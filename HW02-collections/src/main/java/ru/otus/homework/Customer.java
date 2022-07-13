@@ -3,12 +3,10 @@ package ru.otus.homework;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Customer {
+public class Customer implements Comparable<Customer> {
     private final long id;
     private String name;
     private long scores;
-
-    //todo: 1. в этом классе надо исправить ошибки
 
     public Customer(long id, String name, long scores) {
         this.id = id == 0 ? UUID.randomUUID().getLeastSignificantBits() : id;
@@ -59,5 +57,10 @@ public class Customer {
     public int hashCode() {
         int result = 17;
         return result * 31 + (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public int compareTo(Customer customer) {
+        return Long.compare(scores, customer.getScores());
     }
 }
