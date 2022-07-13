@@ -1,5 +1,8 @@
 package ru.otus.homework;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class Customer {
     private final long id;
     private String name;
@@ -8,8 +11,8 @@ public class Customer {
     //todo: 1. в этом классе надо исправить ошибки
 
     public Customer(long id, String name, long scores) {
-        this.id = id;
-        this.name = name;
+        this.id = id == 0 ? UUID.randomUUID().getLeastSignificantBits() : id;
+        this.name = Objects.requireNonNull(name, " name must not be null.");
         this.scores = scores;
     }
 
@@ -49,16 +52,12 @@ public class Customer {
 
         Customer customer = (Customer) o;
 
-        if (id != customer.id) return false;
-        if (scores != customer.scores) return false;
-        return name != null ? name.equals(customer.name) : customer.name == null;
+        return id == customer.id;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (int) (scores ^ (scores >>> 32));
-        return result;
+        int result = 17;
+        return result * 31 + (int) (id ^ (id >>> 32));
     }
 }
