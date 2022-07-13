@@ -56,7 +56,6 @@ class CustomerTest {
     }
 
     @Test
-    @Disabled //надо удалить
     @DisplayName("Сортировка по полю score, итерация по возрастанию")
     void scoreSortingTest() {
         //given
@@ -82,6 +81,7 @@ class CustomerTest {
         assertThat(middleScore.getKey()).isEqualTo(customer1);
         middleScore.getKey().setScores(10000);
         middleScore.getKey().setName("Vasyl");
+        System.out.println(customerService);
 
         //when
         Map.Entry<Customer, String> biggestScore = customerService.getNext(customer1);
@@ -96,7 +96,6 @@ class CustomerTest {
     }
 
     @Test
-    @Disabled //надо удалить
     @DisplayName("Модификация коллекции")
     void mutationTest() {
         //given
