@@ -2,4 +2,5 @@
 ## Группа 2022-06. <br>Cтудент `Стародубенко Александр`.
 ## _Решения домашних заданий_
 
-#### [HW-01: set up the project using gradle.](https://github.com/av-starodub/2022-06-otus-java-starodubenko/pull/1/files)
+#### [HW01: set up the project using gradle.](https://github.com/av-starodub/2022-06-otus-java-starodubenko/pull/1/files)
+#### [HW02: collection practice.](https://github.com/av-starodub/2022-06-otus-java-starodubenko/pull/5/files)
