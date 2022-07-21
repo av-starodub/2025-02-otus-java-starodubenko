@@ -9,7 +9,7 @@ import static ru.otus.simplejunit.util.Assertions.assertTrue;
 public class BeforeMethodWithExceptionTest {
     @Before
     public void setUp() {
-        throw new RuntimeException("Before method exception");
+        throw new RuntimeException("Exception in method annotated with @Before.");
     }
 
     @After

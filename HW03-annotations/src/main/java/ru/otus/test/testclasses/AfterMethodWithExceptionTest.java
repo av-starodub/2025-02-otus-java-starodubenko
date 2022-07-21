@@ -6,6 +6,9 @@ import ru.otus.simplejunit.annotations.Test;
 
 import static ru.otus.simplejunit.util.Assertions.assertTrue;
 
+/**
+ * Only one method annotated with @Test should be called.
+ */
 public class AfterMethodWithExceptionTest {
     @Before
     public void setUp() {
@@ -13,16 +16,16 @@ public class AfterMethodWithExceptionTest {
 
     @After
     public void tearDown() {
-        throw new RuntimeException("After method exception");
+        throw new RuntimeException("Exception in method annotated with @After");
     }
 
     @Test
-    public void executeBeforeException() {
+    public void firstTest() {
         assertTrue(true);
     }
 
     @Test
-    public void doNotExecuteAfterException() {
+    public void secondTest() {
         assertTrue(true);
     }
 }

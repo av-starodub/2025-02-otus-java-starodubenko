@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class SeveralPreparatoryMethodsExecutionTest {
-    private List<String> expectedPreparatoryMethods;
-    private List<String> actualPreparatoryMethods;
+    private final List<String> expectedPreparatoryMethods;
+    private final List<String> actualPreparatoryMethods;
 
     public SeveralPreparatoryMethodsExecutionTest() {
         expectedPreparatoryMethods = new ArrayList<>() {{
@@ -47,6 +47,6 @@ public class SeveralPreparatoryMethodsExecutionTest {
     }
 
     private void printResult() {
-        System.out.println("All preparatory methods have been completed: " + isAllExecuted());
+        System.out.println("Actual result: " + isAllExecuted());
     }
 }
