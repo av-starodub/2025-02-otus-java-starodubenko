@@ -1,4 +1,4 @@
-package ru.otus.simplejunit.methodscash;
+package ru.otus.simplejunit.cash;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
