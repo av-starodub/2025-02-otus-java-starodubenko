@@ -36,7 +36,7 @@ public class MainSimpleJunitTest {
     private void run(Class<?> testClass, String testDescription, String expectedResult) {
         System.out.println("\n> " + testClass.getSimpleName());
         System.out.println(testDescription);
-        new TestRunner(testClass).run();
+        new TestRunner(testClass);
         System.out.println("Expected result: " + expectedResult);
         System.out.println("---------------------------------");
     }
