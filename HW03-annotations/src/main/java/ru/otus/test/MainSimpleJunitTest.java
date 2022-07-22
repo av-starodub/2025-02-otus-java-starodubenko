@@ -31,6 +31,10 @@ public class MainSimpleJunitTest {
                 "Failed test should throw TestException and TestRunner should continue running.",
                 "PASSED 1, FAILED 1, SKIPPED 0"
         );
+        new MainSimpleJunitTest().run(LifeCycleTest.class,
+                "Each method annotated with @Test must be executed on a new instance of the test class",
+                "The hashCode of the test class instance must be different for each test method."
+        );
     }
 
     private void run(Class<?> testClass, String testDescription, String expectedResult) {
