@@ -30,7 +30,7 @@ public enum TestMethodsCash {
     }
 
     public static void clearCash() {
-        Arrays.stream(TestMethodsCash.values()).forEach(methodType -> methodType.methods.clear());
+        Arrays.stream(values()).forEach(methodType -> methodType.methods.clear());
     }
 
     public static void saveMethodsInCash(Class<?> testClass) {
@@ -38,7 +38,7 @@ public enum TestMethodsCash {
     }
 
     private static void addIfAnnotationPresent(Method method) {
-        Arrays.stream(TestMethodsCash.values()).forEach(cashType -> {
+        Arrays.stream(values()).forEach(cashType -> {
             if (method.isAnnotationPresent(cashType.annotation)) {
                 cashType.methods.add(method);
             }
