@@ -1,6 +1,6 @@
 package ru.otus.test;
 
-import ru.otus.simplejunit.runner.TestRunner;
+import ru.otus.simplejunit.util.TestRunner;
 import ru.otus.test.testclasses.*;
 
 public class MainSimpleJunitTest {
@@ -24,23 +24,23 @@ public class MainSimpleJunitTest {
                 "PASSED 1, FAILED 0, SKIPPED 0"
         );
         new MainSimpleJunitTest().run(UnexpectedExceptionInTestMethodTest.class,
-                "Test with unexpected exception should be failed and TestRunner should continue running.",
+                "Test with unexpected exception should be failed and TestRunner must not stop executing tests.",
                 "PASSED 2, FAILED 1, SKIPPED 0"
         );
         new MainSimpleJunitTest().run(TestMethodsExecutionTest.class,
-                "Failed test should throw TestException and TestRunner should continue running.",
+                "Failed test should throw TestException and TestRunner must not stop executing tests.",
                 "PASSED 1, FAILED 1, SKIPPED 0"
         );
         new MainSimpleJunitTest().run(LifeCycleTest.class,
-                "Each method annotated with @Test must be executed on a new instance of the test class",
+                "Each method annotated with @Test must be executed on a new instance of the test class.",
                 "The hashCode of the test class instance must be different for each test method."
         );
     }
 
     private void run(Class<?> testClass, String testDescription, String expectedResult) {
-        System.out.println("\n> " + testClass.getSimpleName());
-        System.out.println(testDescription);
-        new TestRunner(testClass);
+        System.out.println("\n> Test class: " + testClass.getSimpleName());
+        System.out.println("Description: " + testDescription);
+        TestRunner.run(testClass);
         System.out.println("Expected result: " + expectedResult);
         System.out.println("---------------------------------");
     }

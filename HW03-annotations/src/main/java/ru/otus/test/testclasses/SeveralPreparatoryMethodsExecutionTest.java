@@ -2,10 +2,13 @@ package ru.otus.test.testclasses;
 
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
+import ru.otus.simplejunit.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static ru.otus.simplejunit.util.Assertions.assertTrue;
 
 public class SeveralPreparatoryMethodsExecutionTest {
     private final List<String> expectedPreparatoryMethods;
@@ -20,6 +23,7 @@ public class SeveralPreparatoryMethodsExecutionTest {
         }};
         actualPreparatoryMethods = new ArrayList<>();
     }
+
     @Before
     public void setUp1() {
         actualPreparatoryMethods.add("setUp1");
@@ -33,13 +37,17 @@ public class SeveralPreparatoryMethodsExecutionTest {
     @After
     public void tearDown1() {
         actualPreparatoryMethods.add("tearDown1");
-
     }
 
     @After
     public void tearDown2() {
         actualPreparatoryMethods.add("tearDown2");
         printResult();
+    }
+
+    @Test
+    public void anyTest() {
+        assertTrue(true);
     }
 
     private boolean isAllExecuted() {
