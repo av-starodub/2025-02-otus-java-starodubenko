@@ -42,7 +42,7 @@ public final class TestRunner {
         for (Method method : methods) {
             try {
                 method.invoke(testCase);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (Exception e) {
                 throw new TestException("Error in preparatory method: " + method.getName(), e);
             }
         }
@@ -55,13 +55,13 @@ public final class TestRunner {
                 testCase = createTestCase(testClass);
                 try {
                     runForEachTest(testCase, BEFORE.getMethods());
-                } catch (TestException e) {
+                } catch (Exception e) {
                     SKIPPED.addEvent();
                     e.printStackTrace();
-                    continue;
+                    break;
                 }
                 test.invoke(testCase);
-            } catch (TestException | IllegalAccessException | InvocationTargetException e) {
+            } catch (Exception e) {
                 FAILED.addEvent();
                 e.printStackTrace();
             } finally {
