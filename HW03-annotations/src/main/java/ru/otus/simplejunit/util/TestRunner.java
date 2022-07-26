@@ -1,5 +1,6 @@
 package ru.otus.simplejunit.util;
 
+import ru.otus.simplejunit.cash.MethodsContainer;
 import ru.otus.simplejunit.exceptions.TestException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -7,7 +8,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Objects;
 
-import static ru.otus.simplejunit.cash.TestMethodsCash.*;
 import static ru.otus.simplejunit.logger.TestResultLogger.*;
 
 public final class TestRunner {
@@ -18,14 +18,12 @@ public final class TestRunner {
         if (Objects.isNull(testClass)) {
             throw new TestException("Test class must not be null.");
         }
-        saveMethodsInCash(testClass);
         try {
             runTests(testClass);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             printResults();
-            clearCash();
             resetLogger();
         }
     }
@@ -49,12 +47,13 @@ public final class TestRunner {
     }
 
     private static void runTests(Class<?> testClass) {
-        for (Method test : TEST.getMethods()) {
+        MethodsContainer cash = new MethodsContainer(testClass);
+        for (Method test : cash.getTest()) {
             Object testCase = new Object();
             try {
                 testCase = createTestCase(testClass);
                 try {
-                    runForEachTest(testCase, BEFORE.getMethods());
+                    runForEachTest(testCase, cash.getBefore());
                 } catch (Exception e) {
                     SKIPPED.addEvent();
                     e.printStackTrace();
@@ -65,7 +64,7 @@ public final class TestRunner {
                 FAILED.addEvent();
                 e.printStackTrace();
             } finally {
-                runForEachTest(testCase, AFTER.getMethods());
+                runForEachTest(testCase, cash.getAfter());
             }
         }
     }
