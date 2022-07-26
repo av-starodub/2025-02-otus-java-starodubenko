@@ -1,14 +1,13 @@
 package ru.otus.simplejunit.util;
 
 import ru.otus.simplejunit.cash.MethodsContainer;
+import ru.otus.simplejunit.cash.ResultContainer;
 import ru.otus.simplejunit.exceptions.TestException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Objects;
-
-import static ru.otus.simplejunit.logger.TestResultLogger.*;
 
 public final class TestRunner {
     private TestRunner() {
@@ -18,13 +17,13 @@ public final class TestRunner {
         if (Objects.isNull(testClass)) {
             throw new TestException("Test class must not be null.");
         }
+        ResultContainer results = new ResultContainer();
         try {
-            runTests(testClass);
+            runTests(testClass, results);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            printResults();
-            resetLogger();
+            printResults(results);
         }
     }
 
@@ -46,7 +45,7 @@ public final class TestRunner {
         }
     }
 
-    private static void runTests(Class<?> testClass) {
+    private static void runTests(Class<?> testClass, ResultContainer results) {
         MethodsContainer cash = new MethodsContainer(testClass);
         for (Method test : cash.getTest()) {
             Object testCase = new Object();
@@ -55,13 +54,14 @@ public final class TestRunner {
                 try {
                     runForEachTest(testCase, cash.getBefore());
                 } catch (Exception e) {
-                    SKIPPED.addEvent();
+                    results.addSkipped();
                     e.printStackTrace();
                     break;
                 }
                 test.invoke(testCase);
+                results.addPassed();
             } catch (Exception e) {
-                FAILED.addEvent();
+                results.addFailed();
                 e.printStackTrace();
             } finally {
                 runForEachTest(testCase, cash.getAfter());
@@ -69,7 +69,7 @@ public final class TestRunner {
         }
     }
 
-    private static void printResults() {
-        System.out.printf("TEST RESULTS: %s, %s, %s\n", PASSED, FAILED, SKIPPED);
+    private static void printResults(ResultContainer results) {
+        System.out.printf(results.toString());
     }
 }
