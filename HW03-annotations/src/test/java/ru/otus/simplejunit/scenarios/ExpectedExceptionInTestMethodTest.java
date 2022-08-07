@@ -1,4 +1,4 @@
-package ru.otus.test.testclasses;
+package ru.otus.simplejunit.scenarios;
 
 import ru.otus.simplejunit.annotations.Test;
 
@@ -8,7 +8,7 @@ public class ExpectedExceptionInTestMethodTest {
     @Test
     public void checkPassWithExpectedException() {
         try {
-            throw new RuntimeException("");
+            throw new RuntimeException();
         } catch (Exception e) {
             assertThrow(RuntimeException.class, e.getClass());
         }
