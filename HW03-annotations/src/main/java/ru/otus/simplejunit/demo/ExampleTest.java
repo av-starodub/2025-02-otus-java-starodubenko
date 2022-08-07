@@ -1,4 +1,4 @@
-package ru.otus.test.testclasses;
+package ru.otus.simplejunit.demo;
 
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
@@ -6,26 +6,22 @@ import ru.otus.simplejunit.annotations.Test;
 
 import static ru.otus.simplejunit.util.Assertions.assertTrue;
 
-/**
- * Only one method annotated with @Test should be called.
- */
-public class AfterMethodWithExceptionTest {
+public class ExampleTest {
     @Before
     public void setUp() {
     }
 
     @After
     public void tearDown() {
-        throw new RuntimeException("Exception in method annotated with @After");
     }
 
     @Test
-    public void firstTest() {
-        assertTrue(true);
+    public void anyTest1() {
+        assertTrue(false);
     }
 
     @Test
-    public void secondTest() {
+    public void anyTest2() {
         assertTrue(true);
     }
 }
