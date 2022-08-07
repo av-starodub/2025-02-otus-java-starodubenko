@@ -1,11 +1,13 @@
-package ru.otus.test.testclasses;
+package ru.otus.simplejunit.scenarios;
 
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
 import ru.otus.simplejunit.annotations.Test;
 
 import static ru.otus.simplejunit.util.Assertions.*;
-
+/**
+ * The class implements the test scenario with unexpected exception in method annotated with @Test.
+ */
 public class UnexpectedExceptionInTestMethodTest {
     @Before
     public void setUp() {

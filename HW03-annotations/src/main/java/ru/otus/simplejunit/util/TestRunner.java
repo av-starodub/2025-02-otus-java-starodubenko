@@ -1,7 +1,6 @@
 package ru.otus.simplejunit.util;
 
-import ru.otus.simplejunit.cash.MethodsContainer;
-import ru.otus.simplejunit.cash.ResultContainer;
+import ru.otus.simplejunit.cash.*;
 import ru.otus.simplejunit.exceptions.TestException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,59 +16,60 @@ public final class TestRunner {
         if (Objects.isNull(testClass)) {
             throw new TestException("Test class must not be null.");
         }
-        ResultContainer results = new ResultContainer();
-        try {
-            runTests(testClass, results);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            printResults(results);
-        }
+        var mc = new MethodsContainer(testClass);
+        var rc = new ResultsContainer(mc.getTest());
+        runTests(testClass, mc, rc);
+        rc.printStatistic();
+        rc.printCausesOfFailures();
     }
 
     private static Object createTestCase(Class<?> testClass) {
         try {
             return testClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
             throw new TestException("Error instantiating test class", e);
         }
     }
 
-    private static void runForEachTest(Object testCase, Collection<Method> methods) {
-        for (Method method : methods) {
+    private static void runForEachTest(Object testCase, Collection<Method> methods, String testMethodName, ResultsContainer rc) {
+        for (var method : methods) {
             try {
                 method.invoke(testCase);
-            } catch (Exception e) {
-                throw new TestException("Error in preparatory method: " + method.getName(), e);
+            } catch (Throwable e) {
+                rc.fail(testMethodName);
+                throw new TestException("Test: " + testMethodName + " FAILED" + " - error in preparatory method: " + method.getName(), e);
             }
         }
     }
 
-    private static void runTests(Class<?> testClass, ResultContainer results) {
-        MethodsContainer cash = new MethodsContainer(testClass);
-        for (Method test : cash.getTest()) {
-            Object testCase = new Object();
+    private static void runTest(Object testCase, Method test, ResultsContainer rc) {
+        try {
+            test.invoke(testCase);
+            rc.pass(test.getName());
+        } catch (Throwable e) {
+            rc.fail(test.getName());
+            throw new TestException("Test: " + test.getName() + " - FAILED", e);
+        }
+    }
+
+    private static void runTests(Class<?> testClass, MethodsContainer mc, ResultsContainer rc) {
+        for (var test : mc.getTest()) {
+            var testMethodName = test.getName();
+            var testCase = new Object();
             try {
-                testCase = createTestCase(testClass);
                 try {
-                    runForEachTest(testCase, cash.getBefore());
-                } catch (Exception e) {
-                    results.addSkipped();
-                    e.printStackTrace();
-                    break;
+                    testCase = createTestCase(testClass);
+                    runForEachTest(testCase, mc.getBefore(), testMethodName, rc);
+                    runTest(testCase, test, rc);
+                } catch (Throwable e) {
+                    rc.addError(e);
+                } finally {
+                    runForEachTest(testCase, mc.getAfter(), testMethodName, rc);
                 }
-                test.invoke(testCase);
-                results.addPassed();
-            } catch (Exception e) {
-                results.addFailed();
-                e.printStackTrace();
-            } finally {
-                runForEachTest(testCase, cash.getAfter());
+            } catch (Throwable e) {
+                rc.addError(e);
             }
         }
-    }
-
-    private static void printResults(ResultContainer results) {
-        System.out.printf(results.toString());
     }
 }

@@ -1,4 +1,4 @@
-package ru.otus.test.testclasses;
+package ru.otus.simplejunit.demo;
 
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
@@ -6,10 +6,9 @@ import ru.otus.simplejunit.annotations.Test;
 
 import static ru.otus.simplejunit.util.Assertions.assertTrue;
 
-public class BeforeMethodWithExceptionTest {
+public class ExampleTest {
     @Before
     public void setUp() {
-        throw new RuntimeException("Exception in method annotated with @Before.");
     }
 
     @After
@@ -17,7 +16,12 @@ public class BeforeMethodWithExceptionTest {
     }
 
     @Test
-    public void checkSkippedTestMethod() {
+    public void anyTest1() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void anyTest2() {
         assertTrue(true);
     }
 }

@@ -1,6 +1,6 @@
 package ru.otus.simplejunit.util;
 
-import ru.otus.simplejunit.exceptions.TestException;
+import ru.otus.simplejunit.exceptions.AssertionError;
 
 public final class Assertions {
     private Assertions() {
@@ -8,7 +8,7 @@ public final class Assertions {
 
     public static void assertTrue(boolean expression) {
         if (!expression) {
-            throw new TestException("TEST FAILED");
+            throw new AssertionError("expected: true, actual: false.");
         }
     }
 
