@@ -2,7 +2,7 @@ package ru.otus.simplejunit.exceptions;
 
 public class TestException extends RuntimeException {
 
-    public TestException(String message, Exception e) {
+    public TestException(String message, Throwable e) {
         super(message, e);
     }
 
@@ -10,7 +10,7 @@ public class TestException extends RuntimeException {
         this(message, null);
     }
 
-    public TestException(Exception e) {
+    public TestException(Throwable e) {
         this(e.getMessage(), e);
     }
 }
