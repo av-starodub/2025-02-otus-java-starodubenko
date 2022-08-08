@@ -1,4 +1,4 @@
-package ru.otus.simplejunit.demo;
+package ru.otus.simplejunitdemo;
 
 import ru.otus.simplejunit.util.TestRunner;
 
