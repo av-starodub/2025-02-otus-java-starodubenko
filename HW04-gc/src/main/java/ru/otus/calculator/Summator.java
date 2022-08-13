@@ -1,52 +1,50 @@
 package ru.otus.calculator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Summator {
-    private Integer sum = 0;
-    private Integer prevValue = 0;
-    private Integer prevPrevValue = 0;
-    private Integer sumLastThreeValues = 0;
-    private Integer someValue = 0;
-    private final List<Data> listValues = new ArrayList<>();
+    private int sum;
+    private int prevValue;
+    private int prevPrevValue;
+    private int sumLastThreeValues;
+    private int someValue;
+    private int valueCounter;
 
     //!!! сигнатуру метода менять нельзя
     public void calc(Data data) {
-        listValues.add(data);
-        if (listValues.size() % 6_600_000 == 0) {
-            listValues.clear();
+        int value = data.getValue();
+        valueCounter++;
+        if (valueCounter % 6_600_000 == 0) {
+            valueCounter = 0;
         }
-        sum += data.getValue();
+        sum += value;
 
-        sumLastThreeValues = data.getValue() + prevValue + prevPrevValue;
+        sumLastThreeValues = value + prevValue + prevPrevValue;
 
         prevPrevValue = prevValue;
-        prevValue = data.getValue();
+        prevValue = value;
 
         for (var idx = 0; idx < 3; idx++) {
-            someValue += (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum);
-            someValue = Math.abs(someValue) + listValues.size();
+            someValue += (sumLastThreeValues * sumLastThreeValues / (value + 1) - sum);
+            someValue = Math.abs(someValue) + valueCounter;
         }
     }
 
-    public Integer getSum() {
+    public int getSum() {
         return sum;
     }
 
-    public Integer getPrevValue() {
+    public int getPrevValue() {
         return prevValue;
     }
 
-    public Integer getPrevPrevValue() {
+    public int getPrevPrevValue() {
         return prevPrevValue;
     }
 
-    public Integer getSumLastThreeValues() {
+    public int getSumLastThreeValues() {
         return sumLastThreeValues;
     }
 
-    public Integer getSomeValue() {
+    public int getSomeValue() {
         return someValue;
     }
 }
