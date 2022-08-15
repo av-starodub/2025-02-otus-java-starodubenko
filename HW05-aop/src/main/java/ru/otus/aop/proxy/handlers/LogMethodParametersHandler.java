@@ -1,5 +1,6 @@
 package ru.otus.aop.proxy.handlers;
 
+<<<<<<< HEAD
 import ru.otus.aop.proxy.annotations.Log;
 
 import java.lang.reflect.InvocationHandler;
@@ -44,4 +45,7 @@ public class LogMethodParametersHandler<T> implements InvocationHandler {
     private void printLog(String log) {
         System.out.println(log);
     }
+=======
+public class LogMethodParametersHandler {
+>>>>>>> 420de80 (Create project structure.)
 }

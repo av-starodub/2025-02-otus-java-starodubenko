@@ -1,5 +1,6 @@
 package ru.otus.aop.proxy.util;
 
+<<<<<<< HEAD
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -22,4 +23,7 @@ public final class AnnotatedMethodsSupplier {
     public static String createKey(Method method) {
         return method.getName() + Arrays.toString(method.getParameters());
     }
+=======
+public class AnnotatedMethodsSupplier {
+>>>>>>> 420de80 (Create project structure.)
 }

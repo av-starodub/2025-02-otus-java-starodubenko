@@ -1,6 +1,7 @@
 package ru.otus.aop.calculator.operations;
 
 import ru.otus.aop.calculator.Calculator;
+<<<<<<< HEAD
 import ru.otus.aop.proxy.annotations.Log;
 
 public class Addition implements Calculator {
@@ -20,4 +21,8 @@ public class Addition implements Calculator {
     public String calculate(int number1, int number2, String unit) {
         return (number1 + number2) + unit;
     }
+=======
+
+public class Addition implements Calculator {
+>>>>>>> 420de80 (Create project structure.)
 }

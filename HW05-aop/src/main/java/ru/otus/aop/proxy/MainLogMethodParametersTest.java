@@ -1,5 +1,6 @@
 package ru.otus.aop.proxy;
 
+<<<<<<< HEAD
 import ru.otus.aop.calculator.Calculator;
 import ru.otus.aop.calculator.operations.Addition;
 import ru.otus.aop.proxy.handlers.LogMethodParametersHandler;
@@ -49,4 +50,7 @@ public class MainLogMethodParametersTest {
     private interface TestProcessor {
         void process();
     }
+=======
+public class MainLogMethodParametersTest {
+>>>>>>> 420de80 (Create project structure.)
 }
