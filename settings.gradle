@@ -2,4 +2,5 @@ rootProject.name = 'otusJavaHomework'
 include 'HW01-gradle'
 include 'HW02-collections'
 include 'HW04-gc'
+include 'HW06-atm'
 
