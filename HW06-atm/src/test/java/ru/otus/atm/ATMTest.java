@@ -11,6 +11,6 @@ public class ATMTest {
     @DisplayName("Check disbursement of cash balance")
     public void getBalanceTest() {
         var atm = new ATM();
-        assertThat(0).isEqualTo(atm.getBalance());
+        assertThat(atm.getBalance()).isEqualTo(0);
     }
 }
