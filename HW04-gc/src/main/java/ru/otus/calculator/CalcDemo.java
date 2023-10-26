@@ -20,7 +20,16 @@ public class CalcDemo {
         long startTime = System.currentTimeMillis();
 
         for (var idx = 0; idx < counter; idx++) {
+<<<<<<< HEAD
+<<<<<<< HEAD
             summator.calc(new Data(idx));
+=======
+            var data = new Data(idx);
+            summator.calc(data);
+>>>>>>> f4feb63 (Set up project.)
+=======
+            summator.calc(new Data(idx));
+>>>>>>> 078add0 (Optimize the application.)
 
             if (idx % 10_000_000 == 0) {
                 System.out.println(LocalDateTime.now() + " current idx:" + idx);
