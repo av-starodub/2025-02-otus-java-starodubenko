@@ -1,14 +1,14 @@
 package ru.otus.aop.proxy.handlers;
 
-<<<<<<< HEAD
 import ru.otus.aop.proxy.annotations.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
-import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.*;
+import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.createKey;
+import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.getAnnotatedMethods;
 
 /**
  * The class implements the output to the console of the parameters
@@ -18,7 +18,7 @@ import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.*;
  */
 public class LogMethodParametersHandler<T> implements InvocationHandler {
     private final T instance;
-    private final HashMap<String, String> logAnnotatedMethods;
+    private final Set<String> logAnnotatedMethods;
 
     public LogMethodParametersHandler(T instance) {
         this.instance = instance;
@@ -27,7 +27,7 @@ public class LogMethodParametersHandler<T> implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (Objects.nonNull(logAnnotatedMethods.get(createKey(method)))) {
+        if (logAnnotatedMethods.contains(createKey(method))) {
             printLog(createMethodParametersLog(method, args));
         }
         return method.invoke(instance, args);
@@ -36,8 +36,11 @@ public class LogMethodParametersHandler<T> implements InvocationHandler {
     private String createMethodParametersLog(Method method, Object[] args) {
         StringBuilder log = new StringBuilder();
         log.append(String.format("executed method: %s, ", method.getName()));
-        for (int idx = 0; idx < args.length; idx++) {
-            log.append(String.format("param%d=%s ", idx, args[idx]));
+
+        if (Objects.nonNull(args)) {
+            for (int idx = 0; idx < args.length; idx++) {
+                log.append(String.format("param%d=%s ", idx, args[idx]));
+            }
         }
         return log.toString();
     }
@@ -45,7 +48,4 @@ public class LogMethodParametersHandler<T> implements InvocationHandler {
     private void printLog(String log) {
         System.out.println(log);
     }
-=======
-public class LogMethodParametersHandler {
->>>>>>> 420de80 (Create project structure.)
 }

@@ -5,9 +5,6 @@ include 'HW03-annotations'
 include 'HW04-gc'
 include 'HW05-aop'
 include 'HW06-atm'
-<<<<<<< HEAD
 include 'HW04-gc'
-=======
 include 'HW09-jdbc:demo'
 include 'HW09-jdbc:homework'
->>>>>>> 053cf63 (Add modules 'demo' and 'homework' for HW09-jdbc)
