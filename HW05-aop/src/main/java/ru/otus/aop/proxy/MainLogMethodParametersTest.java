@@ -1,6 +1,5 @@
 package ru.otus.aop.proxy;
 
-<<<<<<< HEAD
 import ru.otus.aop.calculator.Calculator;
 import ru.otus.aop.calculator.operations.Addition;
 import ru.otus.aop.proxy.handlers.LogMethodParametersHandler;
@@ -18,6 +17,11 @@ public class MainLogMethodParametersTest {
     }
 
     private void runTests() {
+        doTest("check method without parameters annotated with @Log",
+                sum::calculate,
+                "executed method: calculate,"
+        );
+
         doTest("check empty log for method not annotated with @Log",
                 () -> sum.calculate(1),
                 ""
@@ -50,7 +54,4 @@ public class MainLogMethodParametersTest {
     private interface TestProcessor {
         void process();
     }
-=======
-public class MainLogMethodParametersTest {
->>>>>>> 420de80 (Create project structure.)
 }

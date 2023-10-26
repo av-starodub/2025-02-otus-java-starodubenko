@@ -1,20 +1,20 @@
 package ru.otus.aop.proxy.util;
 
-<<<<<<< HEAD
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class AnnotatedMethodsSupplier {
     private AnnotatedMethodsSupplier() {
     }
 
-    public static HashMap<String, String> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation) {
-        var annotatedMethods = new HashMap<String, String>();
+    public static Set<String> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation) {
+        var annotatedMethods = new HashSet<String>();
         Arrays.stream(clazz.getDeclaredMethods()).forEach(method -> {
             if (method.isAnnotationPresent(annotation)) {
-                annotatedMethods.put(createKey(method), "");
+                annotatedMethods.add(createKey(method));
             }
         });
         return annotatedMethods;
@@ -23,7 +23,4 @@ public final class AnnotatedMethodsSupplier {
     public static String createKey(Method method) {
         return method.getName() + Arrays.toString(method.getParameters());
     }
-=======
-public class AnnotatedMethodsSupplier {
->>>>>>> 420de80 (Create project structure.)
 }
