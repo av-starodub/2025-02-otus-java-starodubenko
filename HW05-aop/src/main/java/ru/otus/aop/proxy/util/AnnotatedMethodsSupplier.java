@@ -23,4 +23,10 @@ public final class AnnotatedMethodsSupplier {
     public static String createKey(Method method) {
         return method.getName() + Arrays.toString(method.getParameters());
     }
+<<<<<<< HEAD
+=======
+public class AnnotatedMethodsSupplier {
+>>>>>>> 76d2049 (Resolve merge conflict by incorporating both suggestions)
+=======
+>>>>>>> fc651c0 (Resolve merge conflict by incorporating both suggestions)
 }

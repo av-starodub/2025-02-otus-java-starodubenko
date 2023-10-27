@@ -48,4 +48,10 @@ public class LogMethodParametersHandler<T> implements InvocationHandler {
     private void printLog(String log) {
         System.out.println(log);
     }
+<<<<<<< HEAD
+=======
+public class LogMethodParametersHandler {
+>>>>>>> 76d2049 (Resolve merge conflict by incorporating both suggestions)
+=======
+>>>>>>> fc651c0 (Resolve merge conflict by incorporating both suggestions)
 }

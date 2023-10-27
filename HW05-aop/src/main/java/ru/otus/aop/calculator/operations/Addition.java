@@ -26,4 +26,13 @@ public class Addition implements Calculator {
     public String calculate(int number1, int number2, String unit) {
         return (number1 + number2) + unit;
     }
+<<<<<<< HEAD
 }
+=======
+
+public class Addition implements Calculator {
+}
+>>>>>>> 76d2049 (Resolve merge conflict by incorporating both suggestions)
+=======
+}
+>>>>>>> fc651c0 (Resolve merge conflict by incorporating both suggestions)
