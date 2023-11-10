@@ -15,4 +15,8 @@ public enum NominalType {
     public int getValue() {
         return nominal;
     }
+
+    public static int getMinValue() {
+        return 100;
+    }
 }

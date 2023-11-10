@@ -20,8 +20,8 @@ public class MoneyBoxTest {
         assertThat(balanceEmptyBox).isEqualTo(0);
 
         var money = Money.builder().put5000(1).put1000(1).put500(1).put100(1).build();
-        var actualBalanceAfterAdd = moneyBox.putNotes(money.getInfo());
-        var actualNotes = moneyBox.getInfo();
+        var actualBalanceAfterAdd = moneyBox.putNotes(money.getNumberOfNotes());
+        var actualNotes = moneyBox.getNumberOfNotes();
         var expectedNotes = TestUtil.createBanknotes(1, 1, 1, 1);
 
         assertThat(actualBalanceAfterAdd).isEqualTo(EXPECTED_BALANCE);
@@ -37,14 +37,14 @@ public class MoneyBoxTest {
         assertThat(currentMoneyBoxBalance).isEqualTo(EXPECTED_BALANCE);
 
         var request = TestUtil.createBanknotes(1, 1, 1, 1);
+        var actualMoney = moneyBox.extractNotes(request);
+        var actualMoneyBoxBalanceAfterExtracting = moneyBox.getBalance();
 
-        var actualMoneyBoxBalanceAfterExtracting = moneyBox.extractNotes(request);
-
-        var actualNumberOfNotesAfterExtracting = moneyBox.getInfo();
+        var actualNumberOfNotesAfterExtracting = moneyBox.getNumberOfNotes();
         var expectedNumberOfNotesAfterExtracting = Map.copyOf(
-                TestUtil.createEmptyBox(1).getInfo()
+                TestUtil.createEmptyBox(1).getNumberOfNotes()
         );
-
+        assertThat(actualMoney.getNumberOfNotes()).containsExactlyInAnyOrderEntriesOf(request);
         assertThat(actualMoneyBoxBalanceAfterExtracting).isEqualTo(0);
         assertThat(actualNumberOfNotesAfterExtracting)
                 .containsExactlyInAnyOrderEntriesOf(expectedNumberOfNotesAfterExtracting);

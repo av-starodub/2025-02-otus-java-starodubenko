@@ -1,7 +1,9 @@
 package ru.otus.atm.util;
 
+import ru.otus.atm.container.Money;
 import ru.otus.atm.container.MoneyBox;
 import ru.otus.atm.container.NoteBox;
+import ru.otus.atm.container.NoteContainer;
 import ru.otus.atm.nominal.NominalType;
 
 import java.util.Map;
@@ -23,4 +25,8 @@ public class TestUtil {
                 NominalType._100, _100
         );
     }
+    public static NoteContainer createMoney(int _5000, int _1000, int _500, int _100) {
+        return Money.builder().put5000(_5000).put1000(_1000).put500(_500).put100(_100).build();
+    }
+
 }

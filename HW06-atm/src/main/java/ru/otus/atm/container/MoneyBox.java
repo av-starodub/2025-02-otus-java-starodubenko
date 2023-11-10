@@ -1,7 +1,7 @@
 package ru.otus.atm.container;
 
-import ru.otus.atm.nominal.NominalType;
 import ru.otus.atm.builder.AbstractNoteBuilder;
+import ru.otus.atm.nominal.NominalType;
 
 import java.util.Map;
 
@@ -11,13 +11,14 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
 
     private MoneyBox(Map<NominalType, Integer> banknotes, int ceilSize) {
         super(banknotes);
+        amount = computeAmount(this.banknotes);
         this.ceilSize = ceilSize;
-        amount = getBalance();
     }
 
     public static MoneyBoxBuilder builder(int ceilSize) {
         return new MoneyBoxBuilder(ceilSize);
     }
+
 
     public static class MoneyBoxBuilder extends AbstractNoteBuilder<MoneyBox> {
         private final int ceilSize;
@@ -35,18 +36,28 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
     @Override
     public int putNotes(Map<NominalType, Integer> banknotes) {
         banknotes.forEach((nominal, numberOfBanknotes) -> {
-            this.banknotes.merge(nominal, numberOfBanknotes, (key, oldValue) -> key + numberOfBanknotes);
+            this.banknotes.merge(nominal, numberOfBanknotes, Integer::sum);
             amount += nominal.getValue() * numberOfBanknotes;
         });
         return amount;
     }
 
     @Override
-    public int extractNotes(Map<NominalType, Integer> banknotes) {
+    public NoteContainer extractNotes(Map<NominalType, Integer> banknotes) {
         banknotes.forEach((nominal, numberOfBanknotes) -> {
-            this.banknotes.merge(nominal, numberOfBanknotes, (key, oldValue) -> key - numberOfBanknotes);
+            this.banknotes.merge(nominal, numberOfBanknotes, (oldValue, newValue) -> oldValue - numberOfBanknotes);
             amount -= nominal.getValue() * numberOfBanknotes;
         });
+        return Money.builder()
+                .put5000(banknotes.getOrDefault(NominalType._5000, 0))
+                .put1000(banknotes.getOrDefault(NominalType._1000, 0))
+                .put500(banknotes.getOrDefault(NominalType._500, 0))
+                .put100(banknotes.getOrDefault(NominalType._100, 0))
+                .build();
+    }
+
+    @Override
+    public int getBalance() {
         return amount;
     }
 

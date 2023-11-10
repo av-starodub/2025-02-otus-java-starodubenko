@@ -22,7 +22,7 @@ public class AbstractNoteBuilderTest {
     public void buildMoneyTest() {
         var money = Money.builder().put5000(1).put1000(1).put500(1).put100(1).build();
 
-        var actualNotes = money.getInfo();
+        var actualNotes = money.getNumberOfNotes();
         var actualBalance = money.getBalance();
 
         assertThat(money).isInstanceOf(NoteContainer.class);
@@ -36,7 +36,7 @@ public class AbstractNoteBuilderTest {
     public void buildMoneyBoxTest() {
         var moneyBox = MoneyBox.builder(1).put5000(1).put1000(1).put500(1).put100(1).build();
 
-        var actualNotes = moneyBox.getInfo();
+        var actualNotes = moneyBox.getNumberOfNotes();
         var actualBalance = moneyBox.getBalance();
 
         assertThat(moneyBox).isInstanceOf(NoteContainer.class);

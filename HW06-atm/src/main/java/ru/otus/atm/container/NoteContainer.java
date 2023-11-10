@@ -11,5 +11,5 @@ public interface NoteContainer {
     /**
      * @return must return unmodifiable map
      */
-    Map<NominalType, Integer> getInfo();
+    Map<NominalType, Integer> getNumberOfNotes();
 }
