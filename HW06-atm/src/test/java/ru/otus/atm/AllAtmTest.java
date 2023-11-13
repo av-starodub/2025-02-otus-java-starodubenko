@@ -10,7 +10,8 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @SelectPackages({
         "ru.otus.atm.builder",
         "ru.otus.atm.container",
-        "ru.otus.atm.service"
+        "ru.otus.atm.service",
+        "ru.otus.atm.atm"
 })
 @Suite
 @SuiteDisplayName("All ATM Tests")
