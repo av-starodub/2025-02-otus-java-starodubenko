@@ -12,13 +12,13 @@ import java.util.*;
 
 public class MoneyBoxService implements NoteBoxService {
     private final NoteBox moneyBox;
-    private final Set<NominalType> procedureForIssuingLarge;
+    private final Set<NominalType> calculationOrder;
 
     public MoneyBoxService(NoteBox noteBox) {
         Objects.requireNonNull(noteBox, " noteBox must not ge null");
         moneyBox = noteBox;
-        procedureForIssuingLarge = new TreeSet<>((nominal1, nominal2) -> nominal2.value - nominal1.value);
-        procedureForIssuingLarge.addAll(List.of(NominalType.values()));
+        calculationOrder = new TreeSet<>((nominal1, nominal2) -> nominal2.value - nominal1.value);
+        calculationOrder.addAll(List.of(NominalType.values()));
     }
 
     @Override
@@ -47,9 +47,22 @@ public class MoneyBoxService implements NoteBoxService {
             throw new NotEnoughMoneyException(" not enough money");
         }
         var notesInStock = moneyBox.getNumberOfNotes();
+        var notesRequired = createRequest(notesInStock, requiredSum);
+        if (Objects.isNull(notesRequired)) {
+            throw new NotEnoughBanknotesException(" not enough banknotes");
+        }
+        return moneyBox.extractNotes(notesRequired);
+    }
+
+    @Override
+    public int checkBalance() {
+        return moneyBox.getAmount();
+    }
+
+    private Map<NominalType, Integer> createRequest(Map<NominalType, Integer> notesInStock, int requiredSum) {
         var notesRequired = new EnumMap<NominalType, Integer>(NominalType.class);
         var residualAmount = requiredSum;
-        for (var nominal : procedureForIssuingLarge) {
+        for (var nominal : calculationOrder) {
             var currentNominalValue = nominal.value;
             var nominalInStock = notesInStock.get(nominal);
             var nominalRequired = residualAmount / currentNominalValue;
@@ -63,14 +76,6 @@ public class MoneyBoxService implements NoteBoxService {
                 break;
             }
         }
-        if (residualAmount != 0) {
-            throw new NotEnoughBanknotesException(" not enough banknotes");
-        }
-        return moneyBox.extractNotes(notesRequired);
-    }
-
-    @Override
-    public int checkBalance() {
-        return moneyBox.getAmount();
+        return residualAmount == 0 ? notesRequired : null;
     }
 }
