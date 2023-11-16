@@ -6,17 +6,13 @@ public enum NominalType {
     _500(500),
     _100(100);
 
-    public final int nominal;
+    public final int value;
 
-    NominalType(int nominal) {
-        this.nominal = nominal;
-    }
-
-    public int getValue() {
-        return nominal;
+    NominalType(int value) {
+        this.value = value;
     }
 
     public static int getMinValue() {
-        return 100;
+        return _100.value;
     }
 }

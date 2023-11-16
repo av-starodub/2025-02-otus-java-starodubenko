@@ -3,13 +3,17 @@ package ru.otus.atmemulator.container;
 import ru.otus.atmemulator.builder.AbstractNoteBuilder;
 import ru.otus.atmemulator.nominal.NominalType;
 
+import java.util.ArrayDeque;
 import java.util.Map;
+import java.util.stream.IntStream;
+
+import static ru.otus.atmemulator.nominal.NominalType.*;
 
 public class MoneyBox extends AbstractNoteContainer implements NoteBox {
     private final int ceilSize;
     private int amount;
 
-    private MoneyBox(Map<NominalType, Integer> banknotes, int ceilSize) {
+    private MoneyBox(Map<NominalType, ArrayDeque<NominalType>> banknotes, int ceilSize) {
         super(banknotes);
         amount = computeAmount(this.banknotes);
         this.ceilSize = ceilSize;
@@ -28,41 +32,57 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         }
 
         @Override
-        protected MoneyBox instanceOf(Map<NominalType, Integer> banknotes) {
+        protected MoneyBox getInstance(Map<NominalType, ArrayDeque<NominalType>> banknotes) {
             return new MoneyBox(banknotes, ceilSize);
         }
     }
 
     @Override
-    public int putNotes(Map<NominalType, Integer> banknotes) {
-        banknotes.forEach((nominal, numberOfBanknotes) -> {
-            this.banknotes.merge(nominal, numberOfBanknotes, Integer::sum);
-            amount += nominal.getValue() * numberOfBanknotes;
+    public int putNotes(NoteContainer money) {
+        var notesToAdd = money.getNumberOfNotes();
+        notesToAdd.forEach((nominal, number) -> {
+            var stackToAdd = AbstractNoteBuilder.collectNotes(nominal, number);
+            this.banknotes.merge(nominal, stackToAdd, this::addStack);
+            amount += nominal.value * number;
         });
         return amount;
     }
 
     @Override
-    public NoteContainer extractNotes(Map<NominalType, Integer> banknotes) {
-        banknotes.forEach((nominal, numberOfBanknotes) -> {
-            this.banknotes.merge(nominal, numberOfBanknotes, (oldValue, newValue) -> oldValue - numberOfBanknotes);
-            amount -= nominal.getValue() * numberOfBanknotes;
-        });
+    public NoteContainer extractNotes(Map<NominalType, Integer> request) {
         return Money.builder()
-                .put5000(banknotes.getOrDefault(NominalType._5000, 0))
-                .put1000(banknotes.getOrDefault(NominalType._1000, 0))
-                .put500(banknotes.getOrDefault(NominalType._500, 0))
-                .put100(banknotes.getOrDefault(NominalType._100, 0))
+                .put5000(extract(_5000, getRequired(request, _5000)))
+                .put1000(extract(_1000, getRequired(request, _1000)))
+                .put500(extract(_500, getRequired(request, _500)))
+                .put100(extract(_100, getRequired(request, _100)))
                 .build();
     }
 
     @Override
-    public int getBalance() {
+    public int getAmount() {
         return amount;
     }
 
     @Override
     public int getCeilSize() {
         return ceilSize;
+    }
+
+    private ArrayDeque<NominalType> addStack(ArrayDeque<NominalType> stackIn, ArrayDeque<NominalType> stackToAdd) {
+        stackIn.addAll(stackToAdd);
+        return stackIn;
+    }
+
+    private int extract(NominalType nominal, int numberOfNotes) {
+        var stackIn = banknotes.get(nominal);
+        IntStream.rangeClosed(1, numberOfNotes).forEach(extraction -> {
+            stackIn.pollLast();
+            amount -= nominal.value;
+        });
+        return numberOfNotes;
+    }
+
+    private int getRequired(Map<NominalType, Integer> request, NominalType nominalType) {
+        return request.getOrDefault(nominalType, 0);
     }
 }

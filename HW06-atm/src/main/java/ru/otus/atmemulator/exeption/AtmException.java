@@ -9,8 +9,4 @@ public class AtmException extends RuntimeException {
     public AtmException(String message) {
         this(message, null);
     }
-
-    public AtmException(Exception e) {
-        this(e.getMessage(), e);
-    }
 }

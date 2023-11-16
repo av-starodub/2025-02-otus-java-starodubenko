@@ -17,7 +17,7 @@ public class MoneyBoxService implements NoteBoxService {
     public MoneyBoxService(NoteBox noteBox) {
         Objects.requireNonNull(noteBox, " noteBox must not ge null");
         moneyBox = noteBox;
-        procedureForIssuingLarge = new TreeSet<>((nominal1, nominal2) -> nominal2.getValue() - nominal1.getValue());
+        procedureForIssuingLarge = new TreeSet<>((nominal1, nominal2) -> nominal2.value - nominal1.value);
         procedureForIssuingLarge.addAll(List.of(NominalType.values()));
     }
 
@@ -27,38 +27,38 @@ public class MoneyBoxService implements NoteBoxService {
         var notesToAdd = money.getNumberOfNotes();
         var notesInStock = moneyBox.getNumberOfNotes();
         var ceilSize = moneyBox.getCeilSize();
-        notesInStock.forEach((nominal, notes) -> {
-            if (ceilSize - notes < notesToAdd.get(nominal)) {
+        notesInStock.forEach((nominal, stackSize) -> {
+            var stackSizeToAdd = notesToAdd.get(nominal);
+            if (ceilSize - stackSize < stackSizeToAdd) {
                 throw new NotFreeSpaceException(" not enough free space");
             }
         });
-        moneyBox.putNotes(notesToAdd);
-        return checkBalance();
+        return moneyBox.putNotes(money);
     }
 
     @Override
-    public NoteContainer getMoney(int sum) {
+    public NoteContainer getMoney(int requiredSum) {
         var minNominal = NominalType.getMinValue();
-        var notValidSum = sum < minNominal || sum % minNominal != 0;
+        var notValidSum = requiredSum < minNominal || requiredSum % minNominal != 0;
         if (notValidSum) {
             throw new NotValidSumException(" the amount must be a multiple " + minNominal);
         }
-        if (sum > checkBalance()) {
+        if (requiredSum > checkBalance()) {
             throw new NotEnoughMoneyException(" not enough money");
         }
         var notesInStock = moneyBox.getNumberOfNotes();
         var notesRequired = new EnumMap<NominalType, Integer>(NominalType.class);
-        var residualAmount = sum;
-        for (var nominalType : procedureForIssuingLarge) {
-            var currentNominalValue = nominalType.getValue();
-            var nominalInStock = notesInStock.get(nominalType);
+        var residualAmount = requiredSum;
+        for (var nominal : procedureForIssuingLarge) {
+            var currentNominalValue = nominal.value;
+            var nominalInStock = notesInStock.get(nominal);
             var nominalRequired = residualAmount / currentNominalValue;
             if (nominalInStock == 0 || nominalRequired == 0) {
                 continue;
             }
             var notesToIssue = nominalInStock > nominalRequired ? nominalRequired : nominalInStock;
-            notesRequired.put(nominalType, notesToIssue);
-            residualAmount -= notesToIssue * nominalType.getValue();
+            notesRequired.put(nominal, notesToIssue);
+            residualAmount -= notesToIssue * nominal.value;
             if (residualAmount == 0) {
                 break;
             }
@@ -71,6 +71,6 @@ public class MoneyBoxService implements NoteBoxService {
 
     @Override
     public int checkBalance() {
-        return moneyBox.getBalance();
+        return moneyBox.getAmount();
     }
 }

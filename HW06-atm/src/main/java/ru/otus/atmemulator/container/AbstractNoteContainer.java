@@ -5,9 +5,9 @@ import ru.otus.atmemulator.nominal.NominalType;
 import java.util.*;
 
 public abstract class AbstractNoteContainer implements NoteContainer {
-    protected final Map<NominalType, Integer> banknotes;
+    protected final Map<NominalType, ArrayDeque<NominalType>> banknotes;
 
-    protected AbstractNoteContainer(Map<NominalType, Integer> banknotes) {
+    protected AbstractNoteContainer(Map<NominalType, ArrayDeque<NominalType>> banknotes) {
         Objects.requireNonNull(banknotes, " parameter banknotes must not be null");
         this.banknotes = new EnumMap<>(NominalType.class);
         this.banknotes.putAll(banknotes);
@@ -15,12 +15,14 @@ public abstract class AbstractNoteContainer implements NoteContainer {
 
     @Override
     public Map<NominalType, Integer> getNumberOfNotes() {
-        return Map.copyOf(banknotes);
+        Map<NominalType, Integer> numberOfNotes = new EnumMap<>(NominalType.class);
+        banknotes.forEach((nominalType, notes) -> numberOfNotes.put(nominalType, notes.size()));
+        return numberOfNotes;
     }
 
-    protected static int computeAmount(Map<NominalType, Integer> banknotes) {
+    protected static int computeAmount(Map<NominalType, ArrayDeque<NominalType>> banknotes) {
         final int[] amount = {0};
-        banknotes.forEach((nominal, numberOfBanknotes) -> amount[0] += nominal.getValue() * numberOfBanknotes);
+        banknotes.forEach((nominal, notes) -> amount[0] += nominal.value * notes.size());
         return amount[0];
     }
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface NoteContainer {
 
-    int getBalance();
+    int getAmount();
 
     /**
      * @return must return unmodifiable map

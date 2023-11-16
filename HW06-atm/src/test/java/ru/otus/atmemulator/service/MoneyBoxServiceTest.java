@@ -31,7 +31,7 @@ public class MoneyBoxServiceTest {
         var money = TestUtil.createMoney(1, 1, 1, 1);
         moneyBoxService.putMoney(money);
 
-        var expectedBalance = money.getBalance();
+        var expectedBalance = money.getAmount();
         var actualBalance = moneyBoxService.checkBalance();
 
         assertThat(actualBalance).isEqualTo(expectedBalance);

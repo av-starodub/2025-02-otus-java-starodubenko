@@ -15,12 +15,12 @@ public class MoneyBoxTest {
     @DisplayName("Check that put() creates the Money correctly")
     public void putNotesTest() {
         var moneyBox = MoneyBox.builder(1).put5000(0).put1000(0).put500(0).put100(0).build();
-        var balanceEmptyBox = moneyBox.getBalance();
+        var balanceEmptyBox = moneyBox.getAmount();
 
         assertThat(balanceEmptyBox).isEqualTo(0);
 
         var money = Money.builder().put5000(1).put1000(1).put500(1).put100(1).build();
-        var actualBalanceAfterAdd = moneyBox.putNotes(money.getNumberOfNotes());
+        var actualBalanceAfterAdd = moneyBox.putNotes(money);
         var actualNotes = moneyBox.getNumberOfNotes();
         var expectedNotes = TestUtil.createBanknotes(1, 1, 1, 1);
 
@@ -32,13 +32,13 @@ public class MoneyBoxTest {
     @DisplayName("Check that get() extracts banknotes correctly")
     public void extractNotesTest() {
         var moneyBox = MoneyBox.builder(1).put5000(1).put1000(1).put500(1).put100(1).build();
-        var currentMoneyBoxBalance = moneyBox.getBalance();
+        var currentMoneyBoxBalance = moneyBox.getAmount();
 
         assertThat(currentMoneyBoxBalance).isEqualTo(EXPECTED_BALANCE);
 
         var request = TestUtil.createBanknotes(1, 1, 1, 1);
         var actualMoney = moneyBox.extractNotes(request);
-        var actualMoneyBoxBalanceAfterExtracting = moneyBox.getBalance();
+        var actualMoneyBoxBalanceAfterExtracting = moneyBox.getAmount();
 
         var actualNumberOfNotesAfterExtracting = moneyBox.getNumberOfNotes();
         var expectedNumberOfNotesAfterExtracting = Map.copyOf(
