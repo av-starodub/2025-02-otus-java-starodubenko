@@ -3,6 +3,7 @@ package ru.otus.atmemulator.atm;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.AtmException;
 import ru.otus.atmemulator.service.NoteBoxService;
+import ru.otus.atmemulator.validator.Validator;
 
 import java.util.Objects;
 
@@ -25,6 +26,7 @@ public class ATM {
 
     public NoteContainer getMoney(int requiredSum) {
         try {
+            Validator.checkSum(requiredSum, noteBoxService.checkBalance());
             return noteBoxService.getMoney(requiredSum);
         } catch (Exception e) {
             throw new AtmException(createErrorMessage(e.getMessage()), e);

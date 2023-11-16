@@ -3,9 +3,7 @@ package ru.otus.atmemulator.service;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
-import ru.otus.atmemulator.exeption.NotEnoughMoneyException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
-import ru.otus.atmemulator.exeption.NotValidSumException;
 import ru.otus.atmemulator.nominal.NominalType;
 
 import java.util.*;
@@ -38,14 +36,6 @@ public class MoneyBoxService implements NoteBoxService {
 
     @Override
     public NoteContainer getMoney(int requiredSum) {
-        var minNominal = NominalType.getMinValue();
-        var notValidSum = requiredSum < minNominal || requiredSum % minNominal != 0;
-        if (notValidSum) {
-            throw new NotValidSumException(" the amount must be a multiple " + minNominal);
-        }
-        if (requiredSum > checkBalance()) {
-            throw new NotEnoughMoneyException(" not enough money");
-        }
         var notesInStock = moneyBox.getNumberOfNotes();
         var notesRequired = createRequest(notesInStock, requiredSum);
         if (Objects.isNull(notesRequired)) {

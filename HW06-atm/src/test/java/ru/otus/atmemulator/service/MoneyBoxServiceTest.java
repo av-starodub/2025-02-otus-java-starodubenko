@@ -4,10 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
-import ru.otus.atmemulator.exeption.NotEnoughMoneyException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
-import ru.otus.atmemulator.exeption.NotValidSumException;
-import ru.otus.atmemulator.nominal.NominalType;
 import ru.otus.atmemulator.util.TestUtil;
 
 import java.util.Map;
@@ -68,26 +65,6 @@ public class MoneyBoxServiceTest {
 
         assertThat(actualBalance).isEqualTo(expectedBalance);
         assertThat(actualBanknotes).containsExactlyInAnyOrderEntriesOf(expectedBanknotes);
-    }
-
-    @Test
-    @DisplayName("When sum incorrectly should throw NotValidSumException")
-    public void checkThrowWhenRequiredSumIncorrectly() {
-        int requiredSum = 150;
-        Throwable thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum));
-        assertThat(thrown)
-                .isInstanceOf(NotValidSumException.class)
-                .hasMessageContaining("the amount must be a multiple " + NominalType.getMinValue());
-    }
-
-    @Test
-    @DisplayName("When sum more than balance should throw NotEnoughMoneyException")
-    public void checkThrowWhenNotEnoughMoney() {
-        int requiredSum = 100;
-        Throwable thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum));
-        assertThat(thrown)
-                .isInstanceOf(NotEnoughMoneyException.class)
-                .hasMessageContaining("not enough money");
     }
 
     @Test

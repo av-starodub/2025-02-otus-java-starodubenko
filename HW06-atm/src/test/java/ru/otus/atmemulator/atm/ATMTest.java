@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.*;
+import ru.otus.atmemulator.nominal.NominalType;
 import ru.otus.atmemulator.service.MoneyBoxService;
 import ru.otus.atmemulator.service.NoteBoxService;
 import ru.otus.atmemulator.util.TestUtil;
@@ -45,12 +46,25 @@ public class ATMTest {
     }
 
     @Test
-    @DisplayName("When sum incorrectly should throw AtmException")
-    public void checkThrowWhenRequiredSumIncorrectly() {
-        when(noteBoxService.getMoney(anyInt()))
-                .thenThrow(new NotValidSumException(" the amount must be a multiple"));
+    @DisplayName("When required sum less than minNominal should throw AtmException")
+    public void checkThrowWhenRequiredSumLessThanMinNominal() {
+        int tooLessSum = 7;
 
-        Throwable thrown = catchThrowable(() -> atm.getMoney(REQUIRED_SUM));
+        Throwable thrown = catchThrowable(() -> atm.getMoney(tooLessSum));
+
+        assertThat(thrown)
+                .isInstanceOf(AtmException.class)
+                .hasRootCauseInstanceOf(NotValidSumException.class)
+                .hasMessageContaining(EXPECTED_ERROR_MESSAGE)
+                .hasMessageContaining("the amount must be a multiple");
+    }
+
+    @Test
+    @DisplayName("When required sum not a multiple of the minNominal should throw AtmException")
+    public void checkThrowWhenRequiredSumNotMultipleMinNominal() {
+        int notMultipleSum = NominalType.getMinValue() + 1;
+
+        Throwable thrown = catchThrowable(() -> atm.getMoney(notMultipleSum));
 
         assertThat(thrown)
                 .isInstanceOf(AtmException.class)
@@ -62,8 +76,7 @@ public class ATMTest {
     @Test
     @DisplayName("When sum more than balance should throw AtmException")
     public void checkThrowWhenNotEnoughMoney() {
-        when(noteBoxService.getMoney(anyInt()))
-                .thenThrow(new NotEnoughMoneyException(" not enough money"));
+        when(noteBoxService.checkBalance()).thenReturn(0);
 
         Throwable thrown = catchThrowable(() -> atm.getMoney(REQUIRED_SUM));
 
