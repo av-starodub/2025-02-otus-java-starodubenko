@@ -47,7 +47,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         notesToAdd.forEach((nominal, number) -> {
             var stackToAdd = AbstractNoteBuilder.collectNotes(nominal, number);
             this.banknotes.merge(nominal, stackToAdd, this::addStack);
-            amount += nominal.value * number;
+            amount += nominal.getValue() * number;
         });
         return amount;
     }
@@ -81,7 +81,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         var stackIn = banknotes.get(nominal);
         IntStream.rangeClosed(1, numberOfNotes).forEach(extraction -> {
             stackIn.pollLast();
-            amount -= nominal.value;
+            amount -= nominal.getValue();
         });
         return numberOfNotes;
     }

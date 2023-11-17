@@ -18,7 +18,7 @@ public final class NoteCalculator {
         var notesRequired = new EnumMap<NominalType, Integer>(NominalType.class);
         var residualAmount = requiredSum;
         for (var nominal : calcType.getCalculationOrder()) {
-            var currentNominalValue = nominal.value;
+            var currentNominalValue = nominal.getValue();
             var nominalInStock = notesInStock.get(nominal);
             var nominalRequired = residualAmount / currentNominalValue;
             if (nominalInStock == 0 || nominalRequired == 0) {
@@ -26,7 +26,7 @@ public final class NoteCalculator {
             }
             var notesToIssue = nominalInStock > nominalRequired ? nominalRequired : nominalInStock;
             notesRequired.put(nominal, notesToIssue);
-            residualAmount -= notesToIssue * nominal.value;
+            residualAmount -= notesToIssue * currentNominalValue;
             if (residualAmount == 0) {
                 break;
             }

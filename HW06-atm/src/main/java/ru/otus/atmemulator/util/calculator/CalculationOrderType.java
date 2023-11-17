@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public enum CalculationOrderType {
-    MINIMUM_NOTES((nominal1, nominal2) -> nominal2.value - nominal1.value);
+    MINIMUM_NOTES((nominal1, nominal2) -> nominal2.getValue() - nominal1.getValue());
 
     private final Set<NominalType> calculationOrder;
 

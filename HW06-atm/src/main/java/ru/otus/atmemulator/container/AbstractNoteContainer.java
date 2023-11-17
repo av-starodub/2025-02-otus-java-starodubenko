@@ -22,7 +22,7 @@ public abstract class AbstractNoteContainer implements NoteContainer {
 
     protected static int computeAmount(Map<NominalType, ArrayDeque<NominalType>> banknotes) {
         final int[] amount = {0};
-        banknotes.forEach((nominal, notes) -> amount[0] += nominal.value * notes.size());
+        banknotes.forEach((nominal, notes) -> amount[0] += nominal.getValue() * notes.size());
         return amount[0];
     }
 }
