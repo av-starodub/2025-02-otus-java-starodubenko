@@ -54,12 +54,4 @@ public class MainLogMethodParametersTest {
     private interface TestProcessor {
         void process();
     }
-<<<<<<< HEAD
 }
-=======
-public class MainLogMethodParametersTest {
-}
->>>>>>> 76d2049 (Resolve merge conflict by incorporating both suggestions)
-=======
-}
->>>>>>> fc651c0 (Resolve merge conflict by incorporating both suggestions)
