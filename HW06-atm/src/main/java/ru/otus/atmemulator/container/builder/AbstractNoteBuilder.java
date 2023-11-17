@@ -1,4 +1,4 @@
-package ru.otus.atmemulator.builder;
+package ru.otus.atmemulator.container.builder;
 
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.nominal.NominalType;

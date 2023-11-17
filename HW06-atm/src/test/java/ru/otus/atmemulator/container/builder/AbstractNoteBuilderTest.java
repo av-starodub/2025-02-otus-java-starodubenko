@@ -1,13 +1,13 @@
-package ru.otus.atmemulator.builder;
+package ru.otus.atmemulator.container.builder;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.atmemulator.nominal.NominalType;
-import ru.otus.atmemulator.container.Money;
-import ru.otus.atmemulator.container.MoneyBox;
+import ru.otus.atmemulator.container.money.Money;
+import ru.otus.atmemulator.container.moneybox.MoneyBox;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
-import ru.otus.atmemulator.util.TestUtil;
+import ru.otus.atmemulator.testutil.TestUtil;
 
 import java.util.Map;
 

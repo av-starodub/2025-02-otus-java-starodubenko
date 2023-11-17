@@ -1,23 +1,19 @@
 package ru.otus.atmemulator.service;
 
-import ru.otus.atmemulator.calculator.NoteCalculator;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
-import ru.otus.atmemulator.nominal.NominalType;
+import ru.otus.atmemulator.util.calculator.NoteCalculator;
 
-import java.util.*;
+import java.util.Objects;
 
 public class MoneyBoxService implements NoteBoxService {
     private final NoteBox moneyBox;
-    private final Set<NominalType> calculationOrder;
 
     public MoneyBoxService(NoteBox noteBox) {
         Objects.requireNonNull(noteBox, " noteBox must not ge null");
         moneyBox = noteBox;
-        calculationOrder = new TreeSet<>((nominal1, nominal2) -> nominal2.value - nominal1.value);
-        calculationOrder.addAll(List.of(NominalType.values()));
     }
 
     @Override
@@ -49,26 +45,4 @@ public class MoneyBoxService implements NoteBoxService {
     public int checkBalance() {
         return moneyBox.getAmount();
     }
-/*
-    //@todo create calculator
-    private Map<NominalType, Integer> createRequest(Map<NominalType, Integer> notesInStock, int requiredSum) {
-        var notesRequired = new EnumMap<NominalType, Integer>(NominalType.class);
-        var residualAmount = requiredSum;
-        for (var nominal : calculationOrder) {
-            var currentNominalValue = nominal.value;
-            var nominalInStock = notesInStock.get(nominal);
-            var nominalRequired = residualAmount / currentNominalValue;
-            if (nominalInStock == 0 || nominalRequired == 0) {
-                continue;
-            }
-            var notesToIssue = nominalInStock > nominalRequired ? nominalRequired : nominalInStock;
-            notesRequired.put(nominal, notesToIssue);
-            residualAmount -= notesToIssue * nominal.value;
-            if (residualAmount == 0) {
-                break;
-            }
-        }
-        return residualAmount == 0 ? notesRequired : null;
-    }
-*/
 }

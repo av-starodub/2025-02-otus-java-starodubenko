@@ -9,7 +9,7 @@ import ru.otus.atmemulator.exeption.*;
 import ru.otus.atmemulator.nominal.NominalType;
 import ru.otus.atmemulator.service.MoneyBoxService;
 import ru.otus.atmemulator.service.NoteBoxService;
-import ru.otus.atmemulator.util.TestUtil;
+import ru.otus.atmemulator.testutil.TestUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

@@ -1,4 +1,4 @@
-package ru.otus.atmemulator.validator;
+package ru.otus.atmemulator.util.validator;
 
 import ru.otus.atmemulator.exeption.NotEnoughMoneyException;
 import ru.otus.atmemulator.exeption.NotValidSumException;

@@ -1,8 +1,9 @@
-package ru.otus.atmemulator.container;
+package ru.otus.atmemulator.container.moneybox;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.atmemulator.util.TestUtil;
+import ru.otus.atmemulator.container.money.Money;
+import ru.otus.atmemulator.testutil.TestUtil;
 
 import java.util.Map;
 

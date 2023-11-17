@@ -1,4 +1,4 @@
-package ru.otus.atmemulator.calculator;
+package ru.otus.atmemulator.util.calculator;
 
 import ru.otus.atmemulator.nominal.NominalType;
 

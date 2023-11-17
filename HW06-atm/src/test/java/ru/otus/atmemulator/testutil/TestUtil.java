@@ -1,7 +1,7 @@
-package ru.otus.atmemulator.util;
+package ru.otus.atmemulator.testutil;
 
-import ru.otus.atmemulator.container.Money;
-import ru.otus.atmemulator.container.MoneyBox;
+import ru.otus.atmemulator.container.money.Money;
+import ru.otus.atmemulator.container.moneybox.MoneyBox;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.nominal.NominalType;

@@ -1,7 +1,8 @@
-package ru.otus.atmemulator.container;
+package ru.otus.atmemulator.container.money;
 
+import ru.otus.atmemulator.container.AbstractNoteContainer;
 import ru.otus.atmemulator.nominal.NominalType;
-import ru.otus.atmemulator.builder.AbstractNoteBuilder;
+import ru.otus.atmemulator.container.builder.AbstractNoteBuilder;
 
 import java.util.ArrayDeque;
 import java.util.Map;

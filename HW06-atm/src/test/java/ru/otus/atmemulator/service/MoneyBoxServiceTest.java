@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
-import ru.otus.atmemulator.util.TestUtil;
+import ru.otus.atmemulator.testutil.TestUtil;
 
 import java.util.Map;
 
