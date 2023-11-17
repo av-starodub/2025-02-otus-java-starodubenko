@@ -90,6 +90,7 @@ public class ATMTest {
     @Test
     @DisplayName("When not enough banknotes should throw AtmException")
     public void checkThrowWhenNotEnoughBanknotes() {
+        when(noteBoxService.checkBalance()).thenReturn(REQUIRED_SUM + NominalType.getMinValue());
         when(noteBoxService.getMoney(anyInt()))
                 .thenThrow(new NotEnoughBanknotesException(" not enough banknotes"));
 

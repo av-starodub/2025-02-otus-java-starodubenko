@@ -1,5 +1,6 @@
 package ru.otus.atmemulator.service;
 
+import ru.otus.atmemulator.calculator.NoteCalculator;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
@@ -37,7 +38,7 @@ public class MoneyBoxService implements NoteBoxService {
     @Override
     public NoteContainer getMoney(int requiredSum) {
         var notesInStock = moneyBox.getNumberOfNotes();
-        var notesRequired = createRequest(notesInStock, requiredSum);
+        var notesRequired = NoteCalculator.compute(notesInStock, requiredSum);
         if (Objects.isNull(notesRequired)) {
             throw new NotEnoughBanknotesException(" not enough banknotes");
         }
@@ -48,7 +49,8 @@ public class MoneyBoxService implements NoteBoxService {
     public int checkBalance() {
         return moneyBox.getAmount();
     }
-
+/*
+    //@todo create calculator
     private Map<NominalType, Integer> createRequest(Map<NominalType, Integer> notesInStock, int requiredSum) {
         var notesRequired = new EnumMap<NominalType, Integer>(NominalType.class);
         var residualAmount = requiredSum;
@@ -68,4 +70,5 @@ public class MoneyBoxService implements NoteBoxService {
         }
         return residualAmount == 0 ? notesRequired : null;
     }
+*/
 }
