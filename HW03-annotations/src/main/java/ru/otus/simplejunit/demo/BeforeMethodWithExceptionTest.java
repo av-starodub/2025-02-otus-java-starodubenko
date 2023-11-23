@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-package ru.otus.test.testclasses;
-=======
 package ru.otus.simplejunit.demo;
->>>>>>> e26d1b3 (Resolve merge conflict by incorporating both suggestions)
 
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
