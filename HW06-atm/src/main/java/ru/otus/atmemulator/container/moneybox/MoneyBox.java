@@ -7,7 +7,7 @@ import ru.otus.atmemulator.container.builder.AbstractNoteBuilder;
 import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.nominal.NominalType;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -17,7 +17,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
     private final int ceilSize;
     private int amount;
 
-    private MoneyBox(Map<NominalType, ArrayDeque<NominalType>> banknotes, int ceilSize) {
+    private MoneyBox(Map<NominalType, Deque<NominalType>> banknotes, int ceilSize) {
         super(banknotes);
         amount = computeAmount(this.banknotes);
         this.ceilSize = ceilSize;
@@ -36,7 +36,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         }
 
         @Override
-        protected MoneyBox getInstance(Map<NominalType, ArrayDeque<NominalType>> banknotes) {
+        protected MoneyBox getInstance(Map<NominalType, Deque<NominalType>> banknotes) {
             return new MoneyBox(banknotes, ceilSize);
         }
     }
@@ -72,7 +72,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         return ceilSize;
     }
 
-    private ArrayDeque<NominalType> addStack(ArrayDeque<NominalType> stackIn, ArrayDeque<NominalType> stackToAdd) {
+    private Deque<NominalType> addStack(Deque<NominalType> stackIn, Deque<NominalType> stackToAdd) {
         stackIn.addAll(stackToAdd);
         return stackIn;
     }

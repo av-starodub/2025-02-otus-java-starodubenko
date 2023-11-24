@@ -12,7 +12,7 @@ public class MoneyBoxService implements NoteBoxService {
     private final NoteBox moneyBox;
 
     public MoneyBoxService(NoteBox noteBox) {
-        Objects.requireNonNull(noteBox, " noteBox must not ge null");
+        Objects.requireNonNull(noteBox, " noteBox must not be null");
         moneyBox = noteBox;
     }
 

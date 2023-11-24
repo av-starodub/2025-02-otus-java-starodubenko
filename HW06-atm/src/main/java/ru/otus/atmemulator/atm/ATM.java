@@ -11,7 +11,7 @@ public class ATM {
     private final NoteBoxService noteBoxService;
 
     public ATM(NoteBoxService noteBoxService) {
-        Objects.requireNonNull(noteBoxService, " noteBoxService must not ge null");
+        Objects.requireNonNull(noteBoxService, " noteBoxService must not be null");
         this.noteBoxService = noteBoxService;
     }
 

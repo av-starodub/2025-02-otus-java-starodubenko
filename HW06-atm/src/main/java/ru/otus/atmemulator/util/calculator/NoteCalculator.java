@@ -21,9 +21,6 @@ public final class NoteCalculator {
             var currentNominalValue = nominal.getValue();
             var nominalInStock = notesInStock.get(nominal);
             var nominalRequired = residualAmount / currentNominalValue;
-            if (nominalInStock == 0 || nominalRequired == 0) {
-                continue;
-            }
             var notesToIssue = nominalInStock > nominalRequired ? nominalRequired : nominalInStock;
             notesRequired.put(nominal, notesToIssue);
             residualAmount -= notesToIssue * currentNominalValue;

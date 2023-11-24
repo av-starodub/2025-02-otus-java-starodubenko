@@ -15,5 +15,5 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 })
 @Suite
 @SuiteDisplayName("All ATM Tests")
-public class AllAtmTest {
+class AllAtmTest {
 }

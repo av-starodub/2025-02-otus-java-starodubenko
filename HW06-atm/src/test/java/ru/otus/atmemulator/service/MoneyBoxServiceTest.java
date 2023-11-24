@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static ru.otus.atmemulator.nominal.NominalType.*;
 
-public class MoneyBoxServiceTest {
+class MoneyBoxServiceTest {
     private MoneyBoxService moneyBoxService;
 
     @BeforeEach
@@ -24,7 +24,7 @@ public class MoneyBoxServiceTest {
 
     @Test
     @DisplayName("Check that putMoney() adds money correctly")
-    public void checkPositiveScriptOfPutMoney() {
+    void checkPositiveScriptOfPutMoney() {
         var money = TestUtil.createMoney(1, 1, 1, 1);
         moneyBoxService.putMoney(money);
 
@@ -36,7 +36,7 @@ public class MoneyBoxServiceTest {
 
     @Test
     @DisplayName("When not enough free space should throw NotFreeSpaceException")
-    public void checkThrowWhenNotFreeSpace() {
+    void checkThrowWhenNotFreeSpace() {
         var money = TestUtil.createMoney(1, 1, 5, 1);
 
         Throwable thrown = catchThrowable(() -> moneyBoxService.putMoney(money));
@@ -46,12 +46,12 @@ public class MoneyBoxServiceTest {
         assertThat(thrown)
                 .isInstanceOf(NotFreeSpaceException.class)
                 .hasMessageContaining("not enough free space");
-        assertThat(actualBalance).isEqualTo(0);
+        assertThat(actualBalance).isZero();
     }
 
     @Test
     @DisplayName("Check that getMoney() extracts money correctly")
-    public void checkPositiveScriptOfGetMoney() {
+    void checkPositiveScriptOfGetMoney() {
         int requiredSum = 6000;
         var money = TestUtil.createMoney(1, 0, 4, 1);
         moneyBoxService.putMoney(money);
@@ -69,7 +69,7 @@ public class MoneyBoxServiceTest {
 
     @Test
     @DisplayName("When not enough banknotes should throw NotEnoughBanknotesException")
-    public void checkThrowWhenNotEnoughBanknotes() {
+    void checkThrowWhenNotEnoughBanknotes() {
         var money = TestUtil.createMoney(1, 1, 0, 1);
         moneyBoxService.putMoney(money);
         int requiredSum = 500;

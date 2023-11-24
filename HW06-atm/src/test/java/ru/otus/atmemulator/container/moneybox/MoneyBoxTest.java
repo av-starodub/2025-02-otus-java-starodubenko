@@ -9,16 +9,16 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MoneyBoxTest {
+class MoneyBoxTest {
     private static final int EXPECTED_BALANCE = 6600;
 
     @Test
     @DisplayName("Check that put() creates the Money correctly")
-    public void putNotesTest() {
+    void putNotesTest() {
         var moneyBox = MoneyBox.builder(1).put5000(0).put1000(0).put500(0).put100(0).build();
         var balanceEmptyBox = moneyBox.getAmount();
 
-        assertThat(balanceEmptyBox).isEqualTo(0);
+        assertThat(balanceEmptyBox).isZero();
 
         var money = Money.builder().put5000(1).put1000(1).put500(1).put100(1).build();
         var actualBalanceAfterAdd = moneyBox.putNotes(money);
@@ -31,7 +31,7 @@ public class MoneyBoxTest {
 
     @Test
     @DisplayName("Check that get() extracts banknotes correctly")
-    public void extractNotesTest() {
+    void extractNotesTest() {
         var moneyBox = MoneyBox.builder(1).put5000(1).put1000(1).put500(1).put100(1).build();
         var currentMoneyBoxBalance = moneyBox.getAmount();
 
@@ -46,7 +46,7 @@ public class MoneyBoxTest {
                 TestUtil.createEmptyBox(1).getNumberOfNotes()
         );
         assertThat(actualMoney.getNumberOfNotes()).containsExactlyInAnyOrderEntriesOf(request);
-        assertThat(actualMoneyBoxBalanceAfterExtracting).isEqualTo(0);
+        assertThat(actualMoneyBoxBalanceAfterExtracting).isZero();
         assertThat(actualNumberOfNotesAfterExtracting)
                 .containsExactlyInAnyOrderEntriesOf(expectedNumberOfNotesAfterExtracting);
     }

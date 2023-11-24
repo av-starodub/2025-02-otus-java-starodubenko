@@ -28,5 +28,4 @@ public class TestUtil {
     public static NoteContainer createMoney(int _5000, int _1000, int _500, int _100) {
         return Money.builder().put5000(_5000).put1000(_1000).put500(_500).put100(_100).build();
     }
-
 }

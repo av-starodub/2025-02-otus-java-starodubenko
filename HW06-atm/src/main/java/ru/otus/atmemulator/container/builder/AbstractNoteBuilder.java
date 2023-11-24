@@ -4,6 +4,7 @@ import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.nominal.NominalType;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -11,14 +12,14 @@ import java.util.stream.IntStream;
 import static ru.otus.atmemulator.nominal.NominalType.*;
 
 public abstract class AbstractNoteBuilder<T extends NoteContainer> implements NoteBuilder<T> {
-    private final Map<NominalType, ArrayDeque<NominalType>> banknotes;
+    private final Map<NominalType, Deque<NominalType>> banknotes;
 
 
     protected AbstractNoteBuilder() {
         banknotes = new EnumMap<>(NominalType.class);
     }
 
-    public static ArrayDeque<NominalType> collectNotes(NominalType nominalType, int numberOfNotes) {
+    public static Deque<NominalType> collectNotes(NominalType nominalType, int numberOfNotes) {
         var banknotes = new ArrayDeque<NominalType>();
         IntStream.rangeClosed(1, numberOfNotes).forEach(addition -> banknotes.addLast(nominalType));
         return banknotes;
@@ -49,5 +50,5 @@ public abstract class AbstractNoteBuilder<T extends NoteContainer> implements No
         return getInstance(banknotes);
     }
 
-    protected abstract T getInstance(Map<NominalType, ArrayDeque<NominalType>> banknotes);
+    protected abstract T getInstance(Map<NominalType, Deque<NominalType>> banknotes);
 }
