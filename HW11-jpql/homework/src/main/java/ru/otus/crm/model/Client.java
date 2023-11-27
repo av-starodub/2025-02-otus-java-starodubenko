@@ -7,6 +7,9 @@ import lombok.Setter;
 import ru.otus.crm.model.base.AbstractBaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -14,9 +17,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "client")
 public class Client extends AbstractBaseEntity implements Cloneable {
-
+    @NotBlank
+    @Size(max = 50)
     @Column(name = "name")
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    @NotNull
+    private Address address;
 
     public Client(String name) {
         this.id = null;
@@ -28,9 +37,24 @@ public class Client extends AbstractBaseEntity implements Cloneable {
         this.name = name;
     }
 
+    public Client(Long id, String name, Address address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+    }
+
     @Override
     public Client clone() {
-        return new Client(this.id, this.name);
+        var clientClone = new Client(id, name);
+        clientClone.setAddress(cloneAddress());
+        return clientClone;
+    }
+
+    private Address cloneAddress() {
+        if (address != null) {
+            return new Address(address.getId(), address.getStreet());
+        }
+        return null;
     }
 
     @Override
@@ -38,6 +62,7 @@ public class Client extends AbstractBaseEntity implements Cloneable {
         return "Client{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", address=" + address +
                 '}';
     }
 }
