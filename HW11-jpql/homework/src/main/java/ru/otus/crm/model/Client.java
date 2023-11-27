@@ -4,6 +4,7 @@ package ru.otus.crm.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.otus.crm.model.base.AbstractBaseEntity;
 
 import javax.persistence.*;
 
@@ -12,14 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "client")
-public class Client implements Cloneable {
-
-    @Id
-    @SequenceGenerator(name = "client_gen", sequenceName = "client_seq",
-            initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_gen")
-    @Column(name = "id")
-    private Long id;
+public class Client extends AbstractBaseEntity implements Cloneable {
 
     @Column(name = "name")
     private String name;

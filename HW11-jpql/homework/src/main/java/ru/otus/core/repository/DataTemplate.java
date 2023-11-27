@@ -13,5 +13,5 @@ public interface DataTemplate<T> {
 
     T insert(Session session, T object);
 
-    T update(Session session, T object);
+    Object update(Session session, T object);
 }
