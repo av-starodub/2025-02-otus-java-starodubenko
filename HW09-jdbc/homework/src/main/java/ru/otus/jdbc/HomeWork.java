@@ -24,18 +24,15 @@ public class HomeWork {
     private static final Logger log = LoggerFactory.getLogger(HomeWork.class);
 
     public static void main(String[] args) {
-// Общая часть
         var dataSource = new DriverManagerDataSource(URL, USER, PASSWORD);
         flywayMigrations(dataSource);
         var transactionRunner = new TransactionRunnerJdbc(dataSource);
         var dbExecutor = new DbExecutorImpl();
 
-// Работа с клиентом
         var entityClassMetaDataClient = new EntityClassMetaDataImpl<>(Client.class);
         var entitySQLMetaDataClient = new EntitySQLMetaDataImpl<>(entityClassMetaDataClient);
-        var dataTemplateClient = new DataTemplateJdbc<>(dbExecutor, entitySQLMetaDataClient, entityClassMetaDataClient); //реализация DataTemplate, универсальная
+        var dataTemplateClient = new DataTemplateJdbc<>(dbExecutor, entitySQLMetaDataClient, entityClassMetaDataClient);
 
-// Код дальше должен остаться
         var dbServiceClient = new DbServiceClientImpl(transactionRunner, dataTemplateClient);
         dbServiceClient.saveClient(new Client("dbServiceFirst"));
 
@@ -47,7 +44,6 @@ public class HomeWork {
         var allClients = dbServiceClient.findAll();
         log.info("allManagers:{}", allClients);
 
-// Сделайте тоже самое с классом Manager (для него надо сделать свою таблицу)
 
         var entityClassMetaDataManager = new EntityClassMetaDataImpl<>(Manager.class);
         var entitySQLMetaDataManager = new EntitySQLMetaDataImpl<>(entityClassMetaDataManager);

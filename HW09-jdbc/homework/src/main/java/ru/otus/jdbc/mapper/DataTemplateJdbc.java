@@ -84,7 +84,8 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         try {
             return rs.getObject(field.getName());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 
