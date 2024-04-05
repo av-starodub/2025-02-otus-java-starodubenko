@@ -1,12 +1,14 @@
 plugins {
     id 'idea'
-    id "io.spring.dependency-management" version "1.0.11.RELEASE"
-    id 'com.github.johnrengelman.shadow' version '7.1.2' apply false
+    id 'se.patrikerdes.use-latest-versions' version '0.2.18'
+    id 'com.github.ben-manes.versions' version '0.51.0'
+    id "io.spring.dependency-management" version "1.1.4"
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
 idea {
     project {
-        languageLevel = 17
+        languageLevel = 21
     }
     module {
         downloadJavadoc = true
