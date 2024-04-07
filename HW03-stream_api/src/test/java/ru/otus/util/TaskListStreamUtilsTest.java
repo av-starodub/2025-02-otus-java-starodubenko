@@ -40,4 +40,10 @@ public class TaskListStreamUtilsTest {
         assertThat(TaskListStreamUtils.notExists(tasks, 0)).isTrue();
     }
 
+    @Test
+    @DisplayName("checkCountByStatus: should return the number of tasks by selected status")
+    void checkCountByStatus() {
+        assertThat(TaskListStreamUtils.countByStatus(tasks, OPEN)).isEqualTo(2);
+    }
+
 }

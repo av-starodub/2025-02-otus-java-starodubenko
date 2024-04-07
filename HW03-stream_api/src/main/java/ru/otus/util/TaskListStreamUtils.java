@@ -19,4 +19,10 @@ public final class TaskListStreamUtils {
         return tasks.stream()
                 .noneMatch(task -> id == task.getId());
     }
+
+    public static long countByStatus(List<Task> tasks, StatusType status) {
+        return tasks.stream()
+                .filter(task -> status.equals(task.getStatus()))
+                .count();
+    }
 }
