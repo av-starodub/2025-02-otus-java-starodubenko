@@ -1,10 +1,13 @@
 package ru.otus.util;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import ru.otus.model.Task;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static ru.otus.model.StatusType.OPEN;
 import static ru.otus.model.StatusType.PROCESS;
 import static ru.otus.model.StatusType.CLOSE;
@@ -21,5 +24,12 @@ public class TaskListStreamUtilsTest {
     @BeforeEach
     void init() {
         tasks = List.of(task1, task2, task3, task4, task5, task6);
+    }
+
+    @Test
+    @DisplayName("checkGetAllByStatus: should return a list of tasks by selected status;")
+    void checkGetAllByStatus() {
+        var openTasks = TaskListStreamUtils.getAllByStatus(tasks, OPEN);
+        assertThat(openTasks).containsExactlyInAnyOrder(task1, task4);
     }
 }
