@@ -27,9 +27,17 @@ public class TaskListStreamUtilsTest {
     }
 
     @Test
-    @DisplayName("checkGetAllByStatus: should return a list of tasks by selected status;")
+    @DisplayName("checkGetAllByStatus: should return a list of tasks by selected status")
     void checkGetAllByStatus() {
         var openTasks = TaskListStreamUtils.getAllByStatus(tasks, OPEN);
         assertThat(openTasks).containsExactlyInAnyOrder(task1, task4);
     }
+
+    @Test
+    @DisplayName("checkExists: should return false if the task exists")
+    void checkExists() {
+        assertThat(TaskListStreamUtils.notExists(tasks, 4)).isFalse();
+        assertThat(TaskListStreamUtils.notExists(tasks, 0)).isTrue();
+    }
+
 }

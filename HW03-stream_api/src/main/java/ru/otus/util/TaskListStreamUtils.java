@@ -14,4 +14,9 @@ public final class TaskListStreamUtils {
                 .filter(task -> status.equals(task.getStatus()))
                 .toList();
     }
+
+    public static boolean notExists(List<Task> tasks, long id) {
+        return tasks.stream()
+                .noneMatch(task -> id == task.getId());
+    }
 }
