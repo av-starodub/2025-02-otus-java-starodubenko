@@ -6,7 +6,7 @@ import ru.otus.model.Task;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Objects;
 
 import static java.util.Objects.isNull;
 
@@ -15,6 +15,7 @@ public final class TaskListUtils {
     }
 
     public static List<Task> getAllByStatus(List<Task> tasks, StatusType status) {
+        Objects.requireNonNull(status, "status must not be null");
         return tasks.stream()
                 .filter(task -> status.equals(task.getStatus()))
                 .toList();
@@ -26,6 +27,7 @@ public final class TaskListUtils {
     }
 
     public static long countByStatus(List<Task> tasks, StatusType status) {
+        Objects.requireNonNull(status, "status must not be null");
         return tasks.stream()
                 .filter(task -> status.equals(task.getStatus()))
                 .count();
@@ -34,7 +36,9 @@ public final class TaskListUtils {
     /**
      * @param tasks        list
      * @param sortingOrder StatusType in the order required for sorting
-     *                     missing types are placed at the end of the list
+     *                     missing types are placed at the end of the list.
+     *                     If sortingOrder is empty or NULL,
+     *                     the default order will be returned: OPEN, PROCESS, CLOSE.
      * @return a list of tasks sorted in the given order
      */
     public static List<Task> getAllSortedByStatus(List<Task> tasks, StatusType... sortingOrder) {
@@ -51,14 +55,11 @@ public final class TaskListUtils {
 
     private static EnumMap<StatusType, Integer> buildStatusPriorities(StatusType[] sortingOrder) {
         var statusPriorities = new EnumMap<StatusType, Integer>(StatusType.class);
-
-        if (sortingOrder.length == 0) {
-            var statusTypes = StatusType.values();
-            IntStream.range(0, statusTypes.length)
-                    .forEach(orderNumber -> statusPriorities.put(statusTypes[orderNumber], orderNumber));
-        } else {
-            IntStream.range(0, sortingOrder.length)
-                    .forEach(orderNumber -> statusPriorities.put(sortingOrder[orderNumber], orderNumber));
+        var statusTypes = isNull(sortingOrder) || sortingOrder.length == 0
+                ? StatusType.values()
+                : sortingOrder;
+        for (var idx = 0; idx < statusTypes.length; idx++) {
+            statusPriorities.put(statusTypes[idx], idx);
         }
         return statusPriorities;
     }
