@@ -49,8 +49,7 @@ public class ThreadPoolDemo {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            LOGGER.debug(e.getMessage(), e);
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
 
         threadPool.shutdown();
