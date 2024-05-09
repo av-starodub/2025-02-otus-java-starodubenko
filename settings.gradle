@@ -10,3 +10,5 @@ include 'HW10-jdbc:homework'
 include 'HW11-jpql'
 include 'HW03-stream_api'
 include 'HW04-concurrency'
+include 'HW05-patterns-1'
+
