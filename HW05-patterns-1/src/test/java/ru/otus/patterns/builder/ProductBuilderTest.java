@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ProductBuilderTest")
-public class ProductBuilderTest {
+class ProductBuilderTest {
     private static final long ID = 1;
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "desc";
@@ -30,13 +30,15 @@ public class ProductBuilderTest {
                 .height(HEIGHT)
                 .build();
 
-        assertThat(product.getId()).isEqualTo(ID);
-        assertThat(product.getTitle()).isEqualTo(TITLE);
-        assertThat(product.getDescription()).isEqualTo(DESCRIPTION);
-        assertThat(product.getCost()).isEqualTo(COST);
-        assertThat(product.getWeight()).isEqualTo(WEIGHT);
-        assertThat(product.getWidth()).isEqualTo(WIDTH);
-        assertThat(product.getLength()).isEqualTo(LENGTH);
-        assertThat(product.getHeight()).isEqualTo(HEIGHT);
+        assertThat(product)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("id", ID)
+                .hasFieldOrPropertyWithValue("title", TITLE)
+                .hasFieldOrPropertyWithValue("description", DESCRIPTION)
+                .hasFieldOrPropertyWithValue("cost", COST)
+                .hasFieldOrPropertyWithValue("weight", WEIGHT)
+                .hasFieldOrPropertyWithValue("width", WIDTH)
+                .hasFieldOrPropertyWithValue("length", LENGTH)
+                .hasFieldOrPropertyWithValue("height", HEIGHT);
     }
 }

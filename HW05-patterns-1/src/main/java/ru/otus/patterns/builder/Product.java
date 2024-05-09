@@ -39,6 +39,7 @@ public class Product {
             product.title = ttl;
             return this;
         }
+
         public Builder desc(String desc) {
             product.description = desc;
             return this;
@@ -68,6 +69,7 @@ public class Product {
             product.height = hgh;
             return this;
         }
+
         public Product build() {
             return product;
         }

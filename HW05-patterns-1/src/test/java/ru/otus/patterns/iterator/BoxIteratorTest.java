@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 @DisplayName("BoxIteratorTest")
-public class BoxIteratorTest {
+class BoxIteratorTest {
 
     @Test
     @DisplayName("checkIterator - should return all strings from the lists of the box sequentially")
