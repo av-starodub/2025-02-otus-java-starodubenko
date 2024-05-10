@@ -6,14 +6,19 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    implementation('com.h2database:h2')
-    implementation ('ch.qos.logback:logback-classic')
+    testImplementation('com.h2database:h2:2.1.210')
+    testImplementation("org.flywaydb:flyway-core")
+    testImplementation ('com.zaxxer:HikariCP')
+
+    testImplementation('ch.qos.logback:logback-classic')
 
     testImplementation(platform('org.junit:junit-bom:5.10.2'))
     testImplementation('org.junit.jupiter:junit-jupiter')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
-    testImplementation('org.mockito:mockito-core')
     testImplementation('org.assertj:assertj-core')
+
+    testImplementation('org.mockito:mockito-core')
+    testImplementation('org.mockito:mockito-junit-jupiter')
 }
 
 test {
