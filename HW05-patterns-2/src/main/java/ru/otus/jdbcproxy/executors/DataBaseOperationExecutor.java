@@ -22,15 +22,15 @@ public final class DataBaseOperationExecutor {
         executor = transactionExecutor;
     }
 
-    public long executeStatement(String sqlQuery, List<Object> QueryParams) {
-        checkArgs(sqlQuery, QueryParams);
+    public long executeStatement(String sqlQuery, List<Object> queryParams) {
+        checkArgs(sqlQuery, queryParams);
 
         return executor.executeTransaction(connection -> {
             try (var preparedStatement =
                          connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
-                for (var idx = 0; idx < QueryParams.size(); idx++) {
-                    preparedStatement.setObject(idx + 1, QueryParams.get(idx));
+                for (var idx = 0; idx < queryParams.size(); idx++) {
+                    preparedStatement.setObject(idx + 1, queryParams.get(idx));
                 }
                 preparedStatement.executeUpdate();
 
@@ -45,14 +45,14 @@ public final class DataBaseOperationExecutor {
         });
     }
 
-    public <T> Optional<T> executeSelect(String sqlQuery, List<Object> QueryParams, Function<ResultSet, T> rsHandler) {
-        checkArgs(sqlQuery, QueryParams);
+    public <T> Optional<T> executeSelect(String sqlQuery, List<Object> queryParams, Function<ResultSet, T> rsHandler) {
+        checkArgs(sqlQuery, queryParams);
         requireNonNull(rsHandler, "the ResultSet handler function must not be null ");
 
         return executor.executeTransaction(connection -> {
             try (var preparedStatement = connection.prepareStatement(sqlQuery)) {
-                for (var idx = 0; idx < QueryParams.size(); idx++) {
-                    preparedStatement.setObject(idx + 1, QueryParams.get(idx));
+                for (var idx = 0; idx < queryParams.size(); idx++) {
+                    preparedStatement.setObject(idx + 1, queryParams.get(idx));
                 }
                 try (var resultSet = preparedStatement.executeQuery()) {
                     return Optional.ofNullable(rsHandler.apply(resultSet));
@@ -63,15 +63,15 @@ public final class DataBaseOperationExecutor {
         });
     }
 
-    public boolean executeDelete(String sqlQuery, List<Object> params) {
-        checkArgs(sqlQuery, params);
+    public boolean executeDelete(String sqlQuery, List<Object> queryParams) {
+        checkArgs(sqlQuery, queryParams);
 
         return executor.executeTransaction(connection -> {
             try (var preparedStatement =
                          connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
-                for (var idx = 0; idx < params.size(); idx++) {
-                    preparedStatement.setObject(idx + 1, params.get(idx));
+                for (var idx = 0; idx < queryParams.size(); idx++) {
+                    preparedStatement.setObject(idx + 1, queryParams.get(idx));
                 }
 
                 return preparedStatement.executeUpdate() > 0;
@@ -82,9 +82,9 @@ public final class DataBaseOperationExecutor {
         });
     }
 
-    private void checkArgs(String sqlQuery, List<Object> params) {
+    private void checkArgs(String sqlQuery, List<Object> queryParams) {
         requireNonNull(sqlQuery, "sql-query must not be null ");
-        requireNonNull(params, "the list with sql-query parameters can be empty, but not null ");
+        requireNonNull(queryParams, "the list with sql-query parameters can be empty, but not null ");
         if (sqlQuery.isEmpty()) {
             throw new IllegalArgumentException("sql query must not be empty ");
         }
