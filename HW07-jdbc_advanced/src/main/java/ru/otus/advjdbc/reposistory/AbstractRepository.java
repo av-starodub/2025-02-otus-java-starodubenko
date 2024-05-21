@@ -1,43 +1,50 @@
 package ru.otus.advjdbc.reposistory;
 
 
-import ru.otus.advjdbc.DataSource;
 import ru.otus.advjdbc.RepositoryField;
 import ru.otus.advjdbc.RepositoryIdField;
 import ru.otus.advjdbc.RepositoryTable;
 import ru.otus.advjdbc.exceptions.ApplicationInitializationException;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Field;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AbstractRepository<T> {
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    private PreparedStatement psCreate;
+    private final String insertQuery;
 
     private List<Field> cachedFields;
 
     public AbstractRepository(DataSource dataSource, Class<T> cls) {
         this.dataSource = dataSource;
-        prepare(cls);
+        insertQuery = createInsertQuery(cls);
     }
 
     public void create(T entity) {
-        try {
-            for (int i = 0; i < cachedFields.size(); i++) {
-                psCreate.setObject(i + 1, cachedFields.get(i).get(entity));
+        try (var connection = dataSource.getConnection();
+        var pst = connection.prepareStatement(insertQuery)) {
+            try {
+                for (int i = 0; i < cachedFields.size(); i++) {
+                    pst.setObject(i + 1, cachedFields.get(i).get(entity));
+                }
+                pst.executeUpdate();
+                connection.commit();
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new ApplicationInitializationException();
             }
-            psCreate.executeUpdate();
         } catch (Exception e) {
             throw new ApplicationInitializationException();
         }
     }
 
-    private void prepare(Class<T> cls) {
+    private String createInsertQuery(Class<T> cls) {
         StringBuilder query = new StringBuilder("insert into ");
         String tableName = cls.getAnnotation(RepositoryTable.class).title();
         query.append(tableName).append(" (");
@@ -56,17 +63,13 @@ public class AbstractRepository<T> {
         query.setLength(query.length() - 2);
         // 'insert into users (login, password, nickname'
         query.append(") values (");
-        for (Field f : cachedFields) {
+        for (Field ignored : cachedFields) {
             query.append("?, ");
         }
         // 'insert into users (login, password, nickname) values (?, ?, ?, '
         query.setLength(query.length() - 2);
         // 'insert into users (login, password, nickname) values (?, ?, ?'
         query.append(");");
-        try {
-            psCreate = dataSource.getConnection().prepareStatement(query.toString());
-        } catch (SQLException e) {
-            throw new ApplicationInitializationException();
-        }
+        return query.toString();
     }
 }

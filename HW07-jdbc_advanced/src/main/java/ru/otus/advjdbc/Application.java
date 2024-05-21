@@ -1,6 +1,8 @@
 package ru.otus.advjdbc;
 
 
+import ru.otus.advjdbc.datasource.DataSourceProvider;
+import ru.otus.advjdbc.dbmigration.DbMigrator;
 import ru.otus.advjdbc.model.User;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 import ru.otus.advjdbc.reposistory.UsersDao;
@@ -17,10 +19,11 @@ public class Application {
     // - Работу с полями объектов выполнять только через геттеры/сеттеры
 
     public static void main(String[] args) {
-        DataSource dataSource = null;
+        var dataSource = DataSourceProvider.creatHikariConnectionPool("hikari.properties");
+        var dbMigrator = new DbMigrator(dataSource);
+        dbMigrator.migrate();
+
         try {
-            dataSource = new DataSource("jdbc:h2:file:./db;MODE=PostgreSQL");
-            dataSource.connect();
 
             UsersDao usersDao = new UsersDaoImpl(dataSource);
             System.out.println(usersDao.findAll());
@@ -39,7 +42,7 @@ public class Application {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            dataSource.disconnect();
+            dbMigrator.deleteDataBase();
         }
     }
 }
