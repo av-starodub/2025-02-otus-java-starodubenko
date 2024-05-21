@@ -13,7 +13,7 @@ public final class DataSourceProvider {
 
     public static DataSource creatHikariConnectionPool(String filName) {
         var path = getHikariConfigPathPath(filName);
-        var config = new HikariConfig("/Users/avs/repo/2024-02-otus-java-starodubenko/HW07-jdbc_advanced/src/main/resources/hikari.properties");
+        var config = new HikariConfig(path);
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -22,6 +22,10 @@ public final class DataSourceProvider {
     }
 
     private static String getHikariConfigPathPath(String fileName) {
-        return Paths.get("src", "main", "resources", fileName).toAbsolutePath().toString();
+        return Paths
+                .get("HW07-jdbc_advanced","src", "main", "resources", fileName)
+                .toAbsolutePath()
+                .normalize()
+                .toString();
     }
 }
