@@ -41,7 +41,16 @@ public final class DataBaseOperationExecutor {
         checkArgs(sqlQuery, queryParams);
         requireNonNull(rsHandler, "the ResultSet handler function must not be null ");
 
-        return Optional.empty();
+        try (var preparedStatement = connection.prepareStatement(sqlQuery)) {
+            for (var idx = 0; idx < queryParams.size(); idx++) {
+                preparedStatement.setObject(idx + 1, queryParams.get(idx));
+            }
+            try (var resultSet = preparedStatement.executeQuery()) {
+                return Optional.ofNullable(rsHandler.apply(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DataBaseOperationException("executeSelect error", e);
+        }
     }
 
     public boolean executeDelete(Connection connection, String sqlQuery, List<Object> queryParams) {

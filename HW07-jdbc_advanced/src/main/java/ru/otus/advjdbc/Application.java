@@ -4,13 +4,11 @@ package ru.otus.advjdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.advjdbc.database.datasource.DataSourceProvider;
-import ru.otus.advjdbc.database.dbmigration.DbMigrator;
 import ru.otus.advjdbc.database.dbexecutor.DataBaseOperationExecutor;
+import ru.otus.advjdbc.database.dbmigration.DbMigrator;
 import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
 import ru.otus.advjdbc.model.User;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
-import ru.otus.advjdbc.reposistory.UsersDao;
-import ru.otus.advjdbc.reposistory.UsersDaoImpl;
 
 public class Application {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
@@ -25,30 +23,30 @@ public class Application {
     // - Работу с полями объектов выполнять только через геттеры/сеттеры
 
     public static void main(String[] args) {
+
         var dataSource = DataSourceProvider.creatHikariConnectionPool("hikari.properties");
         var dbMigrator = new DbMigrator(dataSource);
         dbMigrator.migrate();
 
-        var transactionExecutor = new TransactionExecutor(dataSource);
-        var dbExecutor = new DataBaseOperationExecutor();
-
         try {
+            var transactionExecutor = new TransactionExecutor(dataSource);
+            var dbExecutor = new DataBaseOperationExecutor();
 
-            UsersDao usersDao = new UsersDaoImpl(dataSource);
-            LOG.info("all users {}", usersDao.findAll());
+            var userRepository = new AbstractRepository<>(dbExecutor, User.class);
 
-            AbstractRepository<User> repository = new AbstractRepository<>(dbExecutor, User.class);
-            User user1 = new User("bob", "123", "bob");
+            var user1 = new User("bob", "123", "bob");
 
             var savedUser1 = transactionExecutor.executeTransaction(connection -> {
-                var savedUserId = repository.create(connection, user1);
+                var savedUserId = userRepository.create(connection, user1);
                 var user = new User(user1.getLogin(), user1.getPassword(), user1.getNickname());
                 user.setId(savedUserId);
                 return user;
             });
 
             LOG.info("saved user1 {}", savedUser1);
-            LOG.info("all users {}", usersDao.findAll());
+
+            var allSavedUsers = transactionExecutor.executeTransaction(userRepository::findAll);
+            LOG.info("all users {}", allSavedUsers);
 
 /*
             AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);
@@ -56,7 +54,7 @@ public class Application {
             accountAbstractRepository.create(account);
 */
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         } finally {
             dbMigrator.deleteDataBase();
         }
