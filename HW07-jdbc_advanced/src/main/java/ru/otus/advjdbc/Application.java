@@ -1,14 +1,20 @@
 package ru.otus.advjdbc;
 
 
-import ru.otus.advjdbc.datasource.DataSourceProvider;
-import ru.otus.advjdbc.dbmigration.DbMigrator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.otus.advjdbc.database.datasource.DataSourceProvider;
+import ru.otus.advjdbc.database.dbmigration.DbMigrator;
+import ru.otus.advjdbc.database.dbexecutor.DataBaseOperationExecutor;
+import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
 import ru.otus.advjdbc.model.User;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 import ru.otus.advjdbc.reposistory.UsersDao;
 import ru.otus.advjdbc.reposistory.UsersDaoImpl;
 
 public class Application {
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
+
     // Домашнее задание:
     // - Реализовать класс DbMigrator - он должен при старте создавать все необходимые таблицы из файла init.sql
     // Доработать AbstractRepository
@@ -23,16 +29,26 @@ public class Application {
         var dbMigrator = new DbMigrator(dataSource);
         dbMigrator.migrate();
 
+        var transactionExecutor = new TransactionExecutor(dataSource);
+        var dbExecutor = new DataBaseOperationExecutor();
+
         try {
 
             UsersDao usersDao = new UsersDaoImpl(dataSource);
-            System.out.println(usersDao.findAll());
+            LOG.info("all users {}", usersDao.findAll());
 
-            AbstractRepository<User> repository = new AbstractRepository<>(dataSource, User.class);
-            User user = new User("bob", "123", "bob");
-            repository.create(user);
+            AbstractRepository<User> repository = new AbstractRepository<>(dbExecutor, User.class);
+            User user1 = new User("bob", "123", "bob");
 
-            System.out.println(usersDao.findAll());
+            var savedUser1 = transactionExecutor.executeTransaction(connection -> {
+                var savedUserId = repository.create(connection, user1);
+                var user = new User(user1.getLogin(), user1.getPassword(), user1.getNickname());
+                user.setId(savedUserId);
+                return user;
+            });
+
+            LOG.info("saved user1 {}", savedUser1);
+            LOG.info("all users {}", usersDao.findAll());
 
 /*
             AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);

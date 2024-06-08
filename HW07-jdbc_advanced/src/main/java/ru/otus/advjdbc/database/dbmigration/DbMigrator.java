@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.dbmigration;
+package ru.otus.advjdbc.database.dbmigration;
 
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;

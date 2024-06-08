@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.executors;
+package ru.otus.advjdbc.exceptions;
 
 public class DataBaseOperationException extends RuntimeException {
 
