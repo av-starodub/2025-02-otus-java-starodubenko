@@ -50,7 +50,7 @@ public class Application {
             });
             LOG.info("required user1 = {}", requiredUser1);
 
-            var user1ForUpdate = new User(savedUser1.getId(),"bob", "123", "updated_nickname");
+            var user1ForUpdate = new User(savedUser1.getId(), "bob", "123", "updated_nickname");
             transactionExecutor.executeTransaction(connection -> {
                 userRepository.update(connection, user1ForUpdate);
                 return null;
@@ -64,6 +64,10 @@ public class Application {
             var allSavedUsers = transactionExecutor.executeTransaction(userRepository::findAll);
             LOG.info("all users = {}", allSavedUsers);
 
+            var isDeleted = transactionExecutor.executeTransaction(connection ->
+                    userRepository.deleteById(connection, savedUser1.getId())
+            );
+            LOG.info("user1 deleted = {}", isDeleted);
 /*
             AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);
             Account account = new Account(100L, "credit", "blocked");

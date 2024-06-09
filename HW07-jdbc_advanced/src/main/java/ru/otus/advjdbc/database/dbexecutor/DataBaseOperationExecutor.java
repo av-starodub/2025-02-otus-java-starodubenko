@@ -54,7 +54,18 @@ public final class DataBaseOperationExecutor {
     }
 
     public boolean executeDelete(Connection connection, String sqlQuery, List<Object> queryParams) {
-        return false;
+        try (var preparedStatement =
+                     connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+
+            for (var idx = 0; idx < queryParams.size(); idx++) {
+                preparedStatement.setObject(idx + 1, queryParams.get(idx));
+            }
+
+            return preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new DataBaseOperationException("executeDelete error", e);
+        }
     }
 
     private void checkArgs(String sqlQuery, List<Object> queryParams) {

@@ -96,6 +96,11 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
         }).orElseThrow(() -> new RuntimeException("unexpected error "));
     }
 
+    public boolean deleteById(Connection connection, Long id) {
+        var query = "DELETE FROM %s WHERE id = ?".formatted(tableName);
+        return dbExecutor.executeDelete(connection, query, List.of(id));
+    }
+
     private T createEntity(ResultSet resultSet) {
         var entityFieldValues = cachedAllFields.stream().map(field -> {
             var columnName = getColumnName(field);
