@@ -42,11 +42,16 @@ public class Application {
                 user.setId(savedUserId);
                 return user;
             });
+            LOG.info("saved user1 = {}", savedUser1);
 
-            LOG.info("saved user1 {}", savedUser1);
+            var requiredUser1 = transactionExecutor.executeTransaction(connection -> {
+                var requiredUserId = savedUser1.getId();
+                return userRepository.findById(connection, requiredUserId).orElse(null);
+            });
+            LOG.info("required user1 = {}", requiredUser1);
 
             var allSavedUsers = transactionExecutor.executeTransaction(userRepository::findAll);
-            LOG.info("all users {}", allSavedUsers);
+            LOG.info("all users = {}", allSavedUsers);
 
 /*
             AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);

@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AbstractRepository<T> {
@@ -24,7 +25,6 @@ public class AbstractRepository<T> {
 
     private final String tableName;
     private final String insertQuery;
-    private final String findAllQuery;
 
     private final List<Field> cachedFieldsWithoutId;
     private final List<Field> cachedAllFields;
@@ -39,8 +39,7 @@ public class AbstractRepository<T> {
         cachedFieldsWithoutId = cachedAllFields.stream()
                 .filter(f -> !f.isAnnotationPresent(RepositoryIdField.class))
                 .toList();
-        insertQuery = createInsertQuery(cls);
-        findAllQuery = "SELECT * FROM %s".formatted(tableName);
+        insertQuery = createInsertQuery();
         constructor = getConstructor(cls);
     }
 
@@ -53,8 +52,23 @@ public class AbstractRepository<T> {
         }
     }
 
+    public Optional<T> findById(Connection connection, Long id) {
+        var query = "SELECT * FROM %s WHERE id = ?".formatted(tableName);
+        return dbExecutor.executeSelect(connection, query, List.of(id), resultSet -> {
+            try {
+                if (resultSet.next()) {
+                    return createEntity(resultSet);
+                }
+                return null;
+            } catch (SQLException e) {
+                throw new DataBaseOperationException("findById error", e);
+            }
+        });
+    }
+
     public List<T> findAll(Connection connection) {
-        return dbExecutor.executeSelect(connection, findAllQuery, List.of(), resultSet -> {
+        var query = "SELECT * FROM %s".formatted(tableName);
+        return dbExecutor.executeSelect(connection, query, List.of(), resultSet -> {
             var entities = new ArrayList<T>();
             try {
                 while (resultSet.next()) {
@@ -105,18 +119,18 @@ public class AbstractRepository<T> {
         return fieldValues;
     }
 
-    private String createInsertQuery(Class<T> cls) {
-        var query = new StringBuilder("insert into ");
+    private String createInsertQuery() {
+        var query = new StringBuilder("INSERT INTO ");
         query.append(tableName).append(" (");
-        for (var f : cachedFieldsWithoutId) {
-            var columnName = getColumnName(f);
+        for (var field : cachedFieldsWithoutId) {
+            var columnName = getColumnName(field);
             query.append(columnName).append(", ");
         }
         // 'insert into users (login, password, nickname, '
         query.setLength(query.length() - 2);
         // 'insert into users (login, password, nickname'
-        query.append(") values (");
-        for (var f : cachedFieldsWithoutId) {
+        query.append(") VALUES (");
+        for (var ignored : cachedFieldsWithoutId) {
             query.append("?, ");
         }
         // 'insert into users (login, password, nickname) values (?, ?, ?, '
