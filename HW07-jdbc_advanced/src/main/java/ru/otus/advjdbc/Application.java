@@ -35,7 +35,6 @@ public class Application {
             var userRepository = new AbstractRepository<>(dbExecutor, User.class);
 
             var user1 = new User("bob", "123", "bob");
-
             var savedUser1 = transactionExecutor.executeTransaction(connection -> {
                 var savedUserId = userRepository.create(connection, user1);
                 var user = new User(user1.getLogin(), user1.getPassword(), user1.getNickname());
@@ -43,6 +42,15 @@ public class Application {
                 return user;
             });
             LOG.info("saved user1 = {}", savedUser1);
+
+            var user2 = new User("tom", "456", "tom");
+            var savedUser2 = transactionExecutor.executeTransaction(connection -> {
+                var savedUserId = userRepository.create(connection, user2);
+                var user = new User(user2.getLogin(), user2.getPassword(), user2.getNickname());
+                user.setId(savedUserId);
+                return user;
+            });
+            LOG.info("saved user2 {}", savedUser2);
 
             var requiredUser1 = transactionExecutor.executeTransaction(connection -> {
                 var requiredUserId = savedUser1.getId();
@@ -68,6 +76,13 @@ public class Application {
                     userRepository.deleteById(connection, savedUser1.getId())
             );
             LOG.info("user1 deleted = {}", isDeleted);
+
+            var isDeleteAll = transactionExecutor.executeTransaction(userRepository::deleteAll);
+            LOG.info("all users deleted = {}", isDeleteAll);
+
+            var allUsers = transactionExecutor.executeTransaction(userRepository::findAll);
+            LOG.info("all users = {}", allUsers);
+
 /*
             AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);
             Account account = new Account(100L, "credit", "blocked");

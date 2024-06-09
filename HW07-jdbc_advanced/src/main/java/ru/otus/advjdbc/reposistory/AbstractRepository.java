@@ -101,6 +101,11 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
         return dbExecutor.executeDelete(connection, query, List.of(id));
     }
 
+    public boolean deleteAll(Connection connection) {
+        var query = "TRUNCATE TABLE %s".formatted(tableName);
+        return dbExecutor.executeDelete(connection, query, List.of());
+    }
+
     private T createEntity(ResultSet resultSet) {
         var entityFieldValues = cachedAllFields.stream().map(field -> {
             var columnName = getColumnName(field);
