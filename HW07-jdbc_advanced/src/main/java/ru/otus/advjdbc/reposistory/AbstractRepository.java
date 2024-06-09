@@ -1,12 +1,11 @@
 package ru.otus.advjdbc.reposistory;
 
-
 import ru.otus.advjdbc.RepositoryField;
-import ru.otus.advjdbc.RepositoryIdField;
 import ru.otus.advjdbc.RepositoryTable;
 import ru.otus.advjdbc.database.dbexecutor.DataBaseOperationExecutor;
 import ru.otus.advjdbc.exceptions.AbstractRepositoryException;
 import ru.otus.advjdbc.exceptions.DataBaseOperationException;
+import ru.otus.advjdbc.model.AbstractBaseEntity;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class AbstractRepository<T> {
+public class AbstractRepository<T extends AbstractBaseEntity> {
     private final DataBaseOperationExecutor dbExecutor;
 
     private final String tableName;
@@ -30,15 +29,16 @@ public class AbstractRepository<T> {
     private final List<Field> cachedAllFields;
     private final Constructor<T> constructor;
 
-    public AbstractRepository(DataBaseOperationExecutor executor, Class<T> cls) {
+    public AbstractRepository(DataBaseOperationExecutor executor, Class<T> cls) throws NoSuchFieldException {
         dbExecutor = executor;
         tableName = cls.getAnnotation(RepositoryTable.class).title();
-        cachedAllFields = Arrays.stream(cls.getDeclaredFields())
+        cachedFieldsWithoutId = Arrays.stream(cls.getDeclaredFields())
                 .filter(f -> f.isAnnotationPresent(RepositoryField.class))
                 .collect(Collectors.toList());
-        cachedFieldsWithoutId = cachedAllFields.stream()
-                .filter(f -> !f.isAnnotationPresent(RepositoryIdField.class))
-                .toList();
+        var id = cls.getSuperclass().getDeclaredField("id");
+        cachedAllFields = new ArrayList<>();
+        cachedAllFields.add(id);
+        cachedAllFields.addAll(cachedFieldsWithoutId);
         insertQuery = createInsertQuery();
         constructor = getConstructor(cls);
     }
@@ -52,6 +52,21 @@ public class AbstractRepository<T> {
         }
     }
 
+    public void update(Connection connection, T entity) {
+        var columnNames = cachedFieldsWithoutId.stream()
+                .map(field -> {
+                    var columnName = getColumnName(field);
+                    return "%s = ?".formatted(columnName);
+                })
+                .collect(Collectors.joining(", "));
+        var query = "UPDATE %s SET %s WHERE id = %d".formatted(tableName, columnNames, entity.getId());
+        try {
+            dbExecutor.executeStatement(connection, query, getFieldValues(entity));
+        } catch (IllegalAccessException e) {
+            throw new AbstractRepositoryException("update entity error ", e);
+        }
+    }
+
     public Optional<T> findById(Connection connection, Long id) {
         var query = "SELECT * FROM %s WHERE id = ?".formatted(tableName);
         return dbExecutor.executeSelect(connection, query, List.of(id), resultSet -> {
@@ -61,7 +76,7 @@ public class AbstractRepository<T> {
                 }
                 return null;
             } catch (SQLException e) {
-                throw new DataBaseOperationException("findById error", e);
+                throw new DataBaseOperationException("findById error ", e);
             }
         });
     }
@@ -76,9 +91,9 @@ public class AbstractRepository<T> {
                 }
                 return entities;
             } catch (SQLException e) {
-                throw new DataBaseOperationException("findAll error", e);
+                throw new DataBaseOperationException("findAll error ", e);
             }
-        }).orElseThrow(() -> new RuntimeException("unexpected error"));
+        }).orElseThrow(() -> new RuntimeException("unexpected error "));
     }
 
     private T createEntity(ResultSet resultSet) {
@@ -94,7 +109,7 @@ public class AbstractRepository<T> {
         try {
             return constructor.newInstance(entityFieldValues);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new AbstractRepositoryException("create entity error", e);
+            throw new AbstractRepositoryException("create entity error ", e);
         }
     }
 
@@ -105,7 +120,7 @@ public class AbstractRepository<T> {
         try {
             return cls.getDeclaredConstructor(fieldTypes);
         } catch (NoSuchMethodException e) {
-            throw new AbstractRepositoryException("get entity constructor error", e);
+            throw new AbstractRepositoryException("get entity constructor error ", e);
         }
     }
 

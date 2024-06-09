@@ -1,14 +1,10 @@
 package ru.otus.advjdbc.model;
 
 import ru.otus.advjdbc.RepositoryField;
-import ru.otus.advjdbc.RepositoryIdField;
 import ru.otus.advjdbc.RepositoryTable;
 
 @RepositoryTable(title = "users")
-public class User {
-    @RepositoryIdField
-    @RepositoryField
-    private Long id;
+public class User extends AbstractBaseEntity {
 
     @RepositoryField
     private String login;
@@ -18,14 +14,6 @@ public class User {
 
     @RepositoryField
     private String nickname;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getLogin() {
         return login;
