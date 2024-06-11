@@ -56,13 +56,11 @@ public class Application {
             var allSavedUsers = userRepositoryService.getAll();
             LOG.info("all users: {}", allSavedUsers);
 
-            var isDeleted = transactionExecutor.executeTransaction(connection ->
-                    userRepository.deleteById(connection, savedUser1.getId())
-            );
-            LOG.info("user1 deleted: {}", isDeleted);
+            var isUser1Deleted = userRepositoryService.remove(savedUser1Id);
+            LOG.info("user1 deleted: {}", isUser1Deleted);
 
-            var isDeleteAll = transactionExecutor.executeTransaction(userRepository::deleteAll);
-            LOG.info("all users deleted: {}", isDeleteAll);
+            var isAllDeleted = userRepositoryService.removeAll();
+            LOG.info("all users deleted: {}", isAllDeleted);
 
             var allUsers =  userRepositoryService.getAll();
             LOG.info("all users: {}", allUsers);

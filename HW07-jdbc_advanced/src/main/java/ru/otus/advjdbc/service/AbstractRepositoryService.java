@@ -48,4 +48,16 @@ public class AbstractRepositoryService<T extends AbstractBaseEntity> {
         LOG.info("list of entities: {}", entities);
         return entities;
     }
+
+    public boolean remove(Long id) {
+        var isEntityRemoved = executor.executeTransaction(connection -> dao.deleteById(connection, id));
+        LOG.info("entity with id={} removed: {}", id, isEntityRemoved);
+        return isEntityRemoved;
+    }
+
+    public boolean removeAll() {
+        var isEntitiesRemoved = executor.executeTransaction(dao::deleteAll);
+        LOG.info("all entities removed: {}", isEntitiesRemoved);
+        return isEntitiesRemoved;
+    }
 }
