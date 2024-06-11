@@ -6,6 +6,8 @@ import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
 import ru.otus.advjdbc.model.AbstractBaseEntity;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 
+import java.util.Optional;
+
 import static java.util.Objects.isNull;
 
 public class AbstractRepositoryService<T extends AbstractBaseEntity> {
@@ -25,12 +27,18 @@ public class AbstractRepositoryService<T extends AbstractBaseEntity> {
             if (isNull(entity.getId())) {
                 var savedEntityId = dao.create(connection, entity);
                 entity.setId(savedEntityId);
-                LOG.info("created entity {}", entity);
+                LOG.info("created entity: {}", entity);
                 return entity;
             }
             dao.update(connection, entity);
-            LOG.info("updated entity {}", entity);
+            LOG.info("updated entity: {}", entity);
             return entity;
         });
+    }
+
+    public Optional<T> get(Long id) {
+        var entityOptional = executor.executeTransaction(connection -> dao.findById(connection, id));
+        LOG.info("required entityOptional: {}", entityOptional);
+        return entityOptional;
     }
 }

@@ -40,33 +40,32 @@ public class Application {
             var user2 = new User("tom", "456", "tom");
 
             var savedUser1 = userRepositoryService.save(user1);
-            LOG.info("saved user1 = {}", savedUser1);
+            LOG.info("saved user1: {}", savedUser1);
             var savedUser2 = userRepositoryService.save(user2);
-            LOG.info("saved user2 {}", savedUser2);
+            LOG.info("saved user2: {}", savedUser2);
 
-            var requiredUser1 = transactionExecutor.executeTransaction(connection -> {
-                var requiredUserId = savedUser1.getId();
-                return userRepository.findById(connection, requiredUserId).orElse(null);
-            });
-            LOG.info("required user1 = {}", requiredUser1);
+            var savedUser1Id = savedUser1.getId();
+            var requiredUser1 = userRepositoryService.get(savedUser1Id)
+                    .orElseThrow(() -> new RuntimeException("user with id=%d not found".formatted(savedUser1Id)));
+            LOG.info("required user1: {}", requiredUser1);
 
-            var user1ForUpdate = new User(savedUser1.getId(), "bob", "123", "updated_nickname");
+            var user1ForUpdate = new User(savedUser1Id, "bob", "123", "updated_nickname");
             var updatedUser1 = userRepositoryService.save(user1ForUpdate);
-            LOG.info("updated user1 {}", updatedUser1);
+            LOG.info("updated user1: {}", updatedUser1);
 
             var allSavedUsers = transactionExecutor.executeTransaction(userRepository::findAll);
-            LOG.info("all users = {}", allSavedUsers);
+            LOG.info("all users: {}", allSavedUsers);
 
             var isDeleted = transactionExecutor.executeTransaction(connection ->
                     userRepository.deleteById(connection, savedUser1.getId())
             );
-            LOG.info("user1 deleted = {}", isDeleted);
+            LOG.info("user1 deleted: {}", isDeleted);
 
             var isDeleteAll = transactionExecutor.executeTransaction(userRepository::deleteAll);
-            LOG.info("all users deleted = {}", isDeleteAll);
+            LOG.info("all users deleted: {}", isDeleteAll);
 
             var allUsers = transactionExecutor.executeTransaction(userRepository::findAll);
-            LOG.info("all users = {}", allUsers);
+            LOG.info("all users: {}", allUsers);
 
 /*
             AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);
