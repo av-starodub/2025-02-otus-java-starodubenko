@@ -9,6 +9,7 @@ import ru.otus.advjdbc.database.dbmigration.DbMigrator;
 import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
 import ru.otus.advjdbc.model.User;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
+import ru.otus.advjdbc.service.AbstractRepositoryService;
 
 public class Application {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
@@ -33,23 +34,14 @@ public class Application {
             var dbExecutor = new DataBaseOperationExecutor();
 
             var userRepository = new AbstractRepository<>(dbExecutor, User.class);
+            var userRepositoryService = new AbstractRepositoryService<User>(userRepository, transactionExecutor);
 
             var user1 = new User("bob", "123", "bob");
-            var savedUser1 = transactionExecutor.executeTransaction(connection -> {
-                var savedUserId = userRepository.create(connection, user1);
-                var user = new User(user1.getLogin(), user1.getPassword(), user1.getNickname());
-                user.setId(savedUserId);
-                return user;
-            });
-            LOG.info("saved user1 = {}", savedUser1);
-
             var user2 = new User("tom", "456", "tom");
-            var savedUser2 = transactionExecutor.executeTransaction(connection -> {
-                var savedUserId = userRepository.create(connection, user2);
-                var user = new User(user2.getLogin(), user2.getPassword(), user2.getNickname());
-                user.setId(savedUserId);
-                return user;
-            });
+
+            var savedUser1 = userRepositoryService.save(user1);
+            LOG.info("saved user1 = {}", savedUser1);
+            var savedUser2 = userRepositoryService.save(user2);
             LOG.info("saved user2 {}", savedUser2);
 
             var requiredUser1 = transactionExecutor.executeTransaction(connection -> {
@@ -59,14 +51,7 @@ public class Application {
             LOG.info("required user1 = {}", requiredUser1);
 
             var user1ForUpdate = new User(savedUser1.getId(), "bob", "123", "updated_nickname");
-            transactionExecutor.executeTransaction(connection -> {
-                userRepository.update(connection, user1ForUpdate);
-                return null;
-            });
-            var updatedUser1 = transactionExecutor.executeTransaction(connection -> {
-                var requiredUserId = savedUser1.getId();
-                return userRepository.findById(connection, requiredUserId).orElse(null);
-            });
+            var updatedUser1 = userRepositoryService.save(user1ForUpdate);
             LOG.info("updated user1 {}", updatedUser1);
 
             var allSavedUsers = transactionExecutor.executeTransaction(userRepository::findAll);
