@@ -53,7 +53,7 @@ public class Application {
             var updatedUser1 = userRepositoryService.save(user1ForUpdate);
             LOG.info("updated user1: {}", updatedUser1);
 
-            var allSavedUsers = transactionExecutor.executeTransaction(userRepository::findAll);
+            var allSavedUsers = userRepositoryService.getAll();
             LOG.info("all users: {}", allSavedUsers);
 
             var isDeleted = transactionExecutor.executeTransaction(connection ->
@@ -64,7 +64,7 @@ public class Application {
             var isDeleteAll = transactionExecutor.executeTransaction(userRepository::deleteAll);
             LOG.info("all users deleted: {}", isDeleteAll);
 
-            var allUsers = transactionExecutor.executeTransaction(userRepository::findAll);
+            var allUsers =  userRepositoryService.getAll();
             LOG.info("all users: {}", allUsers);
 
 /*

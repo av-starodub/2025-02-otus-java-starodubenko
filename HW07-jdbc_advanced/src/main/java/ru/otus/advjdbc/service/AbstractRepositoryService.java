@@ -6,6 +6,7 @@ import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
 import ru.otus.advjdbc.model.AbstractBaseEntity;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -40,5 +41,11 @@ public class AbstractRepositoryService<T extends AbstractBaseEntity> {
         var entityOptional = executor.executeTransaction(connection -> dao.findById(connection, id));
         LOG.info("required entityOptional: {}", entityOptional);
         return entityOptional;
+    }
+
+    public List<T> getAll() {
+        var entities = executor.executeTransaction(dao::findAll);
+        LOG.info("list of entities: {}", entities);
+        return entities;
     }
 }
