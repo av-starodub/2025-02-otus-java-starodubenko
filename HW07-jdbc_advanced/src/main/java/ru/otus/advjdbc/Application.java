@@ -9,21 +9,14 @@ import ru.otus.advjdbc.database.dbmigration.DbMigrator;
 import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
 import ru.otus.advjdbc.entity.EntityMapper;
 import ru.otus.advjdbc.entity.EntityMetaData;
+import ru.otus.advjdbc.model.Account;
 import ru.otus.advjdbc.model.User;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 import ru.otus.advjdbc.service.AbstractRepositoryService;
 
 public class Application {
-    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    // Домашнее задание:
-    // - Реализовать класс DbMigrator - он должен при старте создавать все необходимые таблицы из файла init.sql
-    // Доработать AbstractRepository
-    // - Доделать findById(id), findAll(), update(), deleteById(id), deleteAll()
-    // - Сделать возможность указывать имя столбца таблицы для конкретного поля (например, поле accountType маппить на столбец с именем account_type)
-    // - Добавить проверки, если по какой-то причине невозможно проинициализировать репозиторий, необходимо бросать исключение, чтобы
-    // программа завершила свою работу (в исключении надо объяснить что сломалось)
-    // - Работу с полями объектов выполнять только через геттеры/сеттеры
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
 
@@ -32,6 +25,7 @@ public class Application {
         dbMigrator.migrate();
 
         try {
+            LOG.info("\nORM demo start ...");
             var transactionExecutor = new TransactionExecutor(dataSource);
             var dbExecutor = new DataBaseOperationExecutor();
 
@@ -67,17 +61,41 @@ public class Application {
             var isAllDeleted = userRepositoryService.removeAll();
             LOG.info("all users deleted: {}", isAllDeleted);
 
-            var allUsers =  userRepositoryService.getAll();
+            var allUsers = userRepositoryService.getAll();
             LOG.info("all users: {}", allUsers);
 
-/*
-            AbstractRepository<Account> accountAbstractRepository = new AbstractRepository<>(dataSource, Account.class);
-            Account account = new Account(100L, "credit", "blocked");
-            accountAbstractRepository.create(account);
-*/
+            var accountMetaData = new EntityMetaData<>(Account.class);
+            var accountMapper = new EntityMapper<>(accountMetaData);
+
+            var accountRepository = new AbstractRepository<>(dbExecutor, accountMapper);
+            var accountRepositoryService = new AbstractRepositoryService<>(accountRepository, transactionExecutor);
+
+            var account = new Account(100L, "credit", "blocked");
+
+            var savedAccount = accountRepositoryService.save(account);
+            LOG.info("saved account: {}", savedAccount);
+
+            var savedAccountId = savedAccount.getId();
+
+            var requiredAccount = accountRepositoryService.get(savedAccountId)
+                    .orElseThrow(() -> new RuntimeException("account with id=%d not found".formatted(savedAccountId)));
+            ;
+            LOG.info("required account: {}", requiredAccount);
+
+            requiredAccount.setAmount(500L);
+            var updatedAccount = accountRepositoryService.save(requiredAccount);
+            LOG.info("updated account: {}", updatedAccount);
+
+            var isAccountDeleted = accountRepositoryService.remove(savedAccountId);
+            LOG.info("account with id={} deleted: {}", savedAccountId, isAccountDeleted);
+
+            var allAccounts = accountRepositoryService.getAll();
+            LOG.info("all accounts: {}", allAccounts);
+
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         } finally {
+            LOG.info("\nORM demo finished");
             dbMigrator.deleteDataBase();
         }
     }
