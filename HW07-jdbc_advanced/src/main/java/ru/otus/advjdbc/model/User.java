@@ -1,8 +1,12 @@
 package ru.otus.advjdbc.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import ru.otus.advjdbc.RepositoryField;
 import ru.otus.advjdbc.RepositoryTable;
 
+@Getter
+@Setter
 @RepositoryTable(title = "users")
 public class User extends AbstractBaseEntity {
 
@@ -15,41 +19,12 @@ public class User extends AbstractBaseEntity {
     @RepositoryField
     private String nickname;
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public User() {
-    }
-
     public User(String login, String password, String nickname) {
-        this.login = login;
-        this.password = password;
-        this.nickname = nickname;
+        this(null, login, password, nickname);
     }
 
     public User(Long id, String login, String password, String nickname) {
-        this.id = id;
+        super(id);
         this.login = login;
         this.password = password;
         this.nickname = nickname;
