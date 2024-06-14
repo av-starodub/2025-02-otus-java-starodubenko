@@ -1,5 +1,7 @@
 package ru.otus.advjdbc.database.dbexecutor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.advjdbc.exceptions.DataBaseOperationException;
 
 import java.sql.Connection;
@@ -13,20 +15,23 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 public final class DataBaseOperationExecutor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DataBaseOperationExecutor.class);
+
     private static final int PRIMARY_KEY_COLUMN_INDEX = 1;
 
     public long executeStatement(Connection connection, String sqlQuery, List<Object> queryParams) {
         checkArgs(sqlQuery, queryParams);
-
-        try (var prepareStatement =
+        try (var preparedStatement =
                      connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
             for (var idx = 0; idx < queryParams.size(); idx++) {
-                prepareStatement.setObject(idx + 1, queryParams.get(idx));
+                preparedStatement.setObject(idx + 1, queryParams.get(idx));
             }
-            prepareStatement.executeUpdate();
+            LOG.info("executeStatement: {}", preparedStatement);
+            preparedStatement.executeUpdate();
 
-            try (var resultSet = prepareStatement.getGeneratedKeys()) {
+            try (var resultSet = preparedStatement.getGeneratedKeys()) {
                 resultSet.next();
                 return resultSet.getLong(PRIMARY_KEY_COLUMN_INDEX);
             }
@@ -45,6 +50,7 @@ public final class DataBaseOperationExecutor {
             for (var idx = 0; idx < queryParams.size(); idx++) {
                 preparedStatement.setObject(idx + 1, queryParams.get(idx));
             }
+            LOG.info("executeSelect: {}", preparedStatement);
             try (var resultSet = preparedStatement.executeQuery()) {
                 return Optional.ofNullable(rsHandler.apply(resultSet));
             }
@@ -60,7 +66,7 @@ public final class DataBaseOperationExecutor {
             for (var idx = 0; idx < queryParams.size(); idx++) {
                 preparedStatement.setObject(idx + 1, queryParams.get(idx));
             }
-
+            LOG.info("executeDelete: {}", preparedStatement);
             return preparedStatement.executeUpdate() > 0;
 
         } catch (SQLException e) {
