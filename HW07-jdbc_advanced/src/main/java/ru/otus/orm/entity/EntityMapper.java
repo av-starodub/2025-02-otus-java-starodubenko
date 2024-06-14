@@ -1,14 +1,14 @@
-package ru.otus.advjdbc.entity;
+package ru.otus.orm.entity;
 
 import lombok.Getter;
-import ru.otus.advjdbc.exceptions.EntityMapperException;
+import ru.otus.orm.exceptions.EntityMapperException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EntityMapper<T extends AbstractBaseEntity> {
+public final class EntityMapper<T extends AbstractBaseEntity> {
 
     private final EntityMetaData<T> metaData;
 

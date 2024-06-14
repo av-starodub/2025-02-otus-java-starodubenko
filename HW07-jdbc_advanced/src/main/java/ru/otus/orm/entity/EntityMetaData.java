@@ -1,9 +1,9 @@
-package ru.otus.advjdbc.entity;
+package ru.otus.orm.entity;
 
 import lombok.Getter;
-import ru.otus.advjdbc.entity.annotations.RepositoryField;
-import ru.otus.advjdbc.entity.annotations.RepositoryTable;
-import ru.otus.advjdbc.exceptions.AbstractRepositoryException;
+import ru.otus.orm.entity.annotations.RepositoryField;
+import ru.otus.orm.entity.annotations.RepositoryTable;
+import ru.otus.orm.exceptions.AbstractRepositoryException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class EntityMetaData<T extends AbstractBaseEntity> {
+public final class EntityMetaData<T extends AbstractBaseEntity> {
 
     private final String tableName;
 

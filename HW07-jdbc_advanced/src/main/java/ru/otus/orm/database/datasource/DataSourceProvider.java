@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.database.datasource;
+package ru.otus.orm.database.datasource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

@@ -1,10 +1,10 @@
-package ru.otus.advjdbc.reposistory;
+package ru.otus.orm.reposistory;
 
-import ru.otus.advjdbc.database.dbexecutor.DataBaseOperationExecutor;
-import ru.otus.advjdbc.entity.AbstractBaseEntity;
-import ru.otus.advjdbc.entity.EntityMapper;
-import ru.otus.advjdbc.exceptions.AbstractRepositoryException;
-import ru.otus.advjdbc.exceptions.DataBaseOperationException;
+import ru.otus.orm.database.dbexecutor.DataBaseOperationExecutor;
+import ru.otus.orm.entity.AbstractBaseEntity;
+import ru.otus.orm.entity.EntityMapper;
+import ru.otus.orm.exceptions.AbstractRepositoryException;
+import ru.otus.orm.exceptions.DataBaseOperationException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AbstractRepository<T extends AbstractBaseEntity> {
-    private final DataBaseOperationExecutor dbExecutor;
-    private final EntityMapper<T> entityMapper;
+public final class AbstractRepository<T extends AbstractBaseEntity> {
 
+    private final DataBaseOperationExecutor dbExecutor;
+
+    private final EntityMapper<T> entityMapper;
 
     public AbstractRepository(DataBaseOperationExecutor executor, EntityMapper<T> mapper) {
         dbExecutor = executor;

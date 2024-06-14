@@ -1,15 +1,15 @@
-package ru.otus.advjdbc.model;
+package ru.otus.orm.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.otus.advjdbc.entity.annotations.RepositoryField;
-import ru.otus.advjdbc.entity.annotations.RepositoryTable;
-import ru.otus.advjdbc.entity.AbstractBaseEntity;
+import ru.otus.orm.entity.annotations.RepositoryField;
+import ru.otus.orm.entity.annotations.RepositoryTable;
+import ru.otus.orm.entity.AbstractBaseEntity;
 
 @Getter
 @Setter
 @RepositoryTable(title = "accounts")
-public class Account extends AbstractBaseEntity {
+public final class Account extends AbstractBaseEntity {
 
     @RepositoryField
     private Long amount;

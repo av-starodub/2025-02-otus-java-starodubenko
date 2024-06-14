@@ -1,8 +1,8 @@
-package ru.otus.advjdbc.database.dbexecutor;
+package ru.otus.orm.database.dbexecutor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.advjdbc.exceptions.DataBaseOperationException;
+import ru.otus.orm.exceptions.DataBaseOperationException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.database.dbmigration;
+package ru.otus.orm.database.dbmigration;
 
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 
-public class DbMigrator {
+public final class DbMigrator {
     private static final Logger LOG = LoggerFactory.getLogger(DbMigrator.class);
 
     private final Flyway flyway;

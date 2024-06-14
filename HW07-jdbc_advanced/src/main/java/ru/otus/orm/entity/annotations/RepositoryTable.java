@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.entity.annotations;
+package ru.otus.orm.entity.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

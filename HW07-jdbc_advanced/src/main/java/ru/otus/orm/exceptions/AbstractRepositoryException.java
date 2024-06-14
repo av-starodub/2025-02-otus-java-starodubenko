@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.exceptions;
+package ru.otus.orm.exceptions;
 
 public class AbstractRepositoryException extends RuntimeException {
 

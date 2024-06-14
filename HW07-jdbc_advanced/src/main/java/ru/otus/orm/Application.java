@@ -1,20 +1,20 @@
-package ru.otus.advjdbc;
+package ru.otus.orm;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.advjdbc.database.datasource.DataSourceProvider;
-import ru.otus.advjdbc.database.dbexecutor.DataBaseOperationExecutor;
-import ru.otus.advjdbc.database.dbmigration.DbMigrator;
-import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
-import ru.otus.advjdbc.entity.EntityMapper;
-import ru.otus.advjdbc.entity.EntityMetaData;
-import ru.otus.advjdbc.model.Account;
-import ru.otus.advjdbc.model.User;
-import ru.otus.advjdbc.reposistory.AbstractRepository;
-import ru.otus.advjdbc.service.AbstractRepositoryService;
+import ru.otus.orm.database.datasource.DataSourceProvider;
+import ru.otus.orm.database.dbexecutor.DataBaseOperationExecutor;
+import ru.otus.orm.database.dbmigration.DbMigrator;
+import ru.otus.orm.database.dbtransaction.TransactionExecutor;
+import ru.otus.orm.entity.EntityMapper;
+import ru.otus.orm.entity.EntityMetaData;
+import ru.otus.orm.model.Account;
+import ru.otus.orm.model.User;
+import ru.otus.orm.reposistory.AbstractRepository;
+import ru.otus.orm.service.AbstractRepositoryService;
 
-public class Application {
+public final class Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 

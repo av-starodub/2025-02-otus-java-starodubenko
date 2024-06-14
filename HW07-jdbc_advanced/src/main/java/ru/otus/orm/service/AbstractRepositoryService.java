@@ -1,17 +1,17 @@
-package ru.otus.advjdbc.service;
+package ru.otus.orm.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
-import ru.otus.advjdbc.entity.AbstractBaseEntity;
-import ru.otus.advjdbc.reposistory.AbstractRepository;
+import ru.otus.orm.database.dbtransaction.TransactionExecutor;
+import ru.otus.orm.entity.AbstractBaseEntity;
+import ru.otus.orm.reposistory.AbstractRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
-public class AbstractRepositoryService<T extends AbstractBaseEntity> {
+public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
     private final static Logger LOG = LoggerFactory.getLogger(AbstractRepositoryService.class);
 
     private final AbstractRepository<T> dao;

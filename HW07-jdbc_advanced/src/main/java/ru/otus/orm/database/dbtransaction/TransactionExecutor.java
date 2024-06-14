@@ -1,6 +1,6 @@
-package ru.otus.advjdbc.database.dbtransaction;
+package ru.otus.orm.database.dbtransaction;
 
-import ru.otus.advjdbc.exceptions.DataBaseOperationException;
+import ru.otus.orm.exceptions.DataBaseOperationException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
