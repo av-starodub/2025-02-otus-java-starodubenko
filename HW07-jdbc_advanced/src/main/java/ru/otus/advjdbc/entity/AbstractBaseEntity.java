@@ -1,4 +1,4 @@
-package ru.otus.advjdbc.model;
+package ru.otus.advjdbc.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

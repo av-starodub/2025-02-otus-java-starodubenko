@@ -7,6 +7,8 @@ import ru.otus.advjdbc.database.datasource.DataSourceProvider;
 import ru.otus.advjdbc.database.dbexecutor.DataBaseOperationExecutor;
 import ru.otus.advjdbc.database.dbmigration.DbMigrator;
 import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
+import ru.otus.advjdbc.entity.EntityMapper;
+import ru.otus.advjdbc.entity.EntityMetaData;
 import ru.otus.advjdbc.model.User;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 import ru.otus.advjdbc.service.AbstractRepositoryService;
@@ -33,8 +35,11 @@ public class Application {
             var transactionExecutor = new TransactionExecutor(dataSource);
             var dbExecutor = new DataBaseOperationExecutor();
 
-            var userRepository = new AbstractRepository<>(dbExecutor, User.class);
-            var userRepositoryService = new AbstractRepositoryService<User>(userRepository, transactionExecutor);
+            var userMetaData = new EntityMetaData<>(User.class);
+            var userMapper = new EntityMapper<>(userMetaData);
+
+            var userRepository = new AbstractRepository<>(dbExecutor, userMapper);
+            var userRepositoryService = new AbstractRepositoryService<>(userRepository, transactionExecutor);
 
             var user1 = new User("bob", "123", "bob");
             var user2 = new User("tom", "456", "tom");

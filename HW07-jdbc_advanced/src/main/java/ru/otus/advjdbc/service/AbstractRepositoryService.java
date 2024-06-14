@@ -3,7 +3,7 @@ package ru.otus.advjdbc.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.advjdbc.database.dbtransaction.TransactionExecutor;
-import ru.otus.advjdbc.model.AbstractBaseEntity;
+import ru.otus.advjdbc.entity.AbstractBaseEntity;
 import ru.otus.advjdbc.reposistory.AbstractRepository;
 
 import java.util.List;
