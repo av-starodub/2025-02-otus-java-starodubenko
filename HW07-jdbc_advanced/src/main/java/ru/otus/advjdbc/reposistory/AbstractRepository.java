@@ -23,7 +23,15 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
     private final DataBaseOperationExecutor dbExecutor;
 
     private final String tableName;
+    private final List<String> columnLabelsWithoutId;
+    private final List<String> allColumnLabels;
     private final String insertQuery;
+    private final String updateQuery;
+    private final String findByIdQuery;
+    private final String findAllQuery;
+    private final String deleteByIdQuery;
+    private final String deleteAllQuery;
+
 
     private final List<Field> cachedFieldsWithoutId;
     private final List<Field> cachedAllFields;
@@ -39,37 +47,42 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
         cachedAllFields = new ArrayList<>();
         cachedAllFields.add(id);
         cachedAllFields.addAll(cachedFieldsWithoutId);
+        columnLabelsWithoutId = cachedFieldsWithoutId.stream()
+                .map(this::getColumnLabel)
+                .collect(Collectors.toList());
+        allColumnLabels = new ArrayList<>();
+        allColumnLabels.add("id");
+        allColumnLabels.addAll(columnLabelsWithoutId);
         insertQuery = createInsertQuery();
+        updateQuery = createUpdateQuery();
+        findByIdQuery = "SELECT * FROM %s WHERE id = ?".formatted(tableName);
+        findAllQuery = "SELECT * FROM %s".formatted(tableName);
+        deleteByIdQuery = "DELETE FROM %s WHERE id = ?".formatted(tableName);
+        deleteAllQuery = "TRUNCATE TABLE %s".formatted(tableName);
         constructor = getConstructor(cls);
     }
 
     public long create(Connection connection, T entity) {
         try {
-            var queryParams = getFieldValues(entity);
+            var queryParams = getEntityFieldValuesWithoutId(entity);
             return dbExecutor.executeStatement(connection, insertQuery, queryParams);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException();
+            throw new AbstractRepositoryException("create entity error ", e);
         }
     }
 
     public void update(Connection connection, T entity) {
-        var columnNames = cachedFieldsWithoutId.stream()
-                .map(field -> {
-                    var columnName = getColumnName(field);
-                    return "%s = ?".formatted(columnName);
-                })
-                .collect(Collectors.joining(", "));
-        var query = "UPDATE %s SET %s WHERE id = %d".formatted(tableName, columnNames, entity.getId());
         try {
-            dbExecutor.executeStatement(connection, query, getFieldValues(entity));
+            var params = getEntityFieldValuesWithoutId(entity);
+            params.add(entity.getId());
+            dbExecutor.executeStatement(connection, updateQuery, params);
         } catch (IllegalAccessException e) {
             throw new AbstractRepositoryException("update entity error ", e);
         }
     }
 
     public Optional<T> findById(Connection connection, Long id) {
-        var query = "SELECT * FROM %s WHERE id = ?".formatted(tableName);
-        return dbExecutor.executeSelect(connection, query, List.of(id), resultSet -> {
+        return dbExecutor.executeSelect(connection, findByIdQuery, List.of(id), resultSet -> {
             try {
                 if (resultSet.next()) {
                     return createEntity(resultSet);
@@ -82,8 +95,7 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
     }
 
     public List<T> findAll(Connection connection) {
-        var query = "SELECT * FROM %s".formatted(tableName);
-        return dbExecutor.executeSelect(connection, query, List.of(), resultSet -> {
+        return dbExecutor.executeSelect(connection, findAllQuery, List.of(), resultSet -> {
             var entities = new ArrayList<T>();
             try {
                 while (resultSet.next()) {
@@ -93,27 +105,23 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
             } catch (SQLException e) {
                 throw new DataBaseOperationException("findAll error ", e);
             }
-        }).orElseThrow(() -> new RuntimeException("unexpected error "));
+        }).orElseThrow(() -> new AbstractRepositoryException("unexpected error "));
     }
 
     public boolean deleteById(Connection connection, Long id) {
-        var query = "DELETE FROM %s WHERE id = ?".formatted(tableName);
-        return dbExecutor.executeDelete(connection, query, List.of(id));
+        return dbExecutor.executeDelete(connection, deleteByIdQuery, List.of(id));
     }
 
     public boolean deleteAll(Connection connection) {
-        var query = "TRUNCATE TABLE %s".formatted(tableName);
-        return dbExecutor.executeDelete(connection, query, List.of());
+        return dbExecutor.executeDelete(connection, deleteAllQuery, List.of());
     }
 
     private T createEntity(ResultSet resultSet) {
-        var entityFieldValues = cachedAllFields.stream().map(field -> {
-            var columnName = getColumnName(field);
+        var entityFieldValues = allColumnLabels.stream().map(columnName -> {
             try {
                 return resultSet.getObject(columnName);
             } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
+                throw new DataBaseOperationException("", e);
             }
         }).toArray();
         try {
@@ -134,7 +142,7 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
         }
     }
 
-    private List<Object> getFieldValues(T entity) throws IllegalAccessException {
+    private List<Object> getEntityFieldValuesWithoutId(T entity) throws IllegalAccessException {
         var fieldValues = new ArrayList<>();
         for (var field : cachedFieldsWithoutId) {
             field.setAccessible(true);
@@ -145,28 +153,22 @@ public class AbstractRepository<T extends AbstractBaseEntity> {
     }
 
     private String createInsertQuery() {
-        var query = new StringBuilder("INSERT INTO ");
-        query.append(tableName).append(" (");
-        for (var field : cachedFieldsWithoutId) {
-            var columnName = getColumnName(field);
-            query.append(columnName).append(", ");
-        }
-        // 'insert into users (login, password, nickname, '
-        query.setLength(query.length() - 2);
-        // 'insert into users (login, password, nickname'
-        query.append(") VALUES (");
-        for (var ignored : cachedFieldsWithoutId) {
-            query.append("?, ");
-        }
-        // 'insert into users (login, password, nickname) values (?, ?, ?, '
-        query.setLength(query.length() - 2);
-        // 'insert into users (login, password, nickname) values (?, ?, ?'
-        query.append(");");
-        return query.toString();
+        var columns = String.join(", ", columnLabelsWithoutId);
+        var paramsTemplate = columnLabelsWithoutId.stream()
+                .map(column -> "?")
+                .collect(Collectors.joining(", "));
+        return "INSERT INTO %s (%s) VALUES (%s);".formatted(tableName, columns, paramsTemplate);
     }
 
-    private String getColumnName(Field field) {
-        var annotationNameValue = field.getAnnotation(RepositoryField.class).columnName();
-        return annotationNameValue.isEmpty() ? field.getName() : annotationNameValue;
+    private String createUpdateQuery() {
+        var columns = columnLabelsWithoutId.stream()
+                .map("%s = ?"::formatted)
+                .collect(Collectors.joining(", "));
+        return "UPDATE %s SET %s WHERE id = ?".formatted(tableName, columns);
+    }
+
+    private String getColumnLabel(Field field) {
+        var columnLabel = field.getAnnotation(RepositoryField.class).columnName();
+        return columnLabel.isEmpty() ? field.getName() : columnLabel;
     }
 }
