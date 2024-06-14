@@ -2,8 +2,8 @@ package ru.otus.advjdbc.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.otus.advjdbc.RepositoryField;
-import ru.otus.advjdbc.RepositoryTable;
+import ru.otus.advjdbc.entity.annotations.RepositoryField;
+import ru.otus.advjdbc.entity.annotations.RepositoryTable;
 import ru.otus.advjdbc.entity.AbstractBaseEntity;
 
 @Getter

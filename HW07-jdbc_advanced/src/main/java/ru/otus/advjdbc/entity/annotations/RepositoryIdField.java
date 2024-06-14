@@ -1,4 +1,4 @@
-package ru.otus.advjdbc;
+package ru.otus.advjdbc.entity.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface RepositoryField {
-    String columnName() default "";
+public @interface RepositoryIdField {
 }

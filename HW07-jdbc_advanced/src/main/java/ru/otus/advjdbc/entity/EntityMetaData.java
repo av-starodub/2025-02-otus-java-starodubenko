@@ -1,8 +1,8 @@
 package ru.otus.advjdbc.entity;
 
 import lombok.Getter;
-import ru.otus.advjdbc.RepositoryField;
-import ru.otus.advjdbc.RepositoryTable;
+import ru.otus.advjdbc.entity.annotations.RepositoryField;
+import ru.otus.advjdbc.entity.annotations.RepositoryTable;
 import ru.otus.advjdbc.exceptions.AbstractRepositoryException;
 
 import java.lang.reflect.Constructor;
