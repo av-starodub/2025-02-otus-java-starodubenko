@@ -8,14 +8,19 @@ import java.sql.SQLException;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 public final class TransactionExecutor {
     private final DataSource dataSource;
 
-    public TransactionExecutor(DataSource ds) {
-        this.dataSource = ds;
+    public TransactionExecutor(DataSource dS) {
+        requireNonNull(dS, "parameter dataSource must not be null ");
+        this.dataSource = dS;
     }
 
     public <T> T executeTransaction(Function<Connection, T> action) {
+        requireNonNull(action, "parameter action must not be null ");
+
         return wrapException(() -> {
             try (var connection = dataSource.getConnection()) {
                 var savePoint = connection.setSavepoint();
@@ -25,13 +30,13 @@ public final class TransactionExecutor {
                     return result;
                 } catch (SQLException e) {
                     connection.rollback(savePoint);
-                    throw new DataBaseOperationException("transaction exception", e);
+                    throw new DataBaseOperationException("transaction error ", e);
                 }
             }
         });
     }
 
-    public <T> T wrapException(Callable<T> action) {
+    private  <T> T wrapException(Callable<T> action) {
         try {
             return action.call();
         } catch (Exception e) {

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNull;
+
 public final class EntityMapper<T extends AbstractBaseEntity> {
 
     private final EntityMetaData<T> metaData;
@@ -26,6 +28,7 @@ public final class EntityMapper<T extends AbstractBaseEntity> {
     private final String deleteAllQuery;
 
     public EntityMapper(EntityMetaData<T> entityMetaData) {
+        requireNonNull(entityMetaData, "parameter entityMetaData must not be null ");
         metaData = entityMetaData;
         var tableName = metaData.getTableName();
         var columnLabelsWithoutId = metaData.getColumnLabelsWithoutId();
@@ -53,22 +56,24 @@ public final class EntityMapper<T extends AbstractBaseEntity> {
     }
 
     public T createEntity(Object[] entityFieldValues) {
+        requireNonNull(entityFieldValues, "parameter entityFieldValues must not be null ");
         try {
             var constructor = metaData.getConstructor();
             return constructor.newInstance(entityFieldValues);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new EntityMapperException("create entity error ", e);
+            throw new EntityMapperException("Failed to create entity ", e);
         }
     }
 
     public List<Object> extractEntityFieldValuesWithoutId(T entity) {
+        requireNonNull(entity, "parameter entity must not be null ");
         var fieldValues = new ArrayList<>();
         for (var field : metaData.getFieldsWithoutId()) {
             field.setAccessible(true);
             try {
                 fieldValues.add(field.get(entity));
             } catch (IllegalAccessException e) {
-                throw new EntityMapperException("getEntityFieldValuesWithoutId error ", e);
+                throw new EntityMapperException("Failed to extract entity field values ", e);
             } finally {
                 field.setAccessible(false);
             }

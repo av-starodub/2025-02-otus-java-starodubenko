@@ -3,12 +3,14 @@ package ru.otus.orm.entity;
 import lombok.Getter;
 import ru.otus.orm.entity.annotations.RepositoryField;
 import ru.otus.orm.entity.annotations.RepositoryTable;
-import ru.otus.orm.exceptions.AbstractRepositoryException;
+import ru.otus.orm.exceptions.EntityMetaDataException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 @Getter
 public final class EntityMetaData<T extends AbstractBaseEntity> {
@@ -27,6 +29,7 @@ public final class EntityMetaData<T extends AbstractBaseEntity> {
 
 
     public EntityMetaData(Class<T> cls) throws NoSuchFieldException {
+        requireNonNull(cls, "parameter class must not be null ");
         tableName = cls.getAnnotation(RepositoryTable.class).title();
         fields = new ArrayList<>();
         fieldsWithoutId = new ArrayList<>();
@@ -60,7 +63,7 @@ public final class EntityMetaData<T extends AbstractBaseEntity> {
         try {
             return cls.getDeclaredConstructor(fieldTypes);
         } catch (NoSuchMethodException e) {
-            throw new AbstractRepositoryException("get entity constructor error ", e);
+            throw new EntityMetaDataException("Entity constructor not found ", e);
         }
     }
 

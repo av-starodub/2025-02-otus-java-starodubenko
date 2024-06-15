@@ -6,12 +6,15 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 
+import static java.util.Objects.requireNonNull;
+
 public final class DbMigrator {
     private static final Logger LOG = LoggerFactory.getLogger(DbMigrator.class);
 
     private final Flyway flyway;
 
     public DbMigrator(DataSource dataSource) {
+        requireNonNull(dataSource, "parameter dataSource must not be null ");
         flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migration")
