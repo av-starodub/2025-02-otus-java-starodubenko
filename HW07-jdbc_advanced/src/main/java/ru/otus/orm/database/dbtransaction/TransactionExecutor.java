@@ -23,6 +23,7 @@ public final class TransactionExecutor {
 
         return wrapException(() -> {
             try (var connection = dataSource.getConnection()) {
+                connection.setAutoCommit(false);
                 var savePoint = connection.setSavepoint();
                 try {
                     var result = action.apply(connection);
@@ -30,17 +31,19 @@ public final class TransactionExecutor {
                     return result;
                 } catch (SQLException e) {
                     connection.rollback(savePoint);
-                    throw new DataBaseOperationException("transaction error", e);
+                    throw new DataBaseOperationException("Error executing transaction", e);
+                } finally {
+                    connection.setAutoCommit(true);
                 }
             }
         });
     }
 
-    private  <T> T wrapException(Callable<T> action) {
+    private <T> T wrapException(Callable<T> action) {
         try {
             return action.call();
         } catch (Exception e) {
-            throw new DataBaseOperationException(e.getMessage(), e);
+            throw new DataBaseOperationException("Error executing transaction", e);
         }
     }
 }
