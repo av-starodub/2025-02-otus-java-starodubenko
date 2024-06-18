@@ -16,16 +16,20 @@ public final class DataSourceProvider {
     public static DataSource creatHikariConnectionPool(String fileName) {
         requireNonNull(fileName, "parameter fileName must not be null");
         if (!fileName.endsWith(".properties")) {
-            throw new IllegalArgumentException("invalid file name: %s ".formatted(fileName));
+            throw new IllegalArgumentException("invalid file extension: %s".formatted(fileName));
         }
 
         var path = getHikariConfigPathPath(fileName);
         var config = new HikariConfig(path);
+        setDataSourceProperties(config);
+
+        return new HikariDataSource(config);
+    }
+
+    private static void setDataSourceProperties(HikariConfig config) {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-        return new HikariDataSource(config);
     }
 
     private static String getHikariConfigPathPath(String fileName) {
