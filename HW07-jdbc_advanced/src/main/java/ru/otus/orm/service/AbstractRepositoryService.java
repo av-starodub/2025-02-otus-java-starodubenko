@@ -25,7 +25,7 @@ public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
     }
 
     public T save(T entity) {
-        requireNonNull(entity, "parameter entity must not be null ");
+        requireNonNull(entity, "parameter entity must not be null");
         return executor.executeTransaction(connection -> {
             if (isNull(entity.getId())) {
                 var savedEntityId = dao.create(connection, entity);
@@ -40,7 +40,7 @@ public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
     }
 
     public Optional<T> get(Long id) {
-        requireNonNull(id, "parameter id must not be null ");
+        requireNonNull(id, "parameter id must not be null");
         var entityOptional = executor.executeTransaction(connection -> dao.findById(connection, id));
         LOG.info("required entityOptional: {}", entityOptional);
         return entityOptional;
@@ -53,7 +53,7 @@ public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
     }
 
     public boolean remove(Long id) {
-        requireNonNull(id, "parameter id must not be null ");
+        requireNonNull(id, "parameter id must not be null");
         var isEntityRemoved = executor.executeTransaction(connection -> dao.deleteById(connection, id));
         LOG.info("entity with id={} removed: {}", id, isEntityRemoved);
         return isEntityRemoved;

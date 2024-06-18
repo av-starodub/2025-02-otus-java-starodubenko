@@ -14,7 +14,7 @@ public final class DbMigrator {
     private final Flyway flyway;
 
     public DbMigrator(DataSource dataSource) {
-        requireNonNull(dataSource, "parameter dataSource must not be null ");
+        requireNonNull(dataSource, "parameter dataSource must not be null");
         flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migration")
@@ -25,7 +25,7 @@ public final class DbMigrator {
         LOG.info("***");
         LOG.info("data base migration start ...");
         flyway.migrate();
-        LOG.info("data base migration finished ");
+        LOG.info("data base migration finished");
         LOG.info("***");
 
     }
@@ -34,7 +34,7 @@ public final class DbMigrator {
         LOG.info("***");
         LOG.info("data base removing start ...");
         flyway.clean();
-        LOG.info("data base removing finished ");
+        LOG.info("data base removing finished");
         LOG.info("***");
     }
 }

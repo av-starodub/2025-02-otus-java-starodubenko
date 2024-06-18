@@ -29,7 +29,7 @@ public final class EntityMetaData<T extends AbstractBaseEntity> {
 
 
     public EntityMetaData(Class<T> cls) throws NoSuchFieldException {
-        requireNonNull(cls, "parameter class must not be null ");
+        requireNonNull(cls, "parameter class must not be null");
         tableName = cls.getAnnotation(RepositoryTable.class).title();
         fields = new ArrayList<>();
         fieldsWithoutId = new ArrayList<>();
@@ -63,7 +63,7 @@ public final class EntityMetaData<T extends AbstractBaseEntity> {
         try {
             return cls.getDeclaredConstructor(fieldTypes);
         } catch (NoSuchMethodException e) {
-            throw new EntityMetaDataException("Entity constructor not found ", e);
+            throw new EntityMetaDataException("Entity constructor not found", e);
         }
     }
 

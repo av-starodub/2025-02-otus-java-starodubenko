@@ -21,27 +21,27 @@ public final class AbstractRepository<T extends AbstractBaseEntity> {
     private final EntityMapper<T> entityMapper;
 
     public AbstractRepository(DataBaseOperationExecutor executor, EntityMapper<T> mapper) {
-        requireNonNull(executor, "parameter executor must not be null ");
-        requireNonNull(mapper, "parameter mapper must not be null ");
+        requireNonNull(executor, "parameter executor must not be null");
+        requireNonNull(mapper, "parameter mapper must not be null");
         dbExecutor = executor;
         entityMapper = mapper;
     }
 
     public long create(Connection connection, T entity) {
-        requireNonNull(entity, "parameter entity must not be null ");
+        requireNonNull(entity, "parameter entity must not be null");
         var queryParams = entityMapper.extractEntityFieldValuesWithoutId(entity);
         return dbExecutor.executeStatement(connection, entityMapper.getInsertQuery(), queryParams);
     }
 
     public void update(Connection connection, T entity) {
-        requireNonNull(entity, "parameter entity must not be null ");
+        requireNonNull(entity, "parameter entity must not be null");
         var params = entityMapper.extractEntityFieldValuesWithoutId(entity);
         params.add(entity.getId());
         dbExecutor.executeStatement(connection, entityMapper.getUpdateQuery(), params);
     }
 
     public Optional<T> findById(Connection connection, Long id) {
-        requireNonNull(id, "parameter id must not be null ");
+        requireNonNull(id, "parameter id must not be null");
         return dbExecutor.executeSelect(connection, entityMapper.getFindByIdQuery(), List.of(id), resultSet -> {
             try {
                 if (resultSet.next()) {
@@ -50,7 +50,7 @@ public final class AbstractRepository<T extends AbstractBaseEntity> {
                 }
                 return null;
             } catch (SQLException e) {
-                throw new DataBaseOperationException("findById error ", e);
+                throw new DataBaseOperationException("findById error", e);
             }
         });
     }
@@ -65,13 +65,13 @@ public final class AbstractRepository<T extends AbstractBaseEntity> {
                 }
                 return entities;
             } catch (SQLException e) {
-                throw new DataBaseOperationException("findAll error ", e);
+                throw new DataBaseOperationException("findAll error", e);
             }
-        }).orElseThrow(() -> new RuntimeException("Unexpected error "));
+        }).orElseThrow(() -> new RuntimeException("Unexpected error"));
     }
 
     public boolean deleteById(Connection connection, Long id) {
-        requireNonNull(id, "parameter id must not be null ");
+        requireNonNull(id, "parameter id must not be null");
         return dbExecutor.executeDelete(connection, entityMapper.getDeleteByIdQuery(), List.of(id));
     }
 
@@ -85,7 +85,7 @@ public final class AbstractRepository<T extends AbstractBaseEntity> {
                     try {
                         return resultSet.getObject(columnLabel);
                     } catch (SQLException e) {
-                        throw new DataBaseOperationException("Failed to get entity field values ", e);
+                        throw new DataBaseOperationException("Failed to get entity field values", e);
                     }
                 }).toArray();
     }

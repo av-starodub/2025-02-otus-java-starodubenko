@@ -14,12 +14,12 @@ public final class TransactionExecutor {
     private final DataSource dataSource;
 
     public TransactionExecutor(DataSource dS) {
-        requireNonNull(dS, "parameter dataSource must not be null ");
+        requireNonNull(dS, "parameter dataSource must not be null");
         this.dataSource = dS;
     }
 
     public <T> T executeTransaction(Function<Connection, T> action) {
-        requireNonNull(action, "parameter action must not be null ");
+        requireNonNull(action, "parameter action must not be null");
 
         return wrapException(() -> {
             try (var connection = dataSource.getConnection()) {
@@ -30,7 +30,7 @@ public final class TransactionExecutor {
                     return result;
                 } catch (SQLException e) {
                     connection.rollback(savePoint);
-                    throw new DataBaseOperationException("transaction error ", e);
+                    throw new DataBaseOperationException("transaction error", e);
                 }
             }
         });

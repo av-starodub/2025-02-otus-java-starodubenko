@@ -44,7 +44,7 @@ public final class DataBaseOperationExecutor {
     public <T> Optional<T> executeSelect(
             Connection connection, String sqlQuery, List<Object> queryParams, Function<ResultSet, T> rsHandler) {
         checkArgs(sqlQuery, queryParams);
-        requireNonNull(rsHandler, "the ResultSet handler function must not be null ");
+        requireNonNull(rsHandler, "the ResultSet handler function must not be null");
 
         try (var preparedStatement = connection.prepareStatement(sqlQuery)) {
             for (var idx = 0; idx < queryParams.size(); idx++) {
@@ -75,10 +75,10 @@ public final class DataBaseOperationExecutor {
     }
 
     private void checkArgs(String sqlQuery, List<Object> queryParams) {
-        requireNonNull(sqlQuery, "sql-query must not be null ");
-        requireNonNull(queryParams, "the list with sql-query parameters can be empty, but not null ");
+        requireNonNull(sqlQuery, "sql-query must not be null");
+        requireNonNull(queryParams, "the list with sql-query parameters can be empty, but not null");
         if (sqlQuery.isEmpty()) {
-            throw new IllegalArgumentException("sql query must not be empty ");
+            throw new IllegalArgumentException("sql query must not be empty");
         }
     }
 }
