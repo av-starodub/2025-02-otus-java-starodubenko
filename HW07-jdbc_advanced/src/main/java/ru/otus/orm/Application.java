@@ -48,8 +48,9 @@ public final class Application {
                     .orElseThrow(() -> new RuntimeException("user with id=%d not found".formatted(savedUser1Id)));
             LOG.info("required user1: {}", requiredUser1);
 
-            var user1ForUpdate = new User(savedUser1Id, "bob", "123", "updated_nickname");
-            var updatedUser1 = userRepositoryService.save(user1ForUpdate);
+            var updatedUser1 = userRepositoryService.save(
+                    new User(savedUser1Id, "bob", "123", "updated_nickname")
+            );
             LOG.info("updated user1: {}", updatedUser1);
 
             var allSavedUsers = userRepositoryService.getAll();
@@ -77,13 +78,8 @@ public final class Application {
 
             var savedAccountId = savedAccount.getId();
 
-            var requiredAccount = accountRepositoryService.get(savedAccountId)
-                    .orElseThrow(() -> new RuntimeException("account with id=%d not found".formatted(savedAccountId)));
-            ;
-            LOG.info("required account: {}", requiredAccount);
-
-            requiredAccount.setAmount(500L);
-            var updatedAccount = accountRepositoryService.save(requiredAccount);
+            savedAccount.setAmount(500L);
+            var updatedAccount = accountRepositoryService.save(savedAccount);
             LOG.info("updated account: {}", updatedAccount);
 
             var isAccountDeleted = accountRepositoryService.remove(savedAccountId);
