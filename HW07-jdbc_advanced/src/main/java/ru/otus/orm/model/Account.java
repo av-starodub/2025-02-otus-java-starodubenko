@@ -14,7 +14,7 @@ public final class Account extends AbstractBaseEntity {
     @RepositoryField
     private Long amount;
 
-    @RepositoryField(columnName = "tp") // TODO (name = "tp");
+    @RepositoryField(columnName = "tp")
     private String accountType;
 
     @RepositoryField
