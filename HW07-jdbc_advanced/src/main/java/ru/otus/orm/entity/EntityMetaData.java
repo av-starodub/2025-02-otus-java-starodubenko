@@ -28,7 +28,7 @@ public final class EntityMetaData<T extends AbstractBaseEntity> {
     private final List<String> columnLabels;
 
 
-    public EntityMetaData(Class<T> cls) throws NoSuchFieldException {
+    public EntityMetaData(Class<T> cls) {
         requireNonNull(cls, "parameter class must not be null");
         tableName = cls.getAnnotation(RepositoryTable.class).title();
         fields = new ArrayList<>();
@@ -42,17 +42,21 @@ public final class EntityMetaData<T extends AbstractBaseEntity> {
     private void fill(
             List<Field> fields,
             List<Field> fieldsWithoutId,
-            List<String> labels, List<String> labelsWithoutId,
-            Class<T> cls)
-            throws NoSuchFieldException {
-        fields.add(AbstractBaseEntity.class.getDeclaredField("id"));
-        labels.add("id");
-        for (var field : cls.getDeclaredFields()) {
-            fields.add(field);
-            fieldsWithoutId.add(field);
-            var columnLabel = getColumnLabel(field);
-            labels.add(columnLabel);
-            labelsWithoutId.add(columnLabel);
+            List<String> labels,
+            List<String> labelsWithoutId,
+            Class<T> cls) {
+        try {
+            fields.add(AbstractBaseEntity.class.getDeclaredField("id"));
+            labels.add("id");
+            for (var field : cls.getDeclaredFields()) {
+                fields.add(field);
+                fieldsWithoutId.add(field);
+                var columnLabel = getColumnLabel(field);
+                labels.add(columnLabel);
+                labelsWithoutId.add(columnLabel);
+            }
+        } catch (NoSuchFieldException e) {
+            throw new EntityMetaDataException("ID field not found", e);
         }
     }
 
