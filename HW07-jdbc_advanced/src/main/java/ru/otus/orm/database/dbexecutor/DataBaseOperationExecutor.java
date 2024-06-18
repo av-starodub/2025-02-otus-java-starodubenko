@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.otus.orm.exceptions.DataBaseOperationException;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,9 +26,7 @@ public final class DataBaseOperationExecutor {
         try (var preparedStatement =
                      connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
-            for (var idx = 0; idx < queryParams.size(); idx++) {
-                preparedStatement.setObject(idx + 1, queryParams.get(idx));
-            }
+            setPreparedStatementParameters(preparedStatement, queryParams);
             LOG.info("executeStatement: {}", preparedStatement);
             preparedStatement.executeUpdate();
 
@@ -47,25 +46,25 @@ public final class DataBaseOperationExecutor {
         requireNonNull(rsHandler, "the ResultSet handler function must not be null");
 
         try (var preparedStatement = connection.prepareStatement(sqlQuery)) {
-            for (var idx = 0; idx < queryParams.size(); idx++) {
-                preparedStatement.setObject(idx + 1, queryParams.get(idx));
-            }
+
+            setPreparedStatementParameters(preparedStatement, queryParams);
             LOG.info("executeSelect: {}", preparedStatement);
+
             try (var resultSet = preparedStatement.executeQuery()) {
                 return Optional.ofNullable(rsHandler.apply(resultSet));
             }
+
         } catch (SQLException e) {
             throw new DataBaseOperationException("executeSelect error", e);
         }
     }
 
     public boolean executeDelete(Connection connection, String sqlQuery, List<Object> queryParams) {
+        checkArgs(sqlQuery, queryParams);
         try (var preparedStatement =
                      connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
-            for (var idx = 0; idx < queryParams.size(); idx++) {
-                preparedStatement.setObject(idx + 1, queryParams.get(idx));
-            }
+            setPreparedStatementParameters(preparedStatement, queryParams);
             LOG.info("executeDelete: {}", preparedStatement);
             return preparedStatement.executeUpdate() > 0;
 
@@ -79,6 +78,13 @@ public final class DataBaseOperationExecutor {
         requireNonNull(queryParams, "the list with sql-query parameters can be empty, but not null");
         if (sqlQuery.isEmpty()) {
             throw new IllegalArgumentException("sql query must not be empty");
+        }
+    }
+
+    private void setPreparedStatementParameters(PreparedStatement preparedStatement, List<Object> queryParams)
+            throws SQLException {
+        for (var idx = 0; idx < queryParams.size(); idx++) {
+            preparedStatement.setObject(idx + 1, queryParams.get(idx));
         }
     }
 }
