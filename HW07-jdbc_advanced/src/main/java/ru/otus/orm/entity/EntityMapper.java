@@ -28,7 +28,7 @@ public final class EntityMapper<T extends AbstractBaseEntity> {
     private final String deleteAllQuery;
 
     public EntityMapper(EntityMetaData<T> entityMetaData) {
-        requireNonNull(entityMetaData, "parameter entityMetaData must not be null ");
+        requireNonNull(entityMetaData, "parameter entityMetaData must not be null");
         metaData = entityMetaData;
         var tableName = metaData.getTableName();
         var columnLabelsWithoutId = metaData.getColumnLabelsWithoutId();
@@ -41,17 +41,17 @@ public final class EntityMapper<T extends AbstractBaseEntity> {
     }
 
     private String createInsertQuery(List<String> columnLabelsWithoutId, String tableName) {
-        var columns = String.join(", ", columnLabelsWithoutId);
+        var columns = String.join(",", columnLabelsWithoutId);
         var paramsTemplate = columnLabelsWithoutId.stream()
                 .map(column -> "?")
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(","));
         return "INSERT INTO %s (%s) VALUES (%s);".formatted(tableName, columns, paramsTemplate);
     }
 
     private String createUpdateQuery(List<String> columnLabelsWithoutId, String tableName) {
         var columns = columnLabelsWithoutId.stream()
                 .map("%s = ?"::formatted)
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(","));
         return "UPDATE %s SET %s WHERE id = ?".formatted(tableName, columns);
     }
 
