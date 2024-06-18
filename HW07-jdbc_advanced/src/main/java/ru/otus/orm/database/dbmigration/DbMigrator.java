@@ -15,7 +15,7 @@ public final class DbMigrator {
 
     public DbMigrator(DataSource dataSource) {
         requireNonNull(dataSource, "parameter dataSource must not be null");
-        flyway = Flyway.configure()
+        this.flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migration")
                 .load();
