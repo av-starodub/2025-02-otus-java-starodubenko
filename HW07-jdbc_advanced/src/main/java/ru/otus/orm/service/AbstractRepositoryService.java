@@ -13,15 +13,15 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
 public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
-    private final static Logger LOG = LoggerFactory.getLogger(AbstractRepositoryService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractRepositoryService.class);
 
     private final AbstractRepository<T> dao;
 
     private final TransactionExecutor executor;
 
     public AbstractRepositoryService(AbstractRepository<T> repository, TransactionExecutor tExec) {
-        this.dao = repository;
-        this.executor = tExec;
+        this.dao = requireNonNull(repository, "Parameter repository must not be null");
+        this.executor = requireNonNull(tExec, "Parameter executor must not be null");
     }
 
     public T save(T entity) {
