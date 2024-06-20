@@ -25,7 +25,7 @@ public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
     }
 
     public T save(T entity) {
-        requireNonNull(entity, "parameter entity must not be null");
+        requireNonNull(entity, "Parameter entity must not be null");
         return executor.executeTransaction(connection -> {
             if (isNull(entity.getId())) {
                 var savedEntityId = dao.create(connection, entity);
@@ -40,28 +40,36 @@ public final class AbstractRepositoryService<T extends AbstractBaseEntity> {
     }
 
     public Optional<T> get(Long id) {
-        requireNonNull(id, "parameter id must not be null");
-        var entityOptional = executor.executeTransaction(connection -> dao.findById(connection, id));
-        LOG.info("required entityOptional: {}", entityOptional);
-        return entityOptional;
+        requireNonNull(id, "Parameter id must not be null");
+        return executor.executeTransaction(connection -> {
+            var entityOptional = dao.findById(connection, id);
+            LOG.info("required entityOptional: {}", entityOptional);
+            return entityOptional;
+        });
     }
 
     public List<T> getAll() {
-        var entities = executor.executeTransaction(dao::findAll);
-        LOG.info("list of entities: {}", entities);
-        return entities;
+        return executor.executeTransaction(connection -> {
+            var entities = dao.findAll(connection);
+            LOG.info("list of entities: {}", entities);
+            return entities;
+        });
     }
 
     public boolean remove(Long id) {
-        requireNonNull(id, "parameter id must not be null");
-        var isEntityRemoved = executor.executeTransaction(connection -> dao.deleteById(connection, id));
-        LOG.info("entity with id={} removed: {}", id, isEntityRemoved);
-        return isEntityRemoved;
+        requireNonNull(id, "Parameter id must not be null");
+        return executor.executeTransaction(connection -> {
+            var isEntityRemoved = dao.deleteById(connection, id);
+            LOG.info("entity with id={} removed: {}", id, isEntityRemoved);
+            return isEntityRemoved;
+        });
     }
 
     public boolean removeAll() {
-        var isEntitiesRemoved = executor.executeTransaction(dao::deleteAll);
-        LOG.info("all entities removed: {}", isEntitiesRemoved);
-        return isEntitiesRemoved;
+        return executor.executeTransaction(connection -> {
+            var isEntitiesRemoved = dao.deleteAll(connection);
+            LOG.info("all entities removed: {}", isEntitiesRemoved);
+            return isEntitiesRemoved;
+        });
     }
 }
