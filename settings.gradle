@@ -12,4 +12,5 @@ include 'HW03-stream_api'
 include 'HW04-concurrency'
 include 'HW05-patterns-1'
 include 'HW05-patterns-2'
+include 'HW07-jdbc_advanced'
 
