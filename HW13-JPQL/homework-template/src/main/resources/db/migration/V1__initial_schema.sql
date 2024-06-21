@@ -1,17 +1,6 @@
--- Для @GeneratedValue(strategy = GenerationType.IDENTITY)
-/*
-create table client
-(
-    id   bigserial not null primary key,
-    name varchar(50)
-);
+CREATE SEQUENCE global_seq START WITH 100000;
 
- */
-
--- Для @GeneratedValue(strategy = GenerationType.SEQUENCE)
-create sequence client_SEQ start with 1 increment by 1;
-
-create table client
+CREATE TABLE client
 (
     id   bigint not null primary key,
     name varchar(50)
