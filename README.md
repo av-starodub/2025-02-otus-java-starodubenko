@@ -13,4 +13,3 @@
 * #### [Patterns part 2 - implement Proxy](https://github.com/av-starodub/2024-02-otus-java-starodubenko/pull/16/files)
 * #### [JDBC - implement custom ORM (2022)](https://github.com/av-starodub/2024-02-otus-java-starodubenko/tree/master/HW10-jdbc/homework)
 * #### [JDBC - implement custom ORM (2024)](https://github.com/av-starodub/2024-02-otus-java-starodubenko/tree/master/HW10-jdbc/homework)
-* #### [JPQL - using Hibernate](https://github.com/av-starodub/2024-02-otus-java-starodubenko/tree/master/HW11-jpql)
