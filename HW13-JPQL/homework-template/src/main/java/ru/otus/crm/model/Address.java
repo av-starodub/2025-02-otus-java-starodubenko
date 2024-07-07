@@ -19,7 +19,7 @@ import static java.util.Objects.requireNonNull;
 @NoArgsConstructor
 @Entity
 @Table(name = "address")
-public class Address extends AbstractBaseEntity {
+public final class Address extends AbstractBaseEntity {
     @NotBlank
     @Size(max = 120)
     @Column(name = "street", nullable = false)
