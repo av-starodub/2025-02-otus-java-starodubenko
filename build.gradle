@@ -30,6 +30,7 @@ allprojects {
                 mavenBom "org.springframework.boot:spring-boot-dependencies:3.3.3"
                 mavenBom "org.testcontainers:testcontainers-bom:1.17.1"
                 mavenBom "com.google.protobuf:protobuf-bom:3.21.1"
+                mavenBom "jakarta.platform:jakarta.jakartaee-bom:10.0.0"
             }
             dependency "com.google.guava:guava:${Versions.guava}"
         }
