@@ -1,10 +1,13 @@
 package ru.otus.crm.service;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.repository.DataTemplate;
-import ru.otus.crm.model.Client;
+import ru.otus.core.repository.HibernateUtils;
 import ru.otus.core.sessionmanager.TransactionManager;
+import ru.otus.crm.model.Address;
+import ru.otus.crm.model.Client;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +42,11 @@ public class DbServiceClientImpl implements DBServiceClient {
     public Optional<Client> getClient(long id) {
         return transactionManager.doInReadOnlyTransaction(session -> {
             var clientOptional = clientDataTemplate.findById(session, id);
+            clientOptional.ifPresent(client -> {
+                Hibernate.initialize(client.getAddress());
+                Hibernate.initialize(client.getPhones());
+                client.setAddress(HibernateUtils.unProxy(client.getAddress(), Address.class));
+            });
             log.info("client: {}", clientOptional);
             return clientOptional;
         });
@@ -48,6 +56,11 @@ public class DbServiceClientImpl implements DBServiceClient {
     public List<Client> findAll() {
         return transactionManager.doInReadOnlyTransaction(session -> {
             var clientList = clientDataTemplate.findAll(session);
+            clientList.forEach(client -> {
+                Hibernate.initialize(client.getAddress());
+                Hibernate.initialize(client.getPhones());
+                client.setAddress(HibernateUtils.unProxy(client.getAddress(), Address.class));
+            });
             log.info("clientList:{}", clientList);
             return clientList;
        });

@@ -1,6 +1,7 @@
 package ru.otus.crm.model;
 
 
+/*
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,14 +10,29 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+*/
+/*
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+*/
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.otus.crm.model.base.AbstractBaseEntity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +43,8 @@ import static java.util.Objects.requireNonNull;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "client")
-public final class Client extends AbstractBaseEntity implements Cloneable {
+@Table(name = "clients")
+public class Client extends AbstractBaseEntity implements Cloneable {
 
     @NotBlank
     @Size(max = 50)
@@ -36,11 +52,12 @@ public final class Client extends AbstractBaseEntity implements Cloneable {
     @NotNull
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", unique = true)
     private Address address;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "client_id")
     @NotNull
     private List<Phone> phones;
 
@@ -59,14 +76,13 @@ public final class Client extends AbstractBaseEntity implements Cloneable {
         this.name = name;
         this.address = address;
         this.phones = phones;
-        phones.forEach(phone -> phone.setClient(this));
     }
 
     @Override
     public Client clone() {
         var clientClone = new Client(id, name);
         clientClone.setAddress(cloneAddress());
-        clientClone.setPhones(clonePhones(clientClone));
+        clientClone.setPhones(clonePhones());
         return clientClone;
     }
 
@@ -77,16 +93,13 @@ public final class Client extends AbstractBaseEntity implements Cloneable {
         return null;
     }
 
-    private List<Phone> clonePhones(Client clientClone) {
+    private List<Phone> clonePhones() {
         if (isNull(phones)) {
             return new ArrayList<>();
         }
         return phones.stream()
-                .map(phone -> {
-                    var clonePhone = new Phone(phone.getId(), phone.getNumber());
-                    clonePhone.setClient(clientClone);
-                    return clonePhone;
-                }).toList();
+                .map(phone -> new Phone(phone.getId(), phone.getNumber()))
+                .toList();
     }
 
     @Override

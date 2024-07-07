@@ -1,16 +1,28 @@
 package ru.otus.crm.model;
 
 
+/*
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+*/
+/*
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+*/
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.otus.crm.model.base.AbstractBaseEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import static java.util.Objects.requireNonNull;
 
@@ -18,8 +30,8 @@ import static java.util.Objects.requireNonNull;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "address")
-public final class Address extends AbstractBaseEntity {
+@Table(name = "addresses")
+public class Address extends AbstractBaseEntity {
     @NotBlank
     @Size(max = 120)
     @Column(name = "street", nullable = false)
