@@ -18,8 +18,8 @@ public class Cart {
         products = new ArrayList<>();
     }
 
-    public void addProduct(Product product) {
-        products.add(product);
+    public boolean addProduct(Product product) {
+        return products.add(product);
     }
 
     public boolean removeProduct(long id) {
