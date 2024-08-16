@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import ru.otus.app.config.ProductProperties;
+import ru.otus.app.exception.DataLoadException;
 import ru.otus.app.model.Product;
 import ru.otus.app.repository.dto.ProductDto;
 
