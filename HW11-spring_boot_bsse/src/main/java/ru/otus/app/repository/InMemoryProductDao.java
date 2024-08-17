@@ -14,6 +14,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.requireNonNull;
+
 @Repository
 public class InMemoryProductDao implements ProductDao {
     private static final Logger log = LoggerFactory.getLogger(InMemoryProductDao.class);
@@ -25,6 +28,7 @@ public class InMemoryProductDao implements ProductDao {
 
     @Autowired
     public InMemoryProductDao(ProductLoader loader) {
+        requireNonNull(loader, "ProductLoader must not be null");
         products = new ConcurrentHashMap<>();
         idGenerator = new AtomicLong();
         productLoader = loader;
@@ -46,8 +50,9 @@ public class InMemoryProductDao implements ProductDao {
 
     @Override
     public Product insert(Product product) {
+        requireNonNull(product, "Product must not be null");
         var productId = product.getId();
-        if (productId == null) {
+        if (isNull(productId)) {
             productId = idGenerator.incrementAndGet();
             product.setId(productId);
         }
@@ -60,8 +65,9 @@ public class InMemoryProductDao implements ProductDao {
     }
 
     @Override
-    public Optional<Product> findById(long productId) {
-        return Optional.ofNullable(products.get(productId));
+    public Optional<Product> findById(Long id) {
+        requireNonNull(id, "Parameter ID must not be null");
+        return Optional.ofNullable(products.get(id));
     }
 
     @Override

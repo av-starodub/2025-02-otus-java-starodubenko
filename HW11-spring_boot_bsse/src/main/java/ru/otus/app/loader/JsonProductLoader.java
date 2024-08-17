@@ -10,7 +10,8 @@ import ru.otus.app.exception.DataLoadException;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 @Component
 public class JsonProductLoader implements ProductLoader {
@@ -19,7 +20,7 @@ public class JsonProductLoader implements ProductLoader {
 
     @Autowired
     public JsonProductLoader(ProductProperties prop) {
-        Objects.requireNonNull(prop, "Parameter properties must not be null");
+        requireNonNull(prop, "ProductProperties must not be null");
         this.properties = prop;
     }
 

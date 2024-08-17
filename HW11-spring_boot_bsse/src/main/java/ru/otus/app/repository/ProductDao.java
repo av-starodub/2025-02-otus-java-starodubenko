@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ProductDao {
     Product insert(Product product);
     
-    Optional<Product> findById(long id);
+    Optional<Product> findById(Long id);
 
     List<Product> findAll();
 }

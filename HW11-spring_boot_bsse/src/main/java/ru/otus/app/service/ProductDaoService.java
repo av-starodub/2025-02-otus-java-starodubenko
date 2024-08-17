@@ -8,20 +8,25 @@ import ru.otus.app.repository.ProductDao;
 
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 @Service
 public class ProductDaoService {
     private final ProductDao productDao;
 
     @Autowired
     public ProductDaoService(ProductDao dao) {
+        requireNonNull(dao, "ProductDao must not be null");
         productDao = dao;
     }
 
     public Product create(ProductDto dto) {
+        requireNonNull(dto, "ProductDto must not be null");
         return productDao.insert(new Product(null, dto.getTitle(), dto.getPrice()));
     }
 
     public Product getById(Long id) {
+        requireNonNull(id, "Product ID must not be null");
         return productDao.findById(id).orElse(null);
     }
 
