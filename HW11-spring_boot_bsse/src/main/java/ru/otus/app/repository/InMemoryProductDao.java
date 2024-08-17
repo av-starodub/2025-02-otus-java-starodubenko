@@ -1,7 +1,11 @@
 package ru.otus.app.repository;
 
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.otus.app.loader.ProductLoader;
 import ru.otus.app.model.Product;
 
 import java.util.List;
@@ -12,23 +16,32 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class InMemoryProductDao implements ProductDao {
-
+    private static final Logger log = LoggerFactory.getLogger(InMemoryProductDao.class);
     private final Map<Long, Product> products;
 
     private final AtomicLong idGenerator;
 
-    public InMemoryProductDao() {
+    private final ProductLoader productLoader;
+
+    @Autowired
+    public InMemoryProductDao(ProductLoader loader) {
         products = new ConcurrentHashMap<>();
         idGenerator = new AtomicLong();
+        productLoader = loader;
     }
 
     @PostConstruct
     public void init() {
-        this.products.put(1L, new Product(1L, "Product 1", 10.0));
-        this.products.put(2L, new Product(2L, "Product 2", 20.0));
-        this.products.put(3L, new Product(3L, "Product 3", 30.0));
-        this.products.put(4L, new Product(4L, "Product 4", 40.0));
-        this.products.put(5L, new Product(5L, "Product 5", 50.0));
+        log.info("ProductRepository initialization start...");
+        var productsDto = productLoader.loadProducts();
+        for (var productDto : productsDto.getProducts()) {
+            long id = idGenerator.incrementAndGet();
+            var product = productDto.toProduct();
+            product.setId(id);
+            products.put(id, product);
+            log.info("Loaded: {}", product);
+        }
+        log.info("ProductRepository initialization finished");
     }
 
     @Override

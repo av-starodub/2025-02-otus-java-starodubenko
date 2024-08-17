@@ -9,11 +9,11 @@ import ru.otus.app.repository.ProductDao;
 import java.util.List;
 
 @Service
-public class ProductService {
+public class ProductDaoService {
     private final ProductDao productDao;
 
     @Autowired
-    public ProductService(ProductDao dao) {
+    public ProductDaoService(ProductDao dao) {
         productDao = dao;
     }
 
