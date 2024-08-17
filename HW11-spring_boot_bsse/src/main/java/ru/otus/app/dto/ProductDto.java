@@ -1,5 +1,6 @@
 package ru.otus.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,10 @@ import ru.otus.app.model.Product;
 @AllArgsConstructor
 public class ProductDto {
 
+    @JsonProperty("title")
     private String title;
 
+    @JsonProperty("price")
     private Double price;
 
     public Product toProduct() {
