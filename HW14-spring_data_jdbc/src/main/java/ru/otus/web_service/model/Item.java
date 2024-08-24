@@ -1,10 +1,13 @@
-package ru.otus.web_service.domain;
+package ru.otus.web_service.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
+import ru.otus.web_service.dto.ItemDto;
 
 @Data
+@AllArgsConstructor
 @Table("items")
 public class Item {
     @Id
@@ -15,4 +18,8 @@ public class Item {
     private String description;
 
     private Double price;
+
+    public ItemDto toDto() {
+        return new ItemDto(name, description, price);
+    }
 }
