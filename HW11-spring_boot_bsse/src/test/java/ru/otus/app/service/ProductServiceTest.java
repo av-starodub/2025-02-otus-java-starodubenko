@@ -7,8 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.app.dto.ProductDto;
-import ru.otus.app.dto.ProductsDto;
-import ru.otus.app.exception.ProductNotFoundException;
 import ru.otus.app.model.Product;
 import ru.otus.app.repository.ProductDao;
 
@@ -16,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,55 +51,35 @@ class ProductServiceTest {
 
         assertThat(createdProduct)
                 .isNotNull()
-                .extracting(Product::getTitle, Product::getPrice)
-                .containsExactly(PRODUCT_TITLE, PRODUCT_PRICE);
+                .isEqualTo(PRODUCT);
 
         verify(productDao).insert(any(Product.class));
     }
 
     @Test
-    @DisplayName("Should return ProductDto when product is found by ID")
+    @DisplayName("Should return Product when product is found by ID")
     void checkGetByIdSuccess() {
         when(productDao.findById(PRODUCT_ID)).thenReturn(Optional.of(PRODUCT));
 
-        var resultDto = productService.getById(PRODUCT_ID);
+        var selectedProduct = productService.getById(PRODUCT_ID);
 
-        assertThat(resultDto)
-                .isNotNull()
-                .extracting(ProductDto::getTitle, ProductDto::getPrice)
-                .containsExactly(PRODUCT_TITLE, PRODUCT_PRICE);
-
-        verify(productDao).findById(PRODUCT_ID);
-    }
-
-    @Test
-    @DisplayName("Should throw ProductNotFoundException when product is not found by ID")
-    void checkGetByIdProductNotFound() {
-        when(productDao.findById(PRODUCT_ID)).thenReturn(Optional.empty());
-
-        ProductNotFoundException thrown = catchThrowableOfType(
-                () -> productService.getById(PRODUCT_ID),
-                ProductNotFoundException.class
-        );
-
-        assertThat(thrown)
-                .isInstanceOf(ProductNotFoundException.class)
-                .hasMessage("Product not found with ID=1");
+        assertThat(selectedProduct)
+                .isPresent()
+                .hasValue(PRODUCT);
 
         verify(productDao).findById(PRODUCT_ID);
     }
 
     @Test
-    @DisplayName("Should return ProductsDto with all products")
+    @DisplayName("Should return List with all products")
     void checkGetAllProducts() {
         when(productDao.findAll()).thenReturn(PRODUCTS);
 
-        ProductsDto resultDto = productService.getAll();
+        var selectedProducts = productService.getAll();
 
-        assertThat(resultDto)
+        assertThat(selectedProducts)
                 .isNotNull()
-                .extracting(ProductsDto::getProducts)
-                .isEqualTo(PRODUCT_DTOS);
+                .isEqualTo(PRODUCTS);
 
         verify(productDao).findAll();
     }
