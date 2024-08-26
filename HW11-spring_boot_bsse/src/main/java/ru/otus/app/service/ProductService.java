@@ -11,11 +11,11 @@ import ru.otus.app.repository.ProductDao;
 import static java.util.Objects.requireNonNull;
 
 @Service
-public class ProductDaoService {
+public class ProductService {
     private final ProductDao productDao;
 
     @Autowired
-    public ProductDaoService(ProductDao dao) {
+    public ProductService(ProductDao dao) {
         requireNonNull(dao, "ProductDao must not be null");
         productDao = dao;
     }

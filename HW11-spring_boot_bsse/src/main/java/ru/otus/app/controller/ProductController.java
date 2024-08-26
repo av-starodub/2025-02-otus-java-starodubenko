@@ -14,34 +14,34 @@ import ru.otus.app.dto.ProductDto;
 import ru.otus.app.dto.ProductsDto;
 import ru.otus.app.exception.ProductNotFoundException;
 import ru.otus.app.model.Product;
-import ru.otus.app.service.ProductDaoService;
+import ru.otus.app.service.ProductService;
 
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-    private final ProductDaoService productDaoService;
+    private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductDaoService productDaoService) {
-        this.productDaoService = productDaoService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDto) {
-        var createdProduct = productDaoService.create(productDto);
+        var createdProduct = productService.create(productDto);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id) {
-        var productsDto = productDaoService.getById(id);
+        var productsDto = productService.getById(id);
         return new ResponseEntity<>(productsDto, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<ProductsDto> getAllProducts() {
-        var products = productDaoService.getAll();
+        var products = productService.getAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

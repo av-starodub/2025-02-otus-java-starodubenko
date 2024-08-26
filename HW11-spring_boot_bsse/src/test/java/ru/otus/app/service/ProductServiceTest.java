@@ -22,13 +22,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ProductDaoServiceTest {
+class ProductServiceTest {
 
     @Mock
     private ProductDao productDao;
 
     @InjectMocks
-    private ProductDaoService productDaoService;
+    private ProductService productService;
 
     // Test data
     private static final Long PRODUCT_ID = 1L;
@@ -50,7 +50,7 @@ class ProductDaoServiceTest {
     void checkCreateProduct() {
         when(productDao.insert(any(Product.class))).thenReturn(PRODUCT);
 
-        var createdProduct = productDaoService.create(PRODUCT_DTO);
+        var createdProduct = productService.create(PRODUCT_DTO);
 
         assertThat(createdProduct)
                 .isNotNull()
@@ -65,7 +65,7 @@ class ProductDaoServiceTest {
     void checkGetByIdSuccess() {
         when(productDao.findById(PRODUCT_ID)).thenReturn(Optional.of(PRODUCT));
 
-        var resultDto = productDaoService.getById(PRODUCT_ID);
+        var resultDto = productService.getById(PRODUCT_ID);
 
         assertThat(resultDto)
                 .isNotNull()
@@ -81,7 +81,7 @@ class ProductDaoServiceTest {
         when(productDao.findById(PRODUCT_ID)).thenReturn(Optional.empty());
 
         ProductNotFoundException thrown = catchThrowableOfType(
-                () -> productDaoService.getById(PRODUCT_ID),
+                () -> productService.getById(PRODUCT_ID),
                 ProductNotFoundException.class
         );
 
@@ -97,7 +97,7 @@ class ProductDaoServiceTest {
     void checkGetAllProducts() {
         when(productDao.findAll()).thenReturn(PRODUCTS);
 
-        ProductsDto resultDto = productDaoService.getAll();
+        ProductsDto resultDto = productService.getAll();
 
         assertThat(resultDto)
                 .isNotNull()
