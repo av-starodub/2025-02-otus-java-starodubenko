@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+import ru.otus.app.dto.ExceptionDto;
 import ru.otus.app.dto.ProductDto;
 import ru.otus.app.dto.ProductsDto;
 import ru.otus.app.exception.ProductNotFoundException;
@@ -35,19 +37,30 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id) {
-        var productsDto = productService.getById(id);
-        return new ResponseEntity<>(productsDto, HttpStatus.OK);
+        var product = productService.getById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID=%d".formatted(id)));
+        var productDto = new ProductDto(product.getTitle(), product.getPrice());
+        return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<ProductsDto> getAllProducts() {
         var products = productService.getAll();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        var productsDto = products.stream()
+                .map(product -> new ProductDto(product.getTitle(), product.getPrice()))
+                .toList();
+        return new ResponseEntity<>(new ProductsDto(productsDto), HttpStatus.OK);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
+    public ResponseEntity<ExceptionDto> handleProductNotFoundException(ProductNotFoundException ex, WebRequest request) {
+        var exceptionDto = new ExceptionDto(ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionDto> handleAllExceptions(Exception ex, WebRequest request) {
+        var exceptionDto = new ExceptionDto(ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
