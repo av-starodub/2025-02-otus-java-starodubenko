@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +37,7 @@ public class Client extends AbstractBaseEntity implements Cloneable {
     @JoinColumn(name = "address_id", unique = true)
     private Address address;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "client_id")
-    @NotNull
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Phone> phones;
 
     public Client(String name) {
@@ -57,14 +54,16 @@ public class Client extends AbstractBaseEntity implements Cloneable {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phones = phones;
+        this.phones = phones.stream()
+                .map(phone -> new Phone(phone.getId(), phone.getNumber(), this))
+                .toList();
     }
 
     @Override
     public Client clone() {
         var clientClone = new Client(id, name);
         clientClone.setAddress(cloneAddress());
-        clientClone.setPhones(clonePhones());
+        clientClone.setPhones(new ArrayList<>(clonePhones(clientClone)));
         return clientClone;
     }
 
@@ -75,18 +74,18 @@ public class Client extends AbstractBaseEntity implements Cloneable {
         return null;
     }
 
-    private List<Phone> clonePhones() {
+    private List<Phone> clonePhones(Client client) {
         if (isNull(phones)) {
             return new ArrayList<>();
         }
         return phones.stream()
-                .map(phone -> new Phone(phone.getId(), phone.getNumber()))
+                .map(phone -> new Phone(phone.getId(), phone.getNumber(), client))
                 .toList();
     }
 
     @Override
     public String toString() {
-        return "Client{id=%d, name='%s', %s}".formatted(id, name, address);
+        return "Client{id=%d, name='%s', %s, %s}".formatted(id, name, address, phones);
     }
 }
 

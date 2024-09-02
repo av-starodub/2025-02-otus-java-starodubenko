@@ -21,4 +21,8 @@ public class MigrationsExecutorFlyway {
         flyway.migrate();
         logger.info("db migration finished.");
     }
+
+    public void deleteDataBase() {
+        flyway.clean();
+    }
 }

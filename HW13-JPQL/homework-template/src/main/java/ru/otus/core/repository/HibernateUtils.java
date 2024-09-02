@@ -6,7 +6,6 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Arrays;
 
@@ -26,15 +25,5 @@ public final class HibernateUtils {
     private static StandardServiceRegistry createServiceRegistry(Configuration configuration) {
         return new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
-    }
-
-    public static <T> T unProxy(T entity, Class<T> cls) {
-        if (entity == null) {
-            return null;
-        }
-        if (entity instanceof HibernateProxy proxy) {
-            return cls.cast(proxy.getHibernateLazyInitializer().getImplementation());
-        }
-        return entity;
     }
 }
