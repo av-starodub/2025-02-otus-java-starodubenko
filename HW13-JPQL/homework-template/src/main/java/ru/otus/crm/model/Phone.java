@@ -40,21 +40,21 @@ public class Phone extends AbstractBaseEntity {
     }
 
     public Phone(Long id, String number) {
+        super(id);
         requireNonNull(number, "Parameter number must not be null");
-        this.id = id;
         this.number = number;
     }
 
     public Phone(Long id, String number, Client client) {
+        super(id);
         requireNonNull(number, "Parameter number must not be null");
         requireNonNull(client, "Parameter client must not be null");
-        this.id = id;
         this.number = number;
         this.client = client;
     }
 
     @Override
     public String toString() {
-        return "Phone{id=%d, number=%s, client_id=%s}".formatted(id, number, client.getId());
+        return "Phone{id=%d, number=%s, client_id=%s}".formatted(super.getId(), number, client.getId());
     }
 }

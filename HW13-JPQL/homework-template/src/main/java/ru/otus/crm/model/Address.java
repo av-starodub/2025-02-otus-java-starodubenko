@@ -29,13 +29,13 @@ public class Address extends AbstractBaseEntity {
     }
 
     public Address(Long id, String street) {
+        super(id);
         requireNonNull(street, "Parameter street must not be null");
-        this.id = id;
         this.street = street;
     }
 
     @Override
     public String toString() {
-        return "Address{id=%d, street=%s}".formatted(id, street);
+        return "Address{id=%d, street=%s}".formatted(super.getId(), street);
     }
 }

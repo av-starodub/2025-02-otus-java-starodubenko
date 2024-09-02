@@ -49,9 +49,9 @@ public class Client extends AbstractBaseEntity implements Cloneable {
     }
 
     public Client(Long id, String name, Address address, List<Phone> phones) {
+        super(id);
         requireNonNull(name, "Parameter name must not be null");
         requireNonNull(name, "Parameter phones must not be null");
-        this.id = id;
         this.name = name;
         this.address = address;
         this.phones = phones.stream()
@@ -61,7 +61,7 @@ public class Client extends AbstractBaseEntity implements Cloneable {
 
     @Override
     public Client clone() {
-        var clientClone = new Client(id, name);
+        var clientClone = new Client(super.getId(), name);
         clientClone.setAddress(cloneAddress());
         clientClone.setPhones(new ArrayList<>(clonePhones(clientClone)));
         return clientClone;
@@ -85,7 +85,7 @@ public class Client extends AbstractBaseEntity implements Cloneable {
 
     @Override
     public String toString() {
-        return "Client{id=%d, name='%s', %s, %s}".formatted(id, name, address, phones);
+        return "Client{id=%d, name='%s', %s, %s}".formatted(super.getId(), name, address, phones);
     }
 }
 
