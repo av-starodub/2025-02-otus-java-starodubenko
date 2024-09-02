@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import static java.util.Objects.requireNonNull;
@@ -23,7 +22,6 @@ public class Phone extends AbstractBaseEntity {
     @NotBlank
     @Size(max = 20)
     @Column(name = "number", nullable = false)
-    @NotNull
     private String number;
 
     public Phone(String number) {

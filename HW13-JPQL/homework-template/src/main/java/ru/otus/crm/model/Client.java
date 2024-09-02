@@ -31,8 +31,7 @@ public class Client extends AbstractBaseEntity implements Cloneable {
 
     @NotBlank
     @Size(max = 50)
-    @Column(name = "name")
-    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
