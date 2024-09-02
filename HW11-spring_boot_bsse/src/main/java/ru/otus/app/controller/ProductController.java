@@ -17,6 +17,7 @@ import ru.otus.app.dto.ProductsDto;
 import ru.otus.app.exception.ProductNotFoundException;
 import ru.otus.app.model.Product;
 import ru.otus.app.service.ProductService;
+import ru.otus.app.util.ProductMapUtils;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -39,17 +40,15 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id) {
         var product = productService.getById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with ID=%d".formatted(id)));
-        var productDto = new ProductDto(product.getTitle(), product.getPrice());
+        var productDto = ProductMapUtils.productTo(product);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<ProductsDto> getAllProducts() {
         var products = productService.getAll();
-        var productsDto = products.stream()
-                .map(product -> new ProductDto(product.getTitle(), product.getPrice()))
-                .toList();
-        return new ResponseEntity<>(new ProductsDto(productsDto), HttpStatus.OK);
+        var productDtos = ProductMapUtils.productsListTo(products);
+        return new ResponseEntity<>(productDtos, HttpStatus.OK);
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
