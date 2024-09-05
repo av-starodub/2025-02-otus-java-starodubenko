@@ -12,7 +12,7 @@ public final class ItemMappingUtils {
     }
 
     public static ItemDto itemTo(Item item) {
-        return new ItemDto(item.getName(), item.getDescription(), item.getPrice());
+        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getPrice());
     }
 
     public static ItemDtos listItemsTo(Collection<Item> items) {

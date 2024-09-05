@@ -5,6 +5,8 @@ import ru.otus.web_service.model.Item;
 
 @Data
 public class ItemDto {
+    private final Long id;
+
     private final String name;
 
     private final String description;
@@ -12,6 +14,6 @@ public class ItemDto {
     private final Double price;
 
     public Item toDomainObject() {
-        return new Item(null, name, description, price);
+        return new Item(id, name, description, price);
     }
 }
