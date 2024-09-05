@@ -4,13 +4,13 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_DB: itemdb
+      POSTGRES_DB: itemdb_dev
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_dev:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  postgres_data_dev:
