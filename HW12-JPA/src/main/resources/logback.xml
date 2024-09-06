@@ -12,6 +12,9 @@
     <logger name="org.hibernate" level="ERROR"/>
     <logger name="ch.qos.logback" level="ERROR"/>
 
+    <logger name="org.hibernate.cache" level="DEBUG"/>
+    <logger name="org.ehcache" level="DEBUG"/>
+
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>

@@ -16,14 +16,20 @@
 
         <!-- HikariCP settings -->
         <property name="hibernate.hikari.dataSourceClassName">org.postgresql.ds.PGSimpleDataSource</property>
+        <property name="hibernate.hikari.dataSource.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="hibernate.hikari.dataSource.user">usr</property>
+        <property name="hibernate.hikari.dataSource.password">pwd</property>
         <property name="hibernate.hikari.maximumPoolSize">10</property>
         <property name="hibernate.hikari.minimumIdle">5</property>
         <property name="hibernate.hikari.idleTimeout">30000</property>
         <property name="hibernate.hikari.maxLifetime">1800000</property>
         <property name="hibernate.hikari.connectionTimeout">30000</property>
 
-        <!-- HikariCP Connection provider -->
-        <property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
+        <!-- Caching -->
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">jcache</property>
+        <property name="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</property>
 
 
         <property name="hibernate.hbm2ddl.auto">validate</property>
@@ -31,14 +37,6 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.generate_statistics">true</property>
 
-
-        <!-- Caching -->
-        <property name="hibernate.cache.use_second_level_cache">true</property>
-        <property name="hibernate.cache.use_query_cache">true</property>
-        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property>
-        <property name="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</property>
-
         <mapping class="ru.otus.app.model.Product"/>
-
     </session-factory>
 </hibernate-configuration>

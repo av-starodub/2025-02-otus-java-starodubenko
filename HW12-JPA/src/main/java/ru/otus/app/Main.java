@@ -3,7 +3,13 @@ package ru.otus.app;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.app.controller.ConsoleController;
+import ru.otus.app.dao.HibernateUtils;
+import ru.otus.app.dao.ProductDao;
 import ru.otus.app.dbmigation.MigrationsExecutorFlyway;
+import ru.otus.app.model.Product;
+import ru.otus.app.service.ProductService;
+import ru.otus.app.sessionmanager.TransactionManager;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -21,6 +27,14 @@ public class Main {
 
         try {
             migrationExecutorFlyway.executeMigrations();
+
+            var sessionFactory = HibernateUtils.buildSessionFactory(configuration, Product.class);
+            var transactionManager = new TransactionManager(sessionFactory);
+            var productDao = new ProductDao();
+            var productService = new ProductService(productDao, transactionManager);
+            var consoleController = new ConsoleController(productService);
+
+            consoleController.run();
 
         } catch (Exception e) {
             log.error(e.getMessage(), e);
