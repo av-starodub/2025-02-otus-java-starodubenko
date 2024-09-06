@@ -25,6 +25,7 @@ dependencies {
     implementation("org.ehcache:ehcache:3.10.8")
 
     implementation('com.fasterxml.jackson.core:jackson-databind',
+            'com.fasterxml.jackson.datatype:jackson-datatype-jsr310',
             'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
     )
 

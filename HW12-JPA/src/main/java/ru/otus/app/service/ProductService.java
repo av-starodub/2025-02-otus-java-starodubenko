@@ -1,27 +1,23 @@
 package ru.otus.app.service;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.otus.app.dao.ProductDao;
-import ru.otus.app.model.Product;
 import ru.otus.app.db.sessionmanager.TransactionManager;
+import ru.otus.app.model.Product;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 public class ProductService {
-    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 
+    @NonNull
     private final ProductDao productDao;
 
+    @NonNull
     private final TransactionManager transactionManager;
 
     public List<Product> findAll() {
-        return transactionManager.doInReadOnlyTransaction(session -> {
-            var productList = productDao.getAll(session);
-            log.info("productList {}", productList);
-            return productList;
-        });
+        return transactionManager.doInReadOnlyTransaction(productDao::getAll);
     }
 }

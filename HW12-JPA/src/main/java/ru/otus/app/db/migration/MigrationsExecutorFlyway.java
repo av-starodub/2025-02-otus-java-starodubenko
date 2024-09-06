@@ -23,6 +23,8 @@ public class MigrationsExecutorFlyway {
     }
 
     public void deleteDataBase() {
+        logger.info("db cleaning started...");
         flyway.clean();
+        logger.info("db cleaning finished.");
     }
 }

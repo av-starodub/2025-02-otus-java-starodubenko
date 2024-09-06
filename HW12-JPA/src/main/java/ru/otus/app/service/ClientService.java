@@ -1,5 +1,6 @@
 package ru.otus.app.service;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +14,13 @@ import java.util.List;
 public class ClientService {
     private static final Logger log = LoggerFactory.getLogger(ClientService.class);
 
+    @NonNull
     private final ClientDao clientDao;
 
+    @NonNull
     private final TransactionManager transactionManager;
 
     public List<Client> getAll() {
-        return transactionManager.doInReadOnlyTransaction(session -> {
-            var clientList = clientDao.getAll(session);
-            log.info("clientList {}", clientList);
-            return clientList;
-        });
+        return transactionManager.doInReadOnlyTransaction(clientDao::getAll);
     }
 }

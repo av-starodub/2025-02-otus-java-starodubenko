@@ -7,6 +7,7 @@ import ru.otus.app.controller.ConsoleController;
 import ru.otus.app.dao.ClientDao;
 import ru.otus.app.dao.HibernateUtils;
 import ru.otus.app.dao.ProductDao;
+import ru.otus.app.dao.PurchaseDao;
 import ru.otus.app.db.init.DatabaseInitializer;
 import ru.otus.app.db.loader.DataLoader;
 import ru.otus.app.db.loader.DataProperties;
@@ -14,11 +15,13 @@ import ru.otus.app.db.migration.MigrationsExecutorFlyway;
 import ru.otus.app.db.sessionmanager.TransactionManager;
 import ru.otus.app.dto.ClientDto;
 import ru.otus.app.dto.ProductDto;
+import ru.otus.app.dto.PurchaseDto;
 import ru.otus.app.model.Client;
 import ru.otus.app.model.Product;
 import ru.otus.app.model.Purchase;
 import ru.otus.app.service.ClientService;
 import ru.otus.app.service.ProductService;
+import ru.otus.app.service.PurchaseService;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -52,13 +55,20 @@ public class Main {
             var clients = DataLoader.load(clientProperties, ClientDto.class);
             dbInitializer.init(clients);
 
+            var purchaseProperties = DataProperties.create("purchases.yml");
+            var purchase = DataLoader.load(purchaseProperties, PurchaseDto.class);
+            dbInitializer.init(purchase);
+
             var productDao = new ProductDao();
             var productService = new ProductService(productDao, transactionManager);
 
             var clientDao = new ClientDao();
             var clientService = new ClientService(clientDao, transactionManager);
 
-            var consoleController = new ConsoleController(productService, clientService);
+            var purchaseDao = new PurchaseDao();
+            var purchaseService = new PurchaseService(purchaseDao, transactionManager);
+
+            var consoleController = new ConsoleController(productService, clientService, purchaseService);
             consoleController.run();
 
         } catch (Exception e) {
