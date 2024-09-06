@@ -1,0 +1,20 @@
+- name: "Product A"
+  price: 10.0
+- name: "Product B"
+  price: 20.5
+- name: "Product C"
+  price: 30.0
+- name: "Product D"
+  price: 40.3
+- name: "Product F"
+  price: 50.2
+- name: "Product G"
+  price: 60.0
+- name: "Product H"
+  price: 70.3
+- name: "Product I"
+  price: 80.5
+- name: "Product J"
+  price: 90.9
+- name: "Product K"
+  price: 100.0

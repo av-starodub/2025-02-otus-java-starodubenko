@@ -1,4 +1,4 @@
-package ru.otus.app.sessionmanager;
+package ru.otus.app.db.sessionmanager;
 
 import org.hibernate.Session;
 

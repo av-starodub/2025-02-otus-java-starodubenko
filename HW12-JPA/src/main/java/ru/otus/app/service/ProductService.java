@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.app.dao.ProductDao;
 import ru.otus.app.model.Product;
-import ru.otus.app.sessionmanager.TransactionManager;
+import ru.otus.app.db.sessionmanager.TransactionManager;
 
 import java.util.List;
 

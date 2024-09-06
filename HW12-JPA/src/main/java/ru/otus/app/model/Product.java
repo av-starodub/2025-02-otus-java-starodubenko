@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +33,9 @@ public class Product {
     @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
     @Override
     public String toString() {

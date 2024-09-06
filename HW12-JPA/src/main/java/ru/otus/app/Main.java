@@ -6,10 +6,14 @@ import org.slf4j.LoggerFactory;
 import ru.otus.app.controller.ConsoleController;
 import ru.otus.app.dao.HibernateUtils;
 import ru.otus.app.dao.ProductDao;
-import ru.otus.app.dbmigation.MigrationsExecutorFlyway;
+import ru.otus.app.db.init.DatabaseInitializer;
+import ru.otus.app.db.loader.DataLoader;
+import ru.otus.app.db.loader.DataProperties;
+import ru.otus.app.db.migration.MigrationsExecutorFlyway;
+import ru.otus.app.db.sessionmanager.TransactionManager;
+import ru.otus.app.dto.ProductDto;
 import ru.otus.app.model.Product;
 import ru.otus.app.service.ProductService;
-import ru.otus.app.sessionmanager.TransactionManager;
 
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -30,10 +34,18 @@ public class Main {
 
             var sessionFactory = HibernateUtils.buildSessionFactory(configuration, Product.class);
             var transactionManager = new TransactionManager(sessionFactory);
+
+            var dbInitializer = new DatabaseInitializer(transactionManager);
+
+            var productProperties = DataProperties.create("products.yml");
+            var products = DataLoader.load(productProperties, ProductDto.class);
+
+            dbInitializer.init(products);
+
             var productDao = new ProductDao();
             var productService = new ProductService(productDao, transactionManager);
-            var consoleController = new ConsoleController(productService);
 
+            var consoleController = new ConsoleController(productService);
             consoleController.run();
 
         } catch (Exception e) {
