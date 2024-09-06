@@ -39,6 +39,7 @@
 
         <mapping class="ru.otus.app.model.Product"/>
         <mapping class="ru.otus.app.model.Client"/>
+        <mapping class="ru.otus.app.model.Purchase"/>
 
     </session-factory>
 </hibernate-configuration>

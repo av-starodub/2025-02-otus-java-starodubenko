@@ -16,6 +16,7 @@ import ru.otus.app.dto.ClientDto;
 import ru.otus.app.dto.ProductDto;
 import ru.otus.app.model.Client;
 import ru.otus.app.model.Product;
+import ru.otus.app.model.Purchase;
 import ru.otus.app.service.ClientService;
 import ru.otus.app.service.ProductService;
 
@@ -37,7 +38,7 @@ public class Main {
             migrationExecutorFlyway.executeMigrations();
 
             var sessionFactory = HibernateUtils.buildSessionFactory(
-                    configuration, Product.class, Client.class
+                    configuration, Product.class, Client.class, Purchase.class
             );
 
             var transactionManager = new TransactionManager(sessionFactory);
