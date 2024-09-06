@@ -38,5 +38,7 @@
         <property name="hibernate.generate_statistics">true</property>
 
         <mapping class="ru.otus.app.model.Product"/>
+        <mapping class="ru.otus.app.model.Client"/>
+
     </session-factory>
 </hibernate-configuration>
