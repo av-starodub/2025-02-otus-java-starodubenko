@@ -1,5 +1,10 @@
-- name: "Petr"
-- name: "Ivan"
-- name: "Anna"
-- name: "Alex"
-- name: "Yulia"
+- id: 1
+  name: "Petr"
+- id: 2
+  name: "Ivan"
+- id: 3
+  name: "Anna"
+- id: 4
+  name: "Alex"
+- id: 5
+  name: "Yulia"

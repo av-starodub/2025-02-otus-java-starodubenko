@@ -1,20 +1,30 @@
-- name: "Product A"
+- id: 1
+  name: "Product A"
   price: 10.0
-- name: "Product B"
+- id: 2
+  name: "Product B"
   price: 20.5
-- name: "Product C"
+- id: 3
+  name: "Product C"
   price: 30.0
-- name: "Product D"
+- id: 4
+  name: "Product D"
   price: 40.3
-- name: "Product F"
+- id: 5
+  name: "Product F"
   price: 50.2
-- name: "Product G"
+- id: 6
+  name: "Product G"
   price: 60.0
-- name: "Product H"
+- id: 7
+  name: "Product H"
   price: 70.3
-- name: "Product I"
+- id: 8
+  name: "Product I"
   price: 80.5
-- name: "Product J"
+- id: 9
+  name: "Product J"
   price: 90.9
-- name: "Product K"
+- id: 10
+  name: "Product K"
   price: 100.0

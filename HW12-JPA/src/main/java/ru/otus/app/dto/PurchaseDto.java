@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Data
 public class PurchaseDto implements Dto<Purchase> {
 
+    private Long id;
+
     private Long clientId;
 
     private Long productId;
@@ -22,6 +24,6 @@ public class PurchaseDto implements Dto<Purchase> {
         client.setId(clientId);
         var product = new Product();
         product.setId(productId);
-        return new Purchase(null, client, product, createdAt);
+        return new Purchase(id, client, product, createdAt);
     }
 }

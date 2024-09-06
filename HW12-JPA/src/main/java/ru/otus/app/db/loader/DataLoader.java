@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.otus.app.db.exception.DataLoadException;
 import ru.otus.app.db.exception.ResourceNotFoundException;
 import ru.otus.app.dto.Dto;
+import ru.otus.app.model.AbstractBaseEntity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public final class DataLoader {
     private DataLoader() {
     }
 
-    public static <T, D extends Dto<T>> List<T> load(DataProperties prop, Class<D> cls) {
+    public static <T extends AbstractBaseEntity, D extends Dto<T>> List<T> load(DataProperties prop, Class<D> cls) {
         try (var reader = new InputStreamReader(getInputStream(prop))) {
             var mapper = new ObjectMapper(new YAMLFactory());
             mapper.registerModule(new JavaTimeModule());
