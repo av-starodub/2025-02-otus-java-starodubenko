@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -47,6 +48,9 @@ public class Purchase extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    @Column(name = "price", nullable = false)
+    private BigDecimal price;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

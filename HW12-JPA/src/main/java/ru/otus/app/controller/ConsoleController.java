@@ -1,5 +1,6 @@
 package ru.otus.app.controller;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.otus.app.service.ClientService;
 import ru.otus.app.service.ProductService;
@@ -11,10 +12,13 @@ import java.util.Scanner;
 
 @RequiredArgsConstructor
 public class ConsoleController {
+    @NonNull
     private final ProductService productService;
 
+    @NonNull
     private final ClientService clientService;
 
+    @NonNull
     private final PurchaseService purchaseService;
 
     public void run() {
@@ -26,7 +30,7 @@ public class ConsoleController {
                     1. Show all products
                     2. Show all clients
                     3. Show all purchases
-                    4. Show all products that client bought
+                    4. Show all client purchases
                     5. Show all clients who bought specific product
                     6. Delete product by ID
                     7. Delete client by ID

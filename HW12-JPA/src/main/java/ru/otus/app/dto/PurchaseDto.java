@@ -5,6 +5,7 @@ import ru.otus.app.model.Client;
 import ru.otus.app.model.Product;
 import ru.otus.app.model.Purchase;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,6 +17,8 @@ public class PurchaseDto implements Dto<Purchase> {
 
     private Long productId;
 
+    private BigDecimal price;
+
     private LocalDateTime createdAt;
 
     @Override
@@ -24,6 +27,6 @@ public class PurchaseDto implements Dto<Purchase> {
         client.setId(clientId);
         var product = new Product();
         product.setId(productId);
-        return new Purchase(id, client, product, createdAt);
+        return new Purchase(id, client, product, price, createdAt);
     }
 }

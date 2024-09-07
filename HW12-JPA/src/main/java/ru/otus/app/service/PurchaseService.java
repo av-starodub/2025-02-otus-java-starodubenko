@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import ru.otus.app.dao.PurchaseDao;
 import ru.otus.app.db.sessionmanager.TransactionManager;
 import ru.otus.app.model.Client;
-import ru.otus.app.model.Product;
 import ru.otus.app.model.Purchase;
 
 import java.util.List;
@@ -23,14 +22,8 @@ public class PurchaseService {
         return transactionManager.doInReadOnlyTransaction(purchaseDao::findAll);
     }
 
-    public List<Product> getPurchasedProductsByClientId(Long clientId) {
-        return transactionManager.doInReadOnlyTransaction(session -> {
-                    var clientPurchase = purchaseDao.findAllByClientId(session, clientId);
-                    return clientPurchase.stream()
-                            .map(Purchase::getProduct)
-                            .distinct()
-                            .toList();
-                }
+    public List<Purchase> getPurchasedProductsByClientId(Long clientId) {
+        return transactionManager.doInReadOnlyTransaction(session -> purchaseDao.findAllByClientId(session, clientId)
         );
     }
 
@@ -44,5 +37,4 @@ public class PurchaseService {
                 }
         );
     }
-
 }
