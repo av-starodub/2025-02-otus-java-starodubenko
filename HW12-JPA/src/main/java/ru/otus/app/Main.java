@@ -47,15 +47,15 @@ public class Main {
             var transactionManager = new TransactionManager(sessionFactory);
             var dbInitializer = new DatabaseInitializer(transactionManager);
 
-            var productProperties = DataProperties.create("products.yml");
+            var productProperties = DataProperties.create("data-products.yml");
             var products = DataLoader.load(productProperties, ProductDto.class);
             dbInitializer.init(products);
 
-            var clientProperties = DataProperties.create("clients.yml");
+            var clientProperties = DataProperties.create("data-clients.yml");
             var clients = DataLoader.load(clientProperties, ClientDto.class);
             dbInitializer.init(clients);
 
-            var purchaseProperties = DataProperties.create("purchases.yml");
+            var purchaseProperties = DataProperties.create("data-purchases.yml");
             var purchase = DataLoader.load(purchaseProperties, PurchaseDto.class);
             dbInitializer.init(purchase);
 
