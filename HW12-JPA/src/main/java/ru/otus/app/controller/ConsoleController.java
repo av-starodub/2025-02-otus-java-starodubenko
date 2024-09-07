@@ -21,10 +21,11 @@ public class ConsoleController {
 
         while (!exit) {
             System.out.print("""
-                    1. Show available products
+                    1. Show all products
                     2. Show all clients
                     3. Show all purchases
-                    4. Show all client purchases
+                    4. Show all the goods that client bought
+                    5. Show all clients who bought specific product
                     0. Log out
                     Select action and press enter:\040""");
 
@@ -58,7 +59,6 @@ public class ConsoleController {
                         purchases.forEach(System.out::println);
                     }
                 }
-
                 case "4" -> {
                     System.out.print("Write client id and press enter:\040");
                     var clientId = scanner.nextLong();
@@ -71,9 +71,19 @@ public class ConsoleController {
                         clientPurchases.forEach(System.out::println);
                     }
                 }
+                case "5" -> {
+                    System.out.print("Write product id and press enter:\040");
+                    var productId = scanner.nextLong();
 
+                    System.out.printf("Client who bought products with id=%s:%n", productId);
+                    var clientPurchases = purchaseService.getClientsByProductId(productId);
+                    if (clientPurchases.isEmpty()) {
+                        System.out.printf("The product with id-%s is not on the purchases", productId);
+                    } else {
+                        clientPurchases.forEach(System.out::println);
+                    }
+                }
                 case "0" -> exit = true;
-
                 default -> System.out.printf("Action '%s' does not exist, please try again.\n", choice);
             }
         }

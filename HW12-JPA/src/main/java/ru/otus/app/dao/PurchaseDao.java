@@ -22,4 +22,13 @@ public class PurchaseDao {
                 .applyGraph(session.getEntityGraph("Purchase.withClientAndProduct"), GraphSemantic.FETCH)
                 .getResultList();
     }
+
+    public List<Purchase> findAllByProductId(Session session, Long productId) {
+        return session
+                .createQuery("FROM Purchase p WHERE p.product.id = :productId", Purchase.class)
+                .setParameter("productId", productId)
+                .applyGraph(session.getEntityGraph("Purchase.withClientAndProduct"), GraphSemantic.FETCH)
+                .getResultList();
+    }
+
 }

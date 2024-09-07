@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.otus.app.dao.PurchaseDao;
 import ru.otus.app.db.sessionmanager.TransactionManager;
+import ru.otus.app.model.Client;
 import ru.otus.app.model.Product;
 import ru.otus.app.model.Purchase;
 
@@ -32,4 +33,16 @@ public class PurchaseService {
                 }
         );
     }
+
+    public List<Client> getClientsByProductId(Long productId) {
+        return transactionManager.doInReadOnlyTransaction(session -> {
+                    var clientPurchase = purchaseDao.findAllByProductId(session, productId);
+                    return clientPurchase.stream()
+                            .map(Purchase::getClient)
+                            .distinct()
+                            .toList();
+                }
+        );
+    }
+
 }
