@@ -1,9 +1,7 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow'
 }
-
-group = 'ru.otus'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -37,6 +35,17 @@ dependencies {
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
 }
+
+shadowJar {
+    archiveBaseName.set('PurchaseStatistic')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.otus.app.Main'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
 
 compileJava {
     options.compilerArgs += ["-parameters"]
