@@ -8,9 +8,17 @@ import java.util.List;
 
 public class PurchaseDao {
 
-    public List<Purchase> getAll(Session session) {
+    public List<Purchase> findAll(Session session) {
         return session
-                .createQuery(String.format("from %s", Purchase.class.getSimpleName()), Purchase.class)
+                .createQuery("from Purchase", Purchase.class)
+                .applyGraph(session.getEntityGraph("Purchase.withClientAndProduct"), GraphSemantic.FETCH)
+                .getResultList();
+    }
+
+    public List<Purchase> findAllByClientId(Session session, Long clientId) {
+        return session
+                .createQuery("FROM Purchase p WHERE p.client.id = :clientId", Purchase.class)
+                .setParameter("clientId", clientId)
                 .applyGraph(session.getEntityGraph("Purchase.withClientAndProduct"), GraphSemantic.FETCH)
                 .getResultList();
     }

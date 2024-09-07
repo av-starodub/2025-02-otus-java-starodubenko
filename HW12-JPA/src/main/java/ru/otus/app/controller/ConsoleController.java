@@ -24,6 +24,7 @@ public class ConsoleController {
                     1. Show available products
                     2. Show all clients
                     3. Show all purchases
+                    4. Show all client purchases
                     0. Log out
                     Select action and press enter:\040""");
 
@@ -55,6 +56,19 @@ public class ConsoleController {
                         System.out.println("There are no purchases.");
                     } else {
                         purchases.forEach(System.out::println);
+                    }
+                }
+
+                case "4" -> {
+                    System.out.print("Write client id and press enter:\040");
+                    var clientId = scanner.nextLong();
+
+                    System.out.printf("Client with id=%s purchases:%n", clientId);
+                    var clientPurchases = purchaseService.getPurchasedProductsByClientId(clientId);
+                    if (clientPurchases.isEmpty()) {
+                        System.out.printf("The client with id=%s has no purchases", clientId);
+                    } else {
+                        clientPurchases.forEach(System.out::println);
                     }
                 }
 
