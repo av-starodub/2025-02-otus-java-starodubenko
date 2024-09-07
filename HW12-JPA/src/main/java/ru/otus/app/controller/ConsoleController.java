@@ -26,9 +26,10 @@ public class ConsoleController {
                     1. Show all products
                     2. Show all clients
                     3. Show all purchases
-                    4. Show all the goods that client bought
+                    4. Show all products that client bought
                     5. Show all clients who bought specific product
                     6. Delete product by ID
+                    7. Delete client by ID
                     0. Log out
                     Select action and press enter:\040""");
 
@@ -108,6 +109,21 @@ public class ConsoleController {
                             System.out.printf("Product with id=%s was successfully removed%n", productId);
                         } else {
                             System.out.printf("Product with id=%s does not exist or was deleted earlier.%n", productId);
+                        }
+                    }
+                }
+                case "7" -> {
+                    System.out.print("Write client id and press enter:\040");
+                    var optionalId = getInputLong(scanner);
+                    if (optionalId.isEmpty()) {
+                        scanner.next();
+                        System.out.println("Invalid input. Try agan.");
+                    } else {
+                        var clientId = optionalId.get();
+                        if (clientService.deleteByIdIfExist(clientId)) {
+                            System.out.printf("Client with id=%s was successfully removed%n", clientId);
+                        } else {
+                            System.out.printf("Client with id=%s does not exist or was deleted earlier.%n", clientId);
                         }
                     }
                 }

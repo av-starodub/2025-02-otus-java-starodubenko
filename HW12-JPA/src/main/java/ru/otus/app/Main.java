@@ -60,13 +60,11 @@ public class Main {
             dbInitializer.init(purchase);
 
             var purchaseDao = new PurchaseDao();
-
             var productDao = new ProductDao();
-            var productService = new ProductService(productDao, purchaseDao, transactionManager);
-
             var clientDao = new ClientDao();
-            var clientService = new ClientService(clientDao, transactionManager);
 
+            var productService = new ProductService(productDao, purchaseDao, transactionManager);
+            var clientService = new ClientService(clientDao, purchaseDao, transactionManager);
             var purchaseService = new PurchaseService(purchaseDao, transactionManager);
 
             var consoleController = new ConsoleController(productService, clientService, purchaseService);

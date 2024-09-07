@@ -35,4 +35,9 @@ public class PurchaseDao {
         var purchases = findAllByProductId(session, productId);
         purchases.forEach(session::delete);
     }
+
+    public void deleteAllByClientId(Session session, Long clientId) {
+        var purchases = findAllByProductId(session, clientId);
+        purchases.forEach(session::delete);
+    }
 }

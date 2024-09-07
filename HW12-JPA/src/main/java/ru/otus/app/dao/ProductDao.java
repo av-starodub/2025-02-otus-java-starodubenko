@@ -4,7 +4,8 @@ import org.hibernate.Session;
 import ru.otus.app.model.Product;
 
 import java.util.List;
-import java.util.Objects;
+
+import static java.util.Objects.nonNull;
 
 public class ProductDao {
 
@@ -16,7 +17,7 @@ public class ProductDao {
 
     public boolean deleteByIdIfExist(Session session, Long productId) {
         var product = session.get(Product.class, productId);
-        if (Objects.nonNull(product)) {
+        if (nonNull(product)) {
             session.delete(product);
             return true;
         } else {
