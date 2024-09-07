@@ -96,7 +96,7 @@ public class ConsoleController {
                         if (clients.isEmpty()) {
                             System.out.printf("Product with id-%s is not on the purchases%n", productId);
                         } else {
-                            System.out.printf("Client who bought products with id=%s:%n", productId);
+                            System.out.printf("Client who bought product with id=%s:%n", productId);
                             clients.forEach(System.out::println);
                         }
                     }

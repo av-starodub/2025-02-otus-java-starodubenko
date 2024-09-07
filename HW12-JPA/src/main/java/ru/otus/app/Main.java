@@ -57,6 +57,7 @@ public class Main {
 
             var purchaseProperties = DataProperties.create("data-purchases.yml");
             var purchase = DataLoader.load(purchaseProperties, PurchaseDto.class);
+            System.out.println(purchase);
             dbInitializer.init(purchase);
 
             var purchaseDao = new PurchaseDao();

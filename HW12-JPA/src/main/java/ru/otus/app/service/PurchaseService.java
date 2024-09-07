@@ -23,7 +23,12 @@ public class PurchaseService {
     }
 
     public List<Purchase> getPurchasedProductsByClientId(Long clientId) {
-        return transactionManager.doInReadOnlyTransaction(session -> purchaseDao.findAllByClientId(session, clientId)
+        return transactionManager.doInReadOnlyTransaction(session -> {
+                    var purchases = purchaseDao.findAllByClientId(session, clientId);
+                    return purchases.stream()
+                            .peek(Purchase::setPriceAtTheTimeOfPurchase)
+                            .toList();
+                }
         );
     }
 

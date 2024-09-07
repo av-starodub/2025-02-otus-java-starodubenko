@@ -11,7 +11,6 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
@@ -37,10 +36,6 @@ import java.time.LocalDateTime;
 )
 public class Purchase extends AbstractBaseEntity {
 
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
@@ -54,4 +49,21 @@ public class Purchase extends AbstractBaseEntity {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public Purchase(Long id, Client client, Product product, BigDecimal price, LocalDateTime createdAt) {
+        super(id);
+        this.client = client;
+        this.product = product;
+        this.price = price;
+        this.createdAt = createdAt;
+    }
+
+    public void setPriceAtTheTimeOfPurchase() {
+        product.setPrice(price);
+    }
+
+    @Override
+    public String toString() {
+        return "Purchase{id=%s, %s, %s}".formatted(super.getId(), client, product);
+    }
 }
