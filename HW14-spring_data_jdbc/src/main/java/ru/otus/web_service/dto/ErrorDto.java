@@ -1,12 +1,27 @@
 package ru.otus.web_service.dto;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorDto {
 
-    private final String errorMessage;
+    private final String message;
 
-    private final String errorDetails;
+    private final List<String> details;
+
+    public static ErrorDto of(String message, List<String> details) {
+        return new ErrorDto(message, details);
+    }
+
+    public static ErrorDto of(String message, String... details) {
+        return new ErrorDto(message, List.of(details));
+    }
 }
 

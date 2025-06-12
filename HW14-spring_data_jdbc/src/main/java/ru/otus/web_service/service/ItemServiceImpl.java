@@ -8,6 +8,8 @@ import ru.otus.web_service.repository.ItemRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getAll() {
-        return (List<Item>) itemRepository.findAll();
+        return StreamSupport.stream(itemRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     @Override

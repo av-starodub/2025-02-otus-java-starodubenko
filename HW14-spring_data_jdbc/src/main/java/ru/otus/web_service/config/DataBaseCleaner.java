@@ -15,18 +15,18 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataBaseCleaner implements ApplicationListener<ContextClosedEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataBaseCleaner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataBaseCleaner.class);
 
     private final Flyway flyway;
 
     @Override
     public void onApplicationEvent(@NonNull ContextClosedEvent event) {
         try {
-            logger.info("Flyway clean start...");
+            LOGGER.info("Flyway clean start...");
             flyway.clean();
-            logger.info("Flyway clean data base completed successfully.");
+            LOGGER.info("Flyway clean data base completed successfully.");
         } catch (Exception e) {
-            logger.error("Flyway clean error", e);
+            LOGGER.error("Flyway clean error", e);
         }
     }
 }
