@@ -13,6 +13,7 @@ public class MigrationsExecutorFlyway {
         flyway = Flyway.configure()
                 .dataSource(dbUrl, dbUserName, dbPassword)
                 .locations("classpath:/db/migration")
+                .cleanDisabled(false)
                 .load();
     }
 

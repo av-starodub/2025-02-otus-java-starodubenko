@@ -3,6 +3,7 @@ package ru.otus.app.db.loader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.NoArgsConstructor;
 import ru.otus.app.db.exception.DataLoadException;
 import ru.otus.app.db.exception.ResourceNotFoundException;
 import ru.otus.app.dto.Dto;
@@ -12,14 +13,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
 
-
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public final class DataLoader {
 
-    private DataLoader() {
-    }
-
     public static <T extends AbstractBaseEntity, D extends Dto<T>> List<T> load(DataProperties prop, Class<D> cls) {
+        Objects.requireNonNull(prop, "DataProperties must not be null");
+        Objects.requireNonNull(cls, "Class must not be null");
         try (var reader = new InputStreamReader(getInputStream(prop))) {
             var mapper = new ObjectMapper(new YAMLFactory());
             mapper.registerModule(new JavaTimeModule());
