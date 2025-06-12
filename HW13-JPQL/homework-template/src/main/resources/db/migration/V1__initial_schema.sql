@@ -1,18 +1,26 @@
--- Для @GeneratedValue(strategy = GenerationType.IDENTITY)
-/*
-create table client
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS client;
+DROP TABLE IF EXISTS phone;
+
+CREATE SEQUENCE global_seq START WITH 100000;
+
+CREATE TABLE addresses
 (
-    id   bigserial not null primary key,
-    name varchar(50)
+    id     bigint       NOT NULL PRIMARY KEY,
+    street varchar(120) NOT NULL
+
 );
 
- */
-
--- Для @GeneratedValue(strategy = GenerationType.SEQUENCE)
-create sequence client_SEQ start with 1 increment by 1;
-
-create table client
+CREATE TABLE clients
 (
-    id   bigint not null primary key,
-    name varchar(50)
+    id   bigint      NOT NULL PRIMARY KEY,
+    name varchar(50) NOT NULL,
+    address_id bigint REFERENCES addresses (id) ON DELETE CASCADE
+);
+
+CREATE TABLE phones
+(
+    id        bigint      NOT NULL PRIMARY KEY,
+    number    varchar(20) NOT NULL,
+    client_id bigint     REFERENCES clients (id) ON DELETE CASCADE
 );
