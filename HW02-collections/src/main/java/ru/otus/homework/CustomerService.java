@@ -1,6 +1,5 @@
 package ru.otus.homework;
 
-
 import java.util.*;
 
 public class CustomerService {

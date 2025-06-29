@@ -1,5 +1,12 @@
 package ru.otus.simplejunit.util;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,15 +17,6 @@ import ru.otus.simplejunit.cash.ResultsContainer;
 import ru.otus.simplejunit.scenarios.*;
 import ru.otus.simplejunit.scenarios.util.CallMethodWriter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-
 @DisplayName("TestRunnerTest")
 public class TestRunnerTest {
     private Class<?> testClassName;
@@ -28,7 +26,6 @@ public class TestRunnerTest {
     private final List<String> methodCalls;
     private final MockedStatic<CallMethodWriter> writer;
     private final Answer<Void> addMethod;
-
 
     public TestRunnerTest() {
         runTests = getRunTestsMethod();
@@ -96,7 +93,8 @@ public class TestRunnerTest {
     }
 
     @Test
-    @DisplayName("BeforeMethodWithExceptionTest: test should not be called, result should fail, TestRunner should not stop.")
+    @DisplayName(
+            "BeforeMethodWithExceptionTest: test should not be called, result should fail, TestRunner should not stop.")
     public void BeforeMethodWithExceptionTest() {
         createTestEnvironment(BeforeMethodWithExceptionTest.class);
         writer.when(() -> CallMethodWriter.call(anyString())).thenAnswer(addMethod);
@@ -139,8 +137,7 @@ public class TestRunnerTest {
     private Method getRunTestsMethod() {
         try {
             return TestRunner.class.getDeclaredMethod(
-                    "runTests", Class.class, MethodsContainer.class, ResultsContainer.class
-            );
+                    "runTests", Class.class, MethodsContainer.class, ResultsContainer.class);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }

@@ -1,10 +1,10 @@
 package ru.otus.simplejunit.demo;
 
+import static ru.otus.simplejunit.util.Assertions.assertTrue;
+
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
 import ru.otus.simplejunit.annotations.Test;
-
-import static ru.otus.simplejunit.util.Assertions.assertTrue;
 
 public class BeforeMethodWithExceptionTest {
     @Before
@@ -14,6 +14,7 @@ public class BeforeMethodWithExceptionTest {
 
     @After
     public void tearDown() {
+        assertTrue(true);
     }
 
     @Test

@@ -1,4 +1,3 @@
 package ru.otus.simplejunit.resultwriter;
 
-public enum TestResultWriter {
-}
+public enum TestResultWriter {}

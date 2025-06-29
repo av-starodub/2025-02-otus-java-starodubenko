@@ -1,26 +1,24 @@
 package ru.otus.test.testclasses;
 
-import ru.otus.simplejunit.annotations.After;
-import ru.otus.simplejunit.annotations.Before;
-import ru.otus.simplejunit.annotations.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static ru.otus.simplejunit.util.Assertions.assertTrue;
+import ru.otus.simplejunit.annotations.After;
+import ru.otus.simplejunit.annotations.Before;
 
 public class SeveralPreparatoryMethodsExecutionTest {
     private List<String> expectedPreparatoryMethods;
     private List<String> actualPreparatoryMethods;
 
     public SeveralPreparatoryMethodsExecutionTest() {
-        expectedPreparatoryMethods = new ArrayList<>() {{
-            add("setUp1");
-            add("setUp2");
-            add("tearDown1");
-            add("tearDown2");
-        }};
+        expectedPreparatoryMethods = new ArrayList<>() {
+            {
+                add("setUp1");
+                add("setUp2");
+                add("tearDown1");
+                add("tearDown2");
+            }
+        };
         actualPreparatoryMethods = new ArrayList<>();
     }
 
@@ -37,7 +35,6 @@ public class SeveralPreparatoryMethodsExecutionTest {
     @After
     public void tearDown1() {
         actualPreparatoryMethods.add("tearDown1");
-
     }
 
     @After

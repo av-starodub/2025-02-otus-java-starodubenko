@@ -1,8 +1,9 @@
 package ru.otus.simplejunit.scenarios;
 
+import static ru.otus.simplejunit.util.Assertions.assertTrue;
+
 import ru.otus.simplejunit.annotations.Test;
 
-import static ru.otus.simplejunit.util.Assertions.assertTrue;
 /**
  * The class implements normal operation scenario.
  */

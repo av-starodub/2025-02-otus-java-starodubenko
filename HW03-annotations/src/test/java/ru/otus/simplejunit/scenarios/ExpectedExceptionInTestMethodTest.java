@@ -1,8 +1,8 @@
 package ru.otus.simplejunit.scenarios;
 
-import ru.otus.simplejunit.annotations.Test;
-
 import static ru.otus.simplejunit.util.Assertions.assertThrow;
+
+import ru.otus.simplejunit.annotations.Test;
 
 public class ExpectedExceptionInTestMethodTest {
     @Test

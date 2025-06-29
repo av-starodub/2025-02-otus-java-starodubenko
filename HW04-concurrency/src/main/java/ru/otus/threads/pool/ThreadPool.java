@@ -1,7 +1,7 @@
 package ru.otus.threads.pool;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -11,9 +11,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ThreadPool {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadPool.class);

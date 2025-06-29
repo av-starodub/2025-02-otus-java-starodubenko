@@ -3,8 +3,7 @@ package ru.otus.simplejunit.util;
 import ru.otus.simplejunit.exceptions.AssertionError;
 
 public final class Assertions {
-    private Assertions() {
-    }
+    private Assertions() {}
 
     public static void assertTrue(boolean expression) {
         if (!expression) {

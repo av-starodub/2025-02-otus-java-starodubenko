@@ -1,11 +1,11 @@
 package ru.otus.simplejunit.cash;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.spy;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.simplejunit.scenarios.LifeCycleTest;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.spy;
 
 @DisplayName("ResultContainerTest")
 public class ResultsContainerTest {

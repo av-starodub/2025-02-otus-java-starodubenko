@@ -1,12 +1,5 @@
 package ru.otus.util;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import ru.otus.model.Task;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.otus.model.StatusType.CLOSE;
 import static ru.otus.model.StatusType.OPEN;
@@ -15,6 +8,12 @@ import static ru.otus.util.TaskListUtils.countByStatus;
 import static ru.otus.util.TaskListUtils.getAllByStatus;
 import static ru.otus.util.TaskListUtils.getAllSortedByStatus;
 import static ru.otus.util.TaskListUtils.notExists;
+
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import ru.otus.model.Task;
 
 @DisplayName("TaskListUtilsTest")
 class TaskListUtilsTest {
@@ -50,7 +49,6 @@ class TaskListUtilsTest {
     void checkCountByStatus() {
         assertThat(countByStatus(tasks, OPEN)).isEqualTo(2);
     }
-
 
     @Test
     @DisplayName("checkGetAllSortedByStatus: should return a list of tasks sorted in the given order")

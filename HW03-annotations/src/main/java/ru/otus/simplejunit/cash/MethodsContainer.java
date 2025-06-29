@@ -1,18 +1,16 @@
 package ru.otus.simplejunit.cash;
 
+import java.lang.reflect.Method;
+import java.util.*;
 import ru.otus.simplejunit.annotations.After;
 import ru.otus.simplejunit.annotations.Before;
 import ru.otus.simplejunit.annotations.Test;
-
-import java.lang.reflect.Method;
-import java.util.*;
 
 public class MethodsContainer {
 
     private final List<Method> before;
     private final List<Method> after;
     private final Set<Method> test;
-
 
     public MethodsContainer(Class<?> testClass) {
         before = new ArrayList<>();

@@ -12,9 +12,11 @@ public class ResultsContainer {
     private final List<Throwable> errors;
 
     public ResultsContainer(Set<Method> methods) {
-        results = new HashMap<>() {{
-            methods.forEach(method -> this.put(method.getName(), -1));
-        }};
+        results = new HashMap<>() {
+            {
+                methods.forEach(method -> this.put(method.getName(), -1));
+            }
+        };
         tests = results.size();
         errors = new ArrayList<>();
     }

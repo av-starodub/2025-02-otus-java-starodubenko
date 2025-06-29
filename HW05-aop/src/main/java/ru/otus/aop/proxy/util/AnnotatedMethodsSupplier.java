@@ -7,8 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class AnnotatedMethodsSupplier {
-    private AnnotatedMethodsSupplier() {
-    }
+    private AnnotatedMethodsSupplier() {}
 
     public static Set<String> getAnnotatedMethods(Class<?> clazz, Class<? extends Annotation> annotation) {
         var annotatedMethods = new HashSet<String>();

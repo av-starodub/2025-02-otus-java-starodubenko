@@ -1,9 +1,10 @@
 package ru.otus.simplejunit.scenarios;
 
+import static ru.otus.simplejunit.util.Assertions.assertTrue;
+
 import ru.otus.simplejunit.annotations.*;
 import ru.otus.simplejunit.scenarios.util.CallMethodWriter;
 
-import static ru.otus.simplejunit.util.Assertions.assertTrue;
 /**
  * The class implements the test scenario with several preparatory methods.
  */

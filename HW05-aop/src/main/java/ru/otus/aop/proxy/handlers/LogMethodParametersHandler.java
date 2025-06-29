@@ -1,14 +1,13 @@
 package ru.otus.aop.proxy.handlers;
 
-import ru.otus.aop.proxy.annotations.Log;
+import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.createKey;
+import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.getAnnotatedMethods;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Set;
-
-import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.createKey;
-import static ru.otus.aop.proxy.util.AnnotatedMethodsSupplier.getAnnotatedMethods;
+import ru.otus.aop.proxy.annotations.Log;
 
 /**
  * The class implements the output to the console of the parameters

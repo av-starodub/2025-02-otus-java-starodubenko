@@ -1,16 +1,14 @@
 package ru.otus.simplejunit.util;
 
-import ru.otus.simplejunit.cash.*;
-import ru.otus.simplejunit.exceptions.TestException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Objects;
+import ru.otus.simplejunit.cash.*;
+import ru.otus.simplejunit.exceptions.TestException;
 
 public final class TestRunner {
-    private TestRunner() {
-    }
+    private TestRunner() {}
 
     public static void run(Class<?> testClass) {
         if (Objects.isNull(testClass)) {
@@ -26,19 +24,24 @@ public final class TestRunner {
     private static Object createTestCase(Class<?> testClass) {
         try {
             return testClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
-                 InvocationTargetException e) {
+        } catch (InstantiationException
+                | IllegalAccessException
+                | NoSuchMethodException
+                | InvocationTargetException e) {
             throw new TestException("Error instantiating test class", e);
         }
     }
 
-    private static void runForEachTest(Object testCase, Collection<Method> methods, String testMethodName, ResultsContainer rc) {
+    private static void runForEachTest(
+            Object testCase, Collection<Method> methods, String testMethodName, ResultsContainer rc) {
         for (var method : methods) {
             try {
                 method.invoke(testCase);
             } catch (Throwable e) {
                 rc.fail(testMethodName);
-                throw new TestException("Test: " + testMethodName + " FAILED" + " - error in preparatory method: " + method.getName(), e);
+                throw new TestException(
+                        "Test: " + testMethodName + " FAILED" + " - error in preparatory method: " + method.getName(),
+                        e);
             }
         }
     }

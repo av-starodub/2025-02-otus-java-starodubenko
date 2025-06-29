@@ -1,13 +1,12 @@
 package ru.otus.threads;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.otus.threads.pool.ThreadPool;
-
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.otus.threads.pool.ThreadPool;
 
 public class ThreadPoolDemo {
     private static final int NUMBER_OF_TASK_PROVIDERS = 2;
@@ -30,18 +29,17 @@ public class ThreadPoolDemo {
 
         for (var providerNumber = 1; providerNumber <= NUMBER_OF_TASK_PROVIDERS; providerNumber++) {
             var taskProvider = threadFactory.newThread(() -> {
-                        while (!taskQueue.isEmpty()) {
-                            var task = taskQueue.poll();
-                            var isAdded = threadPool.execute(task);
-                            if (!isAdded) {
-                                skippedTaskCounter.incrementAndGet();
-                            } else {
-                                addedTaskCounter.incrementAndGet();
-                            }
-                        }
-                        latch.countDown();
+                while (!taskQueue.isEmpty()) {
+                    var task = taskQueue.poll();
+                    var isAdded = threadPool.execute(task);
+                    if (!isAdded) {
+                        skippedTaskCounter.incrementAndGet();
+                    } else {
+                        addedTaskCounter.incrementAndGet();
                     }
-            );
+                }
+                latch.countDown();
+            });
             taskProvider.setName("ProviderThread-%d".formatted(providerNumber));
             taskProvider.start();
         }

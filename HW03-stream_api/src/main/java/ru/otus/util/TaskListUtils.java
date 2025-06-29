@@ -1,36 +1,29 @@
 package ru.otus.util;
 
-import ru.otus.model.StatusType;
-import ru.otus.model.Task;
+import static java.util.Objects.isNull;
 
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.Objects.isNull;
+import ru.otus.model.StatusType;
+import ru.otus.model.Task;
 
 public final class TaskListUtils {
-    private TaskListUtils() {
-    }
+    private TaskListUtils() {}
 
     public static List<Task> getAllByStatus(List<Task> tasks, StatusType status) {
         Objects.requireNonNull(status, "status must not be null");
-        return tasks.stream()
-                .filter(task -> status.equals(task.getStatus()))
-                .toList();
+        return tasks.stream().filter(task -> status.equals(task.getStatus())).toList();
     }
 
     public static boolean notExists(List<Task> tasks, long id) {
-        return tasks.stream()
-                .noneMatch(task -> id == task.getId());
+        return tasks.stream().noneMatch(task -> id == task.getId());
     }
 
     public static long countByStatus(List<Task> tasks, StatusType status) {
         Objects.requireNonNull(status, "status must not be null");
-        return tasks.stream()
-                .filter(task -> status.equals(task.getStatus()))
-                .count();
+        return tasks.stream().filter(task -> status.equals(task.getStatus())).count();
     }
 
     /**
@@ -44,20 +37,17 @@ public final class TaskListUtils {
     public static List<Task> getAllSortedByStatus(List<Task> tasks, StatusType... sortingOrder) {
         var statusPriorities = buildStatusPriorities(sortingOrder);
         return tasks.stream()
-                .sorted(Comparator.comparingInt(
-                        (Task task) -> {
+                .sorted(Comparator.comparingInt((Task task) -> {
                             var priorityStatus = statusPriorities.get(task.getStatus());
                             return isNull(priorityStatus) ? 1 : priorityStatus;
-                        }).thenComparing(Task::getId)
-                )
+                        })
+                        .thenComparing(Task::getId))
                 .toList();
     }
 
     private static EnumMap<StatusType, Integer> buildStatusPriorities(StatusType[] sortingOrder) {
         var statusPriorities = new EnumMap<StatusType, Integer>(StatusType.class);
-        var statusTypes = isNull(sortingOrder) || sortingOrder.length == 0
-                ? StatusType.values()
-                : sortingOrder;
+        var statusTypes = isNull(sortingOrder) || sortingOrder.length == 0 ? StatusType.values() : sortingOrder;
         for (var idx = 0; idx < statusTypes.length; idx++) {
             statusPriorities.put(statusTypes[idx], idx);
         }

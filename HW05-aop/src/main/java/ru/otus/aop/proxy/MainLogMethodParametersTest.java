@@ -17,25 +17,17 @@ public class MainLogMethodParametersTest {
     }
 
     private void runTests() {
-        doTest("check method without parameters annotated with @Log",
-                sum::calculate,
-                "executed method: calculate,"
-        );
+        doTest("check method without parameters annotated with @Log", sum::calculate, "executed method: calculate,");
 
-        doTest("check empty log for method not annotated with @Log",
-                () -> sum.calculate(1),
-                ""
-        );
+        doTest("check empty log for method not annotated with @Log", () -> sum.calculate(1), "");
         doTest(
                 "check correct logging of parameters of the same type",
                 () -> sum.calculate(1, 2),
-                "executed method: calculate, param0=1 param1=2"
-        );
+                "executed method: calculate, param0=1 param1=2");
         doTest(
                 "check correct logging of parameters of different types",
                 () -> sum.calculate(2, 3, "km/h"),
-                "executed method: calculate, param0=2 param1=3 param2=km/h"
-        );
+                "executed method: calculate, param0=2 param1=3 param2=km/h");
     }
 
     private void doTest(String description, TestProcessor test, String expectedLog) {
