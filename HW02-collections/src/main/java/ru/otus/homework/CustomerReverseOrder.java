@@ -5,17 +5,18 @@ import java.util.Deque;
 import java.util.Objects;
 
 public class CustomerReverseOrder {
-    private final Deque<Customer> customerDeque;
+
+    private final Deque<Customer> customerStack;
 
     public CustomerReverseOrder() {
-        customerDeque = new ArrayDeque<>();
+        customerStack = new ArrayDeque<>();
     }
 
     public void add(Customer customer) {
-        customerDeque.add(Objects.requireNonNull(customer, " customer must not be null."));
+        customerStack.add(Objects.requireNonNull(customer, "Parameter customer must not be null."));
     }
 
     public Customer take() {
-        return customerDeque.pollLast();
+        return customerStack.pollLast();
     }
 }

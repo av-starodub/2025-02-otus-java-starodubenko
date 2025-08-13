@@ -1,16 +1,18 @@
 package ru.otus.homework;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class Customer implements Comparable<Customer> {
+
     private final long id;
+
     private String name;
+
     private long scores;
 
     public Customer(long id, String name, long scores) {
-        this.id = id == 0 ? UUID.randomUUID().getLeastSignificantBits() : id;
-        this.name = Objects.requireNonNull(name, " name must not be null.");
+        this.id = id;
+        this.name = Objects.requireNonNull(name, "Parameter name must not be null.");
         this.scores = scores;
     }
 
@@ -36,23 +38,25 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public String toString() {
-        return "Customer{" + "id=" + id + ", name='" + name + '\'' + ", scores=" + scores + '}';
+        return "Customer{id=%d, name=%s, scores=%d}".formatted(id, name, scores);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Customer customer = (Customer) o;
-
         return id == customer.id;
     }
 
     @Override
     public int hashCode() {
         int result = 17;
-        return result * 31 + (int) (id ^ (id >>> 32));
+        return result * 31 + Long.hashCode(id);
     }
 
     @Override
