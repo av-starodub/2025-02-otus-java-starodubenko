@@ -8,7 +8,7 @@ public class Summator {
     private int someValue;
     private int valueCounter;
 
-    //!!! сигнатуру метода менять нельзя
+    // !!! сигнатуру метода менять нельзя
     public void calc(Data data) {
         int value = data.getValue();
         valueCounter++;
