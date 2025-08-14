@@ -1,6 +1,23 @@
 rootProject.name = "otusJavaHomework"
-include ("HW01-gradle")
+include("HW01-gradle")
+include("HW01-gradle")
 include("HW02-collections")
+include("HW03-annotations")
+include("HW04-gc")
+include("HW05-aop")
+include("HW07-solid")
+include("HW10-jdbc:demo")
+include("HW10-jdbc:homework")
+include("HW03-stream_api")
+include("HW04-concurrency")
+include("HW05-patterns-1v")
+include("HW05-patterns-2")
+include("HW07-jdbc_advanced")
+include("HW13-JPQL:homework-template")
+include("HW12-JPA")
+include("HW11-spring_boot_bsse")
+include("HW10-spring_context")
+include("HW14-spring_data_jdbc")
 
 pluginManagement {
     val jgitver: String by settings

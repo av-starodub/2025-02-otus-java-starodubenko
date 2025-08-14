@@ -1,0 +1,12 @@
+{
+  "products": [
+    {
+      "title": "Test Product 1",
+      "price": 10.5
+    },
+    {
+      "title": "Test Product 2",
+      "price": 20.75
+    }
+  ]
+}

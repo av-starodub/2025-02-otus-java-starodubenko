@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.otus.app'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(
+            'org.springframework:spring-context',
+            'com.fasterxml.jackson.core:jackson-databind',
+            'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml',
+            'ch.qos.logback:logback-classic:1.2.11'
+    )
+
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    testImplementation(
+            'org.springframework:spring-test:5.3.22',
+            'org.junit.jupiter:junit-jupiter-api',
+            'org.mockito:mockito-core',
+            'org.mockito:mockito-junit-jupiter',
+            'org.assertj:assertj-core'
+    )
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.with {
+        encoding = 'UTF-8'
+    }
+}
+tasks.build.dependsOn tasks.test

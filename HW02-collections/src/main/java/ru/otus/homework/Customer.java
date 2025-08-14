@@ -50,6 +50,7 @@ public class Customer implements Comparable<Customer> {
             return false;
         }
         Customer customer = (Customer) o;
+
         return id == customer.id;
     }
 
