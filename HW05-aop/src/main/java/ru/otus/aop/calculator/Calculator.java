@@ -1,7 +1,6 @@
 package ru.otus.aop.calculator;
 
 public interface Calculator {
-    int calculate();
 
     int calculate(int number);
 
