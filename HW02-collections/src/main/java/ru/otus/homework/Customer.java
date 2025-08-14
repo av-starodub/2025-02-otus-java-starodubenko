@@ -36,11 +36,7 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", scores=" + scores +
-                '}';
+        return "Customer{" + "id=" + id + ", name='" + name + '\'' + ", scores=" + scores + '}';
     }
 
     @Override
