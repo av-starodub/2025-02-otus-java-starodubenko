@@ -1,9 +1,10 @@
 package ru.otus.aop.calculator.operations;
 
 import ru.otus.aop.calculator.Calculator;
-import ru.otus.aop.proxy.annotations.Log;
+import ru.otus.aop.proxy.annotation.Log;
 
 public class Addition implements Calculator {
+
     @Override
     public int calculate(int number) {
         return number;
