@@ -1,15 +1,14 @@
 package ru.otus.atmemulator.container;
 
-import ru.otus.atmemulator.nominal.NominalType;
-
 import java.util.Map;
+import ru.otus.atmemulator.nominal.NominalType;
 
 public interface NoteContainer {
 
     int getAmount();
 
     /**
-     * @return must return unmodifiable map
+     * @return must return an unmodifiable map
      */
     Map<NominalType, Integer> getNumberOfNotes();
 }

@@ -1,13 +1,13 @@
 package ru.otus.atmemulator.container.money;
 
+import java.util.Deque;
+import java.util.Map;
 import ru.otus.atmemulator.container.AbstractNoteContainer;
 import ru.otus.atmemulator.container.builder.AbstractNoteBuilder;
 import ru.otus.atmemulator.nominal.NominalType;
 
-import java.util.Deque;
-import java.util.Map;
-
 public class Money extends AbstractNoteContainer {
+
     private final int amount;
 
     private Money(Map<NominalType, Deque<NominalType>> banknotes) {
@@ -25,6 +25,7 @@ public class Money extends AbstractNoteContainer {
     }
 
     public static class MoneyBuilder extends AbstractNoteBuilder<Money> {
+
         @Override
         protected Money getInstance(Map<NominalType, Deque<NominalType>> banknotes) {
             return new Money(banknotes);

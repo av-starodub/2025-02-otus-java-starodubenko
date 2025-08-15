@@ -1,5 +1,11 @@
 package ru.otus.atmemulator.atm;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,16 +17,14 @@ import ru.otus.atmemulator.service.MoneyBoxService;
 import ru.otus.atmemulator.service.NoteBoxService;
 import ru.otus.atmemulator.testutil.TestUtil;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
-
 class ATMTest {
+
     private static final int REQUIRED_SUM = 100;
+
     private static final String EXPECTED_ERROR_MESSAGE = "Error. Operation can be performed";
+
     private ATM atm;
+
     private NoteBoxService noteBoxService;
 
     @BeforeEach
@@ -91,8 +95,7 @@ class ATMTest {
     @DisplayName("When not enough banknotes should throw AtmException")
     void checkThrowWhenNotEnoughBanknotes() {
         when(noteBoxService.checkBalance()).thenReturn(REQUIRED_SUM + NominalType.getMinValue());
-        when(noteBoxService.getMoney(anyInt()))
-                .thenThrow(new NotEnoughBanknotesException(" not enough banknotes"));
+        when(noteBoxService.getMoney(anyInt())).thenThrow(new NotEnoughBanknotesException(" not enough banknotes"));
 
         Throwable thrown = catchThrowable(() -> atm.getMoney(REQUIRED_SUM));
 

@@ -5,8 +5,8 @@ import ru.otus.atmemulator.exeption.NotValidSumException;
 import ru.otus.atmemulator.nominal.NominalType;
 
 public final class Validator {
-    private Validator() {
-    }
+
+    private Validator() {}
 
     public static void checkSum(int requiredSum, int balance) {
         var minNominal = NominalType.getMinValue();

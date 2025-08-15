@@ -1,5 +1,10 @@
 package ru.otus.atmemulator.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static ru.otus.atmemulator.nominal.NominalType.*;
+
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,13 +12,8 @@ import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
 import ru.otus.atmemulator.testutil.TestUtil;
 
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static ru.otus.atmemulator.nominal.NominalType.*;
-
 class MoneyBoxServiceTest {
+
     private MoneyBoxService moneyBoxService;
 
     @BeforeEach
@@ -43,9 +43,7 @@ class MoneyBoxServiceTest {
 
         var actualBalance = moneyBoxService.checkBalance();
 
-        assertThat(thrown)
-                .isInstanceOf(NotFreeSpaceException.class)
-                .hasMessageContaining("not enough free space");
+        assertThat(thrown).isInstanceOf(NotFreeSpaceException.class).hasMessageContaining("not enough free space");
         assertThat(actualBalance).isZero();
     }
 
@@ -61,7 +59,7 @@ class MoneyBoxServiceTest {
         var actualBalance = moneyBoxService.checkBalance();
         var expectedBalance = 1100;
         var actualBanknotes = actualMoney.getNumberOfNotes();
-        var expectedBanknotes = Map.of(_5000, 1, _1000, 0, _500, 2, _100, 0);
+        var expectedBanknotes = Map.of(RUB_5000, 1, RUB_1000, 0, RUB_500, 2, RUB_100, 0);
 
         assertThat(actualBalance).isEqualTo(expectedBalance);
         assertThat(actualBanknotes).containsExactlyInAnyOrderEntriesOf(expectedBanknotes);
@@ -74,8 +72,6 @@ class MoneyBoxServiceTest {
         moneyBoxService.putMoney(money);
         int requiredSum = 500;
         Throwable thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum));
-        assertThat(thrown)
-                .isInstanceOf(NotEnoughBanknotesException.class)
-                .hasMessageContaining("not enough banknotes");
+        assertThat(thrown).isInstanceOf(NotEnoughBanknotesException.class).hasMessageContaining("not enough banknotes");
     }
 }

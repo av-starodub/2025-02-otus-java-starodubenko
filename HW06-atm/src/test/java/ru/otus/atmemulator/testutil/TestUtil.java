@@ -1,31 +1,39 @@
 package ru.otus.atmemulator.testutil;
 
-import ru.otus.atmemulator.container.money.Money;
-import ru.otus.atmemulator.container.moneybox.MoneyBox;
+import java.util.Map;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
+import ru.otus.atmemulator.container.money.Money;
+import ru.otus.atmemulator.container.moneybox.MoneyBox;
 import ru.otus.atmemulator.nominal.NominalType;
-
-import java.util.Map;
 
 public class TestUtil {
 
-    private TestUtil() {
-    }
+    private TestUtil() {}
 
     public static NoteBox createEmptyBox(int ceilSize) {
-        return MoneyBox.builder(ceilSize).put5000(0).put1000(0).put500(0).put100(0).build();
+        return MoneyBox.builder(ceilSize)
+                .put5000(0)
+                .put1000(0)
+                .put500(0)
+                .put100(0)
+                .build();
     }
 
-    public static Map<NominalType, Integer> createBanknotes(int _5000, int _1000, int _500, int _100) {
+    public static Map<NominalType, Integer> createBanknotes(int r5000, int r1000, int r500, int r100) {
         return Map.of(
-                NominalType._5000, _5000,
-                NominalType._1000, _1000,
-                NominalType._500, _500,
-                NominalType._100, _100
-        );
+                NominalType.RUB_5000, r5000,
+                NominalType.RUB_1000, r1000,
+                NominalType.RUB_500, r500,
+                NominalType.RUB_100, r100);
     }
-    public static NoteContainer createMoney(int _5000, int _1000, int _500, int _100) {
-        return Money.builder().put5000(_5000).put1000(_1000).put500(_500).put100(_100).build();
+
+    public static NoteContainer createMoney(int r5000, int r1000, int r500, int r100) {
+        return Money.builder()
+                .put5000(r5000)
+                .put1000(r1000)
+                .put500(r500)
+                .put100(r100)
+                .build();
     }
 }

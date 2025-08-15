@@ -1,13 +1,12 @@
 package ru.otus.atmemulator.util.calculator;
 
-import ru.otus.atmemulator.nominal.NominalType;
-
 import java.util.EnumMap;
 import java.util.Map;
+import ru.otus.atmemulator.nominal.NominalType;
 
 public final class NoteCalculator {
-    private NoteCalculator() {
-    }
+
+    private NoteCalculator() {}
 
     public static Map<NominalType, Integer> compute(Map<NominalType, Integer> notesInStock, int requiredSum) {
         return compute(notesInStock, requiredSum, CalculationOrderType.MINIMUM_NOTES);

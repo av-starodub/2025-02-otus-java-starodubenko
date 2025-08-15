@@ -1,13 +1,13 @@
 package ru.otus.atmemulator.atm;
 
+import java.util.Objects;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.AtmException;
 import ru.otus.atmemulator.service.NoteBoxService;
 import ru.otus.atmemulator.util.validator.Validator;
 
-import java.util.Objects;
-
 public class ATM {
+
     private final NoteBoxService noteBoxService;
 
     public ATM(NoteBoxService noteBoxService) {

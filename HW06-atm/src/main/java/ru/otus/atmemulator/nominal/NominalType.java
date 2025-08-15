@@ -1,10 +1,10 @@
 package ru.otus.atmemulator.nominal;
 
 public enum NominalType {
-    _5000(5000),
-    _1000(1000),
-    _500(500),
-    _100(100);
+    RUB_5000(5000),
+    RUB_1000(1000),
+    RUB_500(500),
+    RUB_100(100);
 
     private final int value;
 
@@ -17,6 +17,6 @@ public enum NominalType {
     }
 
     public static int getMinValue() {
-        return _100.value;
+        return RUB_100.value;
     }
 }

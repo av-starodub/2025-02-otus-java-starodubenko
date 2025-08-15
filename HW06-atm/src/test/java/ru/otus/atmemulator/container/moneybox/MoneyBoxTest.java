@@ -1,21 +1,22 @@
 package ru.otus.atmemulator.container.moneybox;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.testutil.TestUtil;
 
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 class MoneyBoxTest {
+
     private static final int EXPECTED_BALANCE = 6600;
 
     @Test
     @DisplayName("Check that put() creates the Money correctly")
     void putNotesTest() {
-        var moneyBox = MoneyBox.builder(1).put5000(0).put1000(0).put500(0).put100(0).build();
+        var moneyBox =
+                MoneyBox.builder(1).put5000(0).put1000(0).put500(0).put100(0).build();
         var balanceEmptyBox = moneyBox.getAmount();
 
         assertThat(balanceEmptyBox).isZero();
@@ -32,7 +33,8 @@ class MoneyBoxTest {
     @Test
     @DisplayName("Check that get() extracts banknotes correctly")
     void extractNotesTest() {
-        var moneyBox = MoneyBox.builder(1).put5000(1).put1000(1).put500(1).put100(1).build();
+        var moneyBox =
+                MoneyBox.builder(1).put5000(1).put1000(1).put500(1).put100(1).build();
         var currentMoneyBoxBalance = moneyBox.getAmount();
 
         assertThat(currentMoneyBoxBalance).isEqualTo(EXPECTED_BALANCE);
@@ -42,9 +44,8 @@ class MoneyBoxTest {
         var actualMoneyBoxBalanceAfterExtracting = moneyBox.getAmount();
 
         var actualNumberOfNotesAfterExtracting = moneyBox.getNumberOfNotes();
-        var expectedNumberOfNotesAfterExtracting = Map.copyOf(
-                TestUtil.createEmptyBox(1).getNumberOfNotes()
-        );
+        var expectedNumberOfNotesAfterExtracting =
+                Map.copyOf(TestUtil.createEmptyBox(1).getNumberOfNotes());
         assertThat(actualMoney.getNumberOfNotes()).containsExactlyInAnyOrderEntriesOf(request);
         assertThat(actualMoneyBoxBalanceAfterExtracting).isZero();
         assertThat(actualNumberOfNotesAfterExtracting)

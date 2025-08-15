@@ -1,19 +1,18 @@
 package ru.otus.atmemulator.container.builder;
 
-import ru.otus.atmemulator.container.NoteContainer;
-import ru.otus.atmemulator.nominal.NominalType;
+import static ru.otus.atmemulator.nominal.NominalType.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.IntStream;
-
-import static ru.otus.atmemulator.nominal.NominalType.*;
+import ru.otus.atmemulator.container.NoteContainer;
+import ru.otus.atmemulator.nominal.NominalType;
 
 public abstract class AbstractNoteBuilder<T extends NoteContainer> implements NoteBuilder<T> {
-    private final Map<NominalType, Deque<NominalType>> banknotes;
 
+    private final Map<NominalType, Deque<NominalType>> banknotes;
 
     protected AbstractNoteBuilder() {
         banknotes = new EnumMap<>(NominalType.class);
@@ -26,22 +25,22 @@ public abstract class AbstractNoteBuilder<T extends NoteContainer> implements No
     }
 
     public AbstractNoteBuilder<T> put5000(int numberOfNotes) {
-        banknotes.put(_5000, collectNotes(_5000, numberOfNotes));
+        banknotes.put(RUB_5000, collectNotes(RUB_5000, numberOfNotes));
         return this;
     }
 
     public AbstractNoteBuilder<T> put1000(int numberOfNotes) {
-        banknotes.put(_1000, collectNotes(_1000, numberOfNotes));
+        banknotes.put(RUB_1000, collectNotes(RUB_1000, numberOfNotes));
         return this;
     }
 
     public AbstractNoteBuilder<T> put500(int numberOfNotes) {
-        banknotes.put(_500, collectNotes(_500, numberOfNotes));
+        banknotes.put(RUB_500, collectNotes(RUB_500, numberOfNotes));
         return this;
     }
 
     public AbstractNoteBuilder<T> put100(int numberOfNotes) {
-        banknotes.put(NominalType._100, collectNotes(_100, numberOfNotes));
+        banknotes.put(NominalType.RUB_100, collectNotes(RUB_100, numberOfNotes));
         return this;
     }
 

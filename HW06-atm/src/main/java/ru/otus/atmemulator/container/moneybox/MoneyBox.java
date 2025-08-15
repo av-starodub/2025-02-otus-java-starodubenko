@@ -1,5 +1,10 @@
 package ru.otus.atmemulator.container.moneybox;
 
+import static ru.otus.atmemulator.nominal.NominalType.*;
+
+import java.util.Deque;
+import java.util.Map;
+import java.util.stream.IntStream;
 import ru.otus.atmemulator.container.AbstractNoteContainer;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
@@ -7,14 +12,10 @@ import ru.otus.atmemulator.container.builder.AbstractNoteBuilder;
 import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.nominal.NominalType;
 
-import java.util.Deque;
-import java.util.Map;
-import java.util.stream.IntStream;
-
-import static ru.otus.atmemulator.nominal.NominalType.*;
-
 public class MoneyBox extends AbstractNoteContainer implements NoteBox {
+
     private final int ceilSize;
+
     private int amount;
 
     private MoneyBox(Map<NominalType, Deque<NominalType>> banknotes, int ceilSize) {
@@ -27,8 +28,8 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         return new MoneyBoxBuilder(ceilSize);
     }
 
-
     public static class MoneyBoxBuilder extends AbstractNoteBuilder<MoneyBox> {
+
         private final int ceilSize;
 
         public MoneyBoxBuilder(int ceilSize) {
@@ -55,10 +56,10 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
     @Override
     public NoteContainer extractNotes(Map<NominalType, Integer> request) {
         return Money.builder()
-                .put5000(extract(_5000, getRequired(request, _5000)))
-                .put1000(extract(_1000, getRequired(request, _1000)))
-                .put500(extract(_500, getRequired(request, _500)))
-                .put100(extract(_100, getRequired(request, _100)))
+                .put5000(extract(RUB_5000, getRequired(request, RUB_5000)))
+                .put1000(extract(RUB_1000, getRequired(request, RUB_1000)))
+                .put500(extract(RUB_500, getRequired(request, RUB_500)))
+                .put100(extract(RUB_100, getRequired(request, RUB_100)))
                 .build();
     }
 

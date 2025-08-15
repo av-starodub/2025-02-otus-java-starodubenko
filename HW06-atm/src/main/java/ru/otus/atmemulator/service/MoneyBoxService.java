@@ -1,14 +1,14 @@
 package ru.otus.atmemulator.service;
 
+import java.util.Objects;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
 import ru.otus.atmemulator.util.calculator.NoteCalculator;
 
-import java.util.Objects;
-
 public class MoneyBoxService implements NoteBoxService {
+
     private final NoteBox moneyBox;
 
     public MoneyBoxService(NoteBox noteBox) {

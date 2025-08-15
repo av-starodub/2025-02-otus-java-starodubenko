@@ -1,11 +1,10 @@
 package ru.otus.atmemulator.util.calculator;
 
-import ru.otus.atmemulator.nominal.NominalType;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import ru.otus.atmemulator.nominal.NominalType;
 
 public enum CalculationOrderType {
     MINIMUM_NOTES((nominal1, nominal2) -> nominal2.getValue() - nominal1.getValue());

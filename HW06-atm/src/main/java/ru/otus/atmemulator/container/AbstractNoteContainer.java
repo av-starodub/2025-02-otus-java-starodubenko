@@ -1,10 +1,10 @@
 package ru.otus.atmemulator.container;
 
+import java.util.*;
 import ru.otus.atmemulator.nominal.NominalType;
 
-import java.util.*;
-
 public abstract class AbstractNoteContainer implements NoteContainer {
+
     protected final Map<NominalType, Deque<NominalType>> banknotes;
 
     protected AbstractNoteContainer(Map<NominalType, Deque<NominalType>> banknotes) {
