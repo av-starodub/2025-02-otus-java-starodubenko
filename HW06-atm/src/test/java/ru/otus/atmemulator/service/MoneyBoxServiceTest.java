@@ -59,7 +59,7 @@ class MoneyBoxServiceTest {
         var actualBalance = moneyBoxService.checkBalance();
         var expectedBalance = 1100;
         var actualBanknotes = actualMoney.getNumberOfNotes();
-        var expectedBanknotes = Map.of(RUB_5000, 1, RUB_1000, 0, RUB_500, 2, RUB_100, 0);
+        var expectedBanknotes = Map.of(RUB_5000, 1, RUB_500, 2);
 
         assertThat(actualBalance).isEqualTo(expectedBalance);
         assertThat(actualBanknotes).containsExactlyInAnyOrderEntriesOf(expectedBanknotes);

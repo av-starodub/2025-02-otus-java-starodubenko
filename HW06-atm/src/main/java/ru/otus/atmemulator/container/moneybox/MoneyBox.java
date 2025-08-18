@@ -1,7 +1,5 @@
 package ru.otus.atmemulator.container.moneybox;
 
-import static ru.otus.atmemulator.nominal.NominalType.*;
-
 import java.util.Deque;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -55,12 +53,15 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
 
     @Override
     public NoteContainer extractNotes(Map<NominalType, Integer> request) {
-        return Money.builder()
-                .put5000(extract(RUB_5000, getRequired(request, RUB_5000)))
-                .put1000(extract(RUB_1000, getRequired(request, RUB_1000)))
-                .put500(extract(RUB_500, getRequired(request, RUB_500)))
-                .put100(extract(RUB_100, getRequired(request, RUB_100)))
-                .build();
+        var builder = Money.builder();
+        request.forEach((nominal, required) -> {
+            var toExtract = required == null ? 0 : required;
+            if (toExtract > 0) {
+                var extracted = extract(nominal, toExtract);
+                builder.put(nominal, extracted);
+            }
+        });
+        return builder.build();
     }
 
     @Override
@@ -85,9 +86,5 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
             amount -= nominal.getValue();
         });
         return numberOfNotes;
-    }
-
-    private int getRequired(Map<NominalType, Integer> request, NominalType nominalType) {
-        return request.getOrDefault(nominalType, 0);
     }
 }

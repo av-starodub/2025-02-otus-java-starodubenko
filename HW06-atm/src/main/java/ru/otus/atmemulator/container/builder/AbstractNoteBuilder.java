@@ -24,6 +24,25 @@ public abstract class AbstractNoteBuilder<T extends NoteContainer> implements No
         return banknotes;
     }
 
+    public AbstractNoteBuilder<T> put(NominalType nominal, int numberOfNotes) {
+        if (numberOfNotes <= 0) {
+            return this;
+        }
+        banknotes.merge(nominal, collectNotes(nominal, numberOfNotes), (existing, add) -> {
+            existing.addAll(add);
+            return existing;
+        });
+        return this;
+    }
+
+    public AbstractNoteBuilder<T> putAll(Map<NominalType, Integer> notes) {
+        if (notes == null || notes.isEmpty()) {
+            return this;
+        }
+        notes.forEach((nominal, count) -> put(nominal, count == null ? 0 : count));
+        return this;
+    }
+
     public AbstractNoteBuilder<T> put5000(int numberOfNotes) {
         banknotes.put(RUB_5000, collectNotes(RUB_5000, numberOfNotes));
         return this;
