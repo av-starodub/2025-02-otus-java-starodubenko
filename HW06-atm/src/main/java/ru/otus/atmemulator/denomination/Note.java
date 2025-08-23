@@ -15,7 +15,7 @@ public final class Note {
         return new Note(nominal);
     }
 
-    public int getValue() {
+    public int getNominalValue() {
         return nominal;
     }
 
@@ -37,7 +37,6 @@ public final class Note {
 
     @Override
     public String toString() {
-        return "Note{nominal=%d".formatted(nominal);
+        return "Note{nominal=%d}".formatted(nominal);
     }
-
 }

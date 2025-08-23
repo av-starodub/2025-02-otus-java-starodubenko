@@ -2,7 +2,10 @@ package ru.otus.atmemulator.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static ru.otus.atmemulator.nominal.NominalType.*;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_100;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_1000;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_500;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_5000;
 
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +28,7 @@ class MoneyBoxServiceTest {
     @Test
     @DisplayName("Check that putMoney() adds money correctly")
     void checkPositiveScriptOfPutMoney() {
-        var money = TestUtil.createMoney(1, 1, 1, 1);
+        var money = TestUtil.createMoney(Map.of(RUB_5000, 1, RUB_1000, 1, RUB_500, 1, RUB_100, 1));
         moneyBoxService.putMoney(money);
 
         var expectedBalance = money.getAmount();
@@ -37,13 +40,12 @@ class MoneyBoxServiceTest {
     @Test
     @DisplayName("When not enough free space should throw NotFreeSpaceException")
     void checkThrowWhenNotFreeSpace() {
-        var money = TestUtil.createMoney(1, 1, 5, 1);
+        var money = TestUtil.createMoney(Map.of(RUB_500, 5));
 
-        Throwable thrown = catchThrowable(() -> moneyBoxService.putMoney(money));
+        var thrown = catchThrowable(() -> moneyBoxService.putMoney(money));
+        assertThat(thrown).isInstanceOf(NotFreeSpaceException.class).hasMessageContaining("Not enough free space");
 
         var actualBalance = moneyBoxService.checkBalance();
-
-        assertThat(thrown).isInstanceOf(NotFreeSpaceException.class).hasMessageContaining("not enough free space");
         assertThat(actualBalance).isZero();
     }
 
@@ -51,27 +53,29 @@ class MoneyBoxServiceTest {
     @DisplayName("Check that getMoney() extracts money correctly")
     void checkPositiveScriptOfGetMoney() {
         int requiredSum = 6000;
-        var money = TestUtil.createMoney(1, 0, 4, 1);
+        var money = TestUtil.createMoney(Map.of(RUB_5000, 1, RUB_500, 4, RUB_100, 1));
         moneyBoxService.putMoney(money);
+        var extractedMoney = moneyBoxService.getMoney(requiredSum);
 
-        var actualMoney = moneyBoxService.getMoney(requiredSum);
+        var actualBanknotes = extractedMoney.getNumberOfNotes();
+        var expectedBanknotes = TestUtil.transformToNoteCountMap(Map.of(RUB_5000, 1, RUB_500, 2));
+        assertThat(actualBanknotes).containsExactlyInAnyOrderEntriesOf(expectedBanknotes);
 
         var actualBalance = moneyBoxService.checkBalance();
         var expectedBalance = 1100;
-        var actualBanknotes = actualMoney.getNumberOfNotes();
-        var expectedBanknotes = Map.of(RUB_5000, 1, RUB_500, 2);
-
         assertThat(actualBalance).isEqualTo(expectedBalance);
-        assertThat(actualBanknotes).containsExactlyInAnyOrderEntriesOf(expectedBanknotes);
     }
 
     @Test
     @DisplayName("When not enough banknotes should throw NotEnoughBanknotesException")
     void checkThrowWhenNotEnoughBanknotes() {
-        var money = TestUtil.createMoney(1, 1, 0, 1);
+        var money = TestUtil.createMoney(Map.of(RUB_5000, 1, RUB_1000, 1, RUB_100, 1));
+
         moneyBoxService.putMoney(money);
-        int requiredSum = 500;
-        Throwable thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum));
-        assertThat(thrown).isInstanceOf(NotEnoughBanknotesException.class).hasMessageContaining("not enough banknotes");
+
+        var requiredSum = 500;
+
+        var thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum));
+        assertThat(thrown).isInstanceOf(NotEnoughBanknotesException.class).hasMessageContaining("Not enough banknotes");
     }
 }

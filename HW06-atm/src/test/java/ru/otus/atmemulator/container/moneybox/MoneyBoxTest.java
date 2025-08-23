@@ -1,11 +1,11 @@
 package ru.otus.atmemulator.container.moneybox;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.otus.atmemulator.testutil.TestUtil.NOTE_COUNT_MAP;
+import static ru.otus.atmemulator.testutil.TestUtil.TEST_NOMINAL_COUNT_MAP;
 
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.testutil.TestUtil;
 
 class MoneyBoxTest {
@@ -15,16 +15,15 @@ class MoneyBoxTest {
     @Test
     @DisplayName("Check that put() creates the Money correctly")
     void putNotesTest() {
-        var moneyBox =
-                MoneyBox.builder(1).put5000(0).put1000(0).put500(0).put100(0).build();
-        var balanceEmptyBox = moneyBox.getAmount();
+        var moneyBox = TestUtil.createEmptyBox(1);
+        var actualBalance = moneyBox.getAmount();
 
-        assertThat(balanceEmptyBox).isZero();
+        assertThat(actualBalance).isZero();
 
-        var money = Money.builder().put5000(1).put1000(1).put500(1).put100(1).build();
+        var money = TestUtil.createMoney(TEST_NOMINAL_COUNT_MAP);
         var actualBalanceAfterAdd = moneyBox.putNotes(money);
         var actualNotes = moneyBox.getNumberOfNotes();
-        var expectedNotes = TestUtil.createBanknotes(1, 1, 1, 1);
+        var expectedNotes = TestUtil.transformToNoteCountMap(TEST_NOMINAL_COUNT_MAP);
 
         assertThat(actualBalanceAfterAdd).isEqualTo(EXPECTED_BALANCE);
         assertThat(actualNotes).containsExactlyInAnyOrderEntriesOf(expectedNotes);
@@ -33,21 +32,21 @@ class MoneyBoxTest {
     @Test
     @DisplayName("Check that get() extracts banknotes correctly")
     void extractNotesTest() {
-        var moneyBox =
-                MoneyBox.builder(1).put5000(1).put1000(1).put500(1).put100(1).build();
-        var currentMoneyBoxBalance = moneyBox.getAmount();
+        var moneyBox = MoneyBox.builder(1).putAll(NOTE_COUNT_MAP).build();
 
-        assertThat(currentMoneyBoxBalance).isEqualTo(EXPECTED_BALANCE);
+        var actualBalance = moneyBox.getAmount();
+        assertThat(actualBalance).isEqualTo(EXPECTED_BALANCE);
 
-        var request = TestUtil.createBanknotes(1, 1, 1, 1);
-        var actualMoney = moneyBox.extractNotes(request);
+        var request = NOTE_COUNT_MAP;
+        var actualExtractedMoney = moneyBox.extractNotes(request);
+        assertThat(actualExtractedMoney.getNumberOfNotes()).containsExactlyInAnyOrderEntriesOf(request);
+
         var actualMoneyBoxBalanceAfterExtracting = moneyBox.getAmount();
+        assertThat(actualMoneyBoxBalanceAfterExtracting).isZero();
 
         var actualNumberOfNotesAfterExtracting = moneyBox.getNumberOfNotes();
-        var expectedNumberOfNotesAfterExtracting =
-                Map.copyOf(TestUtil.createEmptyBox(1).getNumberOfNotes());
-        assertThat(actualMoney.getNumberOfNotes()).containsExactlyInAnyOrderEntriesOf(request);
-        assertThat(actualMoneyBoxBalanceAfterExtracting).isZero();
+
+        var expectedNumberOfNotesAfterExtracting = TestUtil.createEmptyBox(1).getNumberOfNotes();
         assertThat(actualNumberOfNotesAfterExtracting)
                 .containsExactlyInAnyOrderEntriesOf(expectedNumberOfNotesAfterExtracting);
     }

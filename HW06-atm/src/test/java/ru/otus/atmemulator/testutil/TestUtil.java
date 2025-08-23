@@ -1,39 +1,59 @@
 package ru.otus.atmemulator.testutil;
 
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_100;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_1000;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_500;
+import static ru.otus.atmemulator.testutil.TestUtil.NominalTypeTest.RUB_5000;
+
 import java.util.Map;
+import java.util.stream.Collectors;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.container.moneybox.MoneyBox;
-import ru.otus.atmemulator.nominal.NominalType;
+import ru.otus.atmemulator.denomination.Note;
 
-public class TestUtil {
+public final class TestUtil {
+
+    public static final Map<NominalTypeTest, Integer> TEST_NOMINAL_COUNT_MAP =
+            Map.of(RUB_5000, 1, RUB_1000, 1, RUB_500, 1, RUB_100, 1);
+
+    public static final Map<Note, Integer> NOTE_COUNT_MAP = transformToNoteCountMap(TEST_NOMINAL_COUNT_MAP);
 
     private TestUtil() {}
 
+    public enum NominalTypeTest {
+        RUB_5000(5000),
+        RUB_1000(1000),
+        RUB_500(500),
+        RUB_100(100);
+
+        public int getNominal() {
+            return nominal;
+        }
+
+        private final int nominal;
+
+        NominalTypeTest(int nominal) {
+            this.nominal = nominal;
+        }
+    }
+
     public static NoteBox createEmptyBox(int ceilSize) {
         return MoneyBox.builder(ceilSize)
-                .put5000(0)
-                .put1000(0)
-                .put500(0)
-                .put100(0)
+                .put(Note.of(RUB_5000.nominal), 0)
+                .put(Note.of(RUB_1000.nominal), 0)
+                .put(Note.of(RUB_500.nominal), 0)
+                .put(Note.of(RUB_100.nominal), 0)
                 .build();
     }
 
-    public static Map<NominalType, Integer> createBanknotes(int r5000, int r1000, int r500, int r100) {
-        return Map.of(
-                NominalType.RUB_5000, r5000,
-                NominalType.RUB_1000, r1000,
-                NominalType.RUB_500, r500,
-                NominalType.RUB_100, r100);
+    public static Map<Note, Integer> transformToNoteCountMap(Map<NominalTypeTest, Integer> notes) {
+        return notes.entrySet().stream()
+                .collect(Collectors.toMap(e -> Note.of(e.getKey().nominal), Map.Entry::getValue));
     }
 
-    public static NoteContainer createMoney(int r5000, int r1000, int r500, int r100) {
-        return Money.builder()
-                .put5000(r5000)
-                .put1000(r1000)
-                .put500(r500)
-                .put100(r100)
-                .build();
+    public static NoteContainer createMoney(Map<NominalTypeTest, Integer> notes) {
+        return Money.builder().putAll(transformToNoteCountMap(notes)).build();
     }
 }

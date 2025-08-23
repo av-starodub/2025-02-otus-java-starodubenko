@@ -4,13 +4,13 @@ import java.util.Deque;
 import java.util.Map;
 import ru.otus.atmemulator.container.AbstractNoteContainer;
 import ru.otus.atmemulator.container.builder.AbstractNoteBuilder;
-import ru.otus.atmemulator.nominal.NominalType;
+import ru.otus.atmemulator.denomination.Note;
 
 public class Money extends AbstractNoteContainer {
 
     private final int amount;
 
-    private Money(Map<NominalType, Deque<NominalType>> banknotes) {
+    private Money(Map<Note, Deque<Note>> banknotes) {
         super(banknotes);
         amount = computeAmount(this.banknotes);
     }
@@ -27,8 +27,13 @@ public class Money extends AbstractNoteContainer {
     public static class MoneyBuilder extends AbstractNoteBuilder<Money> {
 
         @Override
-        protected Money getInstance(Map<NominalType, Deque<NominalType>> banknotes) {
+        protected Money getInstance(Map<Note, Deque<Note>> banknotes) {
             return new Money(banknotes);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Money{" + "amount=" + amount + ", banknotes=" + banknotes + '}';
     }
 }

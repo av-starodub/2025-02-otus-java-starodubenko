@@ -1,28 +1,28 @@
 package ru.otus.atmemulator.container;
 
 import java.util.*;
-import ru.otus.atmemulator.nominal.NominalType;
+import java.util.stream.Collectors;
+import ru.otus.atmemulator.denomination.Note;
 
 public abstract class AbstractNoteContainer implements NoteContainer {
 
-    protected final Map<NominalType, Deque<NominalType>> banknotes;
+    protected final Map<Note, Deque<Note>> banknotes;
 
-    protected AbstractNoteContainer(Map<NominalType, Deque<NominalType>> banknotes) {
-        Objects.requireNonNull(banknotes, " parameter banknotes must not be null");
-        this.banknotes = new EnumMap<>(NominalType.class);
-        this.banknotes.putAll(banknotes);
+    protected AbstractNoteContainer(Map<Note, Deque<Note>> banknotes) {
+        Objects.requireNonNull(banknotes, "Parameter banknotes must not be null");
+        this.banknotes = new HashMap<>(banknotes);
     }
 
     @Override
-    public Map<NominalType, Integer> getNumberOfNotes() {
-        Map<NominalType, Integer> numberOfNotes = new EnumMap<>(NominalType.class);
-        banknotes.forEach((nominalType, notes) -> numberOfNotes.put(nominalType, notes.size()));
-        return numberOfNotes;
+    public Map<Note, Integer> getNumberOfNotes() {
+        return banknotes.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, e -> e.getValue()
+                .size()));
     }
 
-    protected static int computeAmount(Map<NominalType, Deque<NominalType>> banknotes) {
-        final int[] amount = {0};
-        banknotes.forEach((nominal, notes) -> amount[0] += nominal.getValue() * notes.size());
-        return amount[0];
+    protected static int computeAmount(Map<Note, Deque<Note>> banknotes) {
+        return banknotes.entrySet().stream()
+                .mapToInt(entry ->
+                        entry.getKey().getNominalValue() * entry.getValue().size())
+                .sum();
     }
 }
