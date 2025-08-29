@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import ru.otus.atmemulator.denomination.Note;
 
 /**
@@ -45,11 +46,18 @@ public enum NoteDispenseStrategy {
         }
         final Key key = Key.of(notes);
         return lruCache.computeIfAbsent(key, k -> {
-            var ordered = notes.stream().sorted(noteComparator).toList();
+            var ordered = notes.stream()
+                    .sorted(noteComparator)
+                    .toList();
             return List.copyOf(ordered);
         });
     }
 
+    /**
+     * Represents a unique key for caching note dispense strategies based on the set of provided notes.
+     * The key is generated from the sorted nominal values of the notes, ensuring that the order and
+     * duplicates of notes do not affect its uniqueness.
+     */
     private static final class Key {
 
         private final int[] nominals;
@@ -63,7 +71,10 @@ public enum NoteDispenseStrategy {
 
         static Key of(Set<Note> notes) {
             var sortedNominalValues =
-                    notes.stream().mapToInt(Note::getNominalValue).sorted().toArray();
+                    notes.stream()
+                            .mapToInt(Note::getNominalValue)
+                            .sorted()
+                            .toArray();
             return new Key(sortedNominalValues);
         }
 
@@ -82,5 +93,6 @@ public enum NoteDispenseStrategy {
         public int hashCode() {
             return hash;
         }
+
     }
 }
