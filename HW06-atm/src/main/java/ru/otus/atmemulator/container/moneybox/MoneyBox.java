@@ -6,10 +6,23 @@ import java.util.stream.IntStream;
 import ru.otus.atmemulator.container.AbstractNoteContainer;
 import ru.otus.atmemulator.container.NoteBox;
 import ru.otus.atmemulator.container.NoteContainer;
-import ru.otus.atmemulator.container.builder.AbstractNoteBuilder;
+import ru.otus.atmemulator.container.builder.AbstractNoteContainerBuilder;
 import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.denomination.Note;
 
+/**
+ * The MoneyBox class represents a container designed to store and manage banknotes.
+ * It extends the {@code AbstractNoteContainer} class and implements the {@code NoteBox} interface,
+ * providing storage and operations for handling a collection of banknotes while enforcing certain constraints.
+ * <p>
+ * The MoneyBox includes features such as
+ * - Limited storage capacity defined by a ceiling size.
+ * - The ability to store, extract, and calculate amounts from the contained notes.
+ * - A minimum nominal value of stored banknotes automatically derived from the collection.
+ * <p>
+ * It is instantiated using an internal {@code MoneyBoxBuilder} to ensure proper initialization
+ * of the banknotes and constraints.
+ */
 public class MoneyBox extends AbstractNoteContainer implements NoteBox {
 
     private final int ceilSize;
@@ -32,7 +45,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
         return new MoneyBoxBuilder(ceilSize);
     }
 
-    public static class MoneyBoxBuilder extends AbstractNoteBuilder<MoneyBox> {
+    public static class MoneyBoxBuilder extends AbstractNoteContainerBuilder<MoneyBox> {
 
         private final int ceilSize;
 
@@ -50,7 +63,7 @@ public class MoneyBox extends AbstractNoteContainer implements NoteBox {
     public int putNotes(NoteContainer money) {
         var notesToAdd = money.getNumberOfNotes();
         notesToAdd.forEach((note, number) -> {
-            var stackToAdd = AbstractNoteBuilder.collectNotes(note, number);
+            var stackToAdd = AbstractNoteContainerBuilder.collectNotes(note, number);
             this.banknotes.merge(note, stackToAdd, this::addStack);
             amount += note.getNominalValue() * number;
         });

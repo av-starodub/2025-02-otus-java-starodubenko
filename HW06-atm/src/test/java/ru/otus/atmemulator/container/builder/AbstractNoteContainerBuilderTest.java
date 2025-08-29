@@ -16,7 +16,7 @@ import ru.otus.atmemulator.container.money.Money;
 import ru.otus.atmemulator.container.moneybox.MoneyBox;
 import ru.otus.atmemulator.denomination.Note;
 
-class AbstractNoteBuilderTest {
+class AbstractNoteContainerBuilderTest {
 
     private static final Map<Note, Integer> EXPECTED_NOTES = NOTE_COUNT_MAP;
 

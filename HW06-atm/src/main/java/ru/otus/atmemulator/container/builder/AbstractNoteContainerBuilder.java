@@ -8,11 +8,18 @@ import java.util.stream.IntStream;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.denomination.Note;
 
-public abstract class AbstractNoteBuilder<T extends NoteContainer> implements NoteBuilder<T> {
+/**
+ * An abstract base class for building instances of {@link NoteContainer} implementations.
+ * Provides methods to manage and assemble collections of {@link Note} into a container.
+ * This class uses the builder pattern to facilitate the construction of complex objects.
+ *
+ * @param <T> the type of {@link NoteContainer} being built
+ */
+public abstract class AbstractNoteContainerBuilder<T extends NoteContainer> implements NoteContainerBuilder<T> {
 
     private final Map<Note, Deque<Note>> banknotes;
 
-    protected AbstractNoteBuilder() {
+    protected AbstractNoteContainerBuilder() {
         banknotes = new HashMap<>();
     }
 
@@ -22,7 +29,7 @@ public abstract class AbstractNoteBuilder<T extends NoteContainer> implements No
         return stack;
     }
 
-    public AbstractNoteBuilder<T> put(Note nominal, int numberOfNotes) {
+    public AbstractNoteContainerBuilder<T> put(Note nominal, int numberOfNotes) {
         banknotes.merge(nominal, collectNotes(nominal, numberOfNotes), (existing, add) -> {
             existing.addAll(add);
             return existing;
@@ -30,7 +37,7 @@ public abstract class AbstractNoteBuilder<T extends NoteContainer> implements No
         return this;
     }
 
-    public AbstractNoteBuilder<T> putAll(Map<Note, Integer> notes) {
+    public AbstractNoteContainerBuilder<T> putAll(Map<Note, Integer> notes) {
         if (notes == null || notes.isEmpty()) {
             return this;
         }

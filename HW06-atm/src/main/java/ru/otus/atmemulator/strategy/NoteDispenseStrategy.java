@@ -1,4 +1,4 @@
-package ru.otus.atmemulator.util.calculator;
+package ru.otus.atmemulator.strategy;
 
 import java.util.Arrays;
 import java.util.Collections;

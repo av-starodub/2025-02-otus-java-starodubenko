@@ -8,7 +8,7 @@ import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotEnoughMoneyException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
 import ru.otus.atmemulator.exeption.NotValidSumException;
-import ru.otus.atmemulator.util.calculator.NoteRequestBuilder;
+import ru.otus.atmemulator.util.NoteRequestBuilder;
 
 public class MoneyBoxService implements NoteBoxService {
 

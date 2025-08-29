@@ -1,9 +1,10 @@
-package ru.otus.atmemulator.util.calculator;
+package ru.otus.atmemulator.util;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import ru.otus.atmemulator.denomination.Note;
+import ru.otus.atmemulator.strategy.NoteDispenseStrategy;
 
 /**
  * Utility class for building note-dispensing requests based on the available notes in stock
