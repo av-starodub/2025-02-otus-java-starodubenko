@@ -5,15 +5,16 @@ import java.util.Map;
 import java.util.Optional;
 import ru.otus.atmemulator.denomination.Note;
 
-public final class NoteCalculator {
+public final class NoteRequestBuilder {
 
-    private NoteCalculator() {}
+    private NoteRequestBuilder() {}
 
-    public static Optional<Map<Note, Integer>> compute(Map<Note, Integer> notesInStock, int requiredSum) {
-        return compute(notesInStock, requiredSum, CalculationOrderType.MINIMUM_NOTES);
+    public static Optional<Map<Note, Integer>> buildNoteRequestToIssue(
+            Map<Note, Integer> notesInStock, int requiredSum) {
+        return buildNoteRequestToIssue(notesInStock, requiredSum, CalculationOrderType.MINIMUM_NOTES);
     }
 
-    public static Optional<Map<Note, Integer>> compute(
+    public static Optional<Map<Note, Integer>> buildNoteRequestToIssue(
             Map<Note, Integer> notesInStock, int requiredSum, CalculationOrderType calcType) {
         var notesRequired = new HashMap<Note, Integer>();
         var residualAmount = requiredSum;
