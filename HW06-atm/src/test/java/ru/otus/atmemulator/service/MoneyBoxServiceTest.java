@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
+import ru.otus.atmemulator.strategy.NoteDispenseStrategy;
 import ru.otus.atmemulator.testutil.TestUtil;
 
 class MoneyBoxServiceTest {
@@ -55,7 +56,7 @@ class MoneyBoxServiceTest {
         int requiredSum = 6000;
         var money = TestUtil.createMoney(Map.of(RUB_5000, 1, RUB_500, 4, RUB_100, 1));
         moneyBoxService.putMoney(money);
-        var extractedMoney = moneyBoxService.getMoney(requiredSum);
+        var extractedMoney = moneyBoxService.getMoney(requiredSum, NoteDispenseStrategy.MINIMUM_NOTES);
 
         var actualBanknotes = extractedMoney.getNumberOfNotes();
         var expectedBanknotes = TestUtil.transformToNoteCountMap(Map.of(RUB_5000, 1, RUB_500, 2));
@@ -75,7 +76,7 @@ class MoneyBoxServiceTest {
 
         var requiredSum = 500;
 
-        var thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum));
+        var thrown = catchThrowable(() -> moneyBoxService.getMoney(requiredSum, NoteDispenseStrategy.MINIMUM_NOTES));
         assertThat(thrown).isInstanceOf(NotEnoughBanknotesException.class).hasMessageContaining("Not enough banknotes");
     }
 }

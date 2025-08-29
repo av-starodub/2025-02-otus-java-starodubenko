@@ -8,6 +8,7 @@ import ru.otus.atmemulator.exeption.NotEnoughBanknotesException;
 import ru.otus.atmemulator.exeption.NotEnoughMoneyException;
 import ru.otus.atmemulator.exeption.NotFreeSpaceException;
 import ru.otus.atmemulator.exeption.NotValidSumException;
+import ru.otus.atmemulator.strategy.NoteDispenseStrategy;
 import ru.otus.atmemulator.util.NoteRequestBuilder;
 
 public class MoneyBoxService implements NoteBoxService {
@@ -37,10 +38,10 @@ public class MoneyBoxService implements NoteBoxService {
     }
 
     @Override
-    public NoteContainer getMoney(int requiredSum) {
+    public NoteContainer getMoney(int requiredSum, NoteDispenseStrategy dispenseStrategy) {
         checkSum(requiredSum, moneyBox.getAmount());
         var notesInStock = moneyBox.getNumberOfNotes();
-        var notesRequired = NoteRequestBuilder.buildNoteRequestToIssue(notesInStock, requiredSum)
+        var notesRequired = NoteRequestBuilder.buildNoteRequestToIssue(notesInStock, requiredSum, dispenseStrategy)
                 .orElseThrow(() -> new NotEnoughBanknotesException("Not enough banknotes"));
         return moneyBox.extractNotes(notesRequired);
     }

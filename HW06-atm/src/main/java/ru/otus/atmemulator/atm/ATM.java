@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import ru.otus.atmemulator.container.NoteContainer;
 import ru.otus.atmemulator.exeption.AtmException;
 import ru.otus.atmemulator.service.NoteBoxService;
+import ru.otus.atmemulator.strategy.NoteDispenseStrategy;
 
 public class ATM {
 
@@ -24,9 +25,9 @@ public class ATM {
         }
     }
 
-    public NoteContainer getMoney(int requiredSum) {
+    public NoteContainer getMoney(int requiredSum, NoteDispenseStrategy dispenseStrategy) {
         try {
-            return noteBoxService.getMoney(requiredSum);
+            return noteBoxService.getMoney(requiredSum, dispenseStrategy);
         } catch (Exception e) {
             throw new AtmException(createErrorMessage(e.getMessage()), e);
         }

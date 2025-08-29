@@ -23,11 +23,6 @@ public final class NoteRequestBuilder {
     private NoteRequestBuilder() {}
 
     public static Optional<Map<Note, Integer>> buildNoteRequestToIssue(
-            Map<Note, Integer> notesInStock, int requiredSum) {
-        return buildNoteRequestToIssue(notesInStock, requiredSum, NoteDispenseStrategy.MINIMUM_NOTES);
-    }
-
-    public static Optional<Map<Note, Integer>> buildNoteRequestToIssue(
             Map<Note, Integer> notesInStock, int requiredSum, NoteDispenseStrategy dispenseStrategy) {
         var notesRequired = new HashMap<Note, Integer>();
         var residualAmount = requiredSum;
